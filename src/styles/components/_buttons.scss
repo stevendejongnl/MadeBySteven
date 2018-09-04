@@ -1,0 +1,103 @@
+.button {
+	&--menu {
+		position: sticky;
+		top: rem-calc(10);
+		left: rem-calc(10);
+		width: rem-calc(45);
+		height: rem-calc(45);
+		background-color: $tomato-color;
+		z-index: 90000;
+		transition: opacity $base-transition-time, transform $base-transition-time, background-color $base-transition-time;
+
+		@include breakpoint(tablet) {
+			top: rem-calc(35);
+			left: rem-calc(35);
+			margin-top: rem-calc(35);
+			width: rem-calc(70);
+			height: rem-calc(70);
+		}
+
+		& > .line {
+			display: block;
+			width: rem-calc(22);
+			height: rem-calc(1);
+			background-color: $white-color;
+			margin: auto;
+			transition: opacity $base-transition-time, transform $base-transition-time, background-color $base-transition-time;
+
+			@include breakpoint(tablet) {
+				width: rem-calc(35);
+				height: rem-calc(1);
+			}
+
+			&:nth-child(1) {
+				margin-bottom: rem-calc(7);
+
+				@include breakpoint(tablet) {
+					margin-bottom: rem-calc(12);
+				}
+			}
+
+			&:nth-child(3) {
+				margin-top: rem-calc(7);
+
+				@include breakpoint(tablet) {
+					margin-top: rem-calc(12);
+				}
+			}
+		}
+
+		&:hover {
+			background-color: $white-color;
+
+			& > .line {
+				background-color: $tomato-color;
+			}
+		}
+
+		&:active {
+			background-color: $light-grey-color;
+
+			& > .line {
+				background-color: $tomato-color;
+			}
+		}
+	}
+
+	&--home {
+		border: rem-calc(1) solid $white-color;
+		background-color: transparent;
+	}
+
+	&--open {
+		& > .line:nth-child(1) {
+			transform: rotate(45deg) translateY(rem-calc(7)) translateX(rem-calc(7));
+
+			@include breakpoint(tablet) {
+				transform: rotate(45deg) translateY(rem-calc(10)) translateX(rem-calc(10));
+			}
+		}
+		& > .line:nth-child(2) {
+			opacity: 0;
+		}
+		& > .line:nth-child(3) {
+			transform: rotate(-45deg) translateY(rem-calc(-5)) translateX(rem-calc(5));
+
+			@include breakpoint(tablet) {
+				transform: rotate(-45deg) translateY(rem-calc(-8)) translateX(rem-calc(8));
+			}
+		}
+
+		&.button--home {
+			background-color: $tomato-color;
+
+			&:hover {
+				background-color: $sienna-color;
+
+				& > .line {
+					background-color: $white-color;
+				}
+			}
+		}
+	}
+}

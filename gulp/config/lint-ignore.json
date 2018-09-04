@@ -1,0 +1,13 @@
+{
+  "eslint": [
+    "!gulp/**/*.js",
+    "!dist/**/*.js",
+    "!./*.js",
+    "!*.js",
+    "!**/node_modules/**/*.js"
+  ],
+  "stylelint": [
+    "!dist/**/*.{scss,css}",
+    "!**/node_modules/**/*.{scss,css}"
+  ]
+}

@@ -1,0 +1,27 @@
+.grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(calc(100vw / 5), calc(100vw / 5)));
+	grid-template-rows: repeat(auto-fill, minmax(calc(100vw / 5), calc(100vw / 5)));
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: -1;
+
+	@include breakpoint(tablet) {
+		grid-template-columns: repeat(auto-fill, minmax(calc(100vw / 10), calc(100vw / 10)));
+		grid-template-rows: repeat(auto-fill, minmax(calc(100vw / 10), calc(100vw / 10)));
+	}
+
+	&__item {
+		box-sizing: border-box;
+		height: calc(100vw / 5);
+		width: calc(100vw / 5);
+		border: rem-calc(1) solid rgba($white-color, 0.2);
+
+		@include breakpoint(tablet) {
+			height: calc(100vw / 10);
+			width: calc(100vw / 10);
+		}
+	}
+}

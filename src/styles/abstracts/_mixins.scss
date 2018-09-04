@@ -1,0 +1,57 @@
+@mixin breakpoint($break, $type: up) {
+	@if ($break == mobile) {
+		@media screen and (max-width: rem-calc($breakpoint-tablet - 1)) {
+			@content;
+		}
+	} @else if $break == tablet {
+		@if $type == up {
+			@media screen and (min-width: rem-calc($breakpoint-tablet)) {
+				@content;
+			}
+		} @else if $type == down {
+			@media screen and (max-width: rem-calc($breakpoint-desktop - 1)) {
+				@content;
+			}
+		} @else if $type == only {
+			@media screen and (min-width: rem-calc($breakpoint-tablet)) and (max-width: rem-calc($breakpoint-desktop - 1)) {
+				@content;
+			}
+		} @else {
+			@error "Something went wrong, you used $break: `#{$break}` and $type: `#{$type}`";
+		}
+	} @else if $break == desktop {
+		@if $type == up {
+			@media screen and (min-width: rem-calc($breakpoint-desktop)) {
+				@content;
+			}
+		} @else if $type == down {
+			@media screen and (max-width: rem-calc($breakpoint-larger - 1)) {
+				@content;
+			}
+		} @else if $type == only {
+			@media screen and (min-width: rem-calc($breakpoint-desktop)) and (max-width: rem-calc($breakpoint-larger - 1)) {
+				@content;
+			}
+		} @else {
+			@error "Something went wrong, you used $break: `#{$break}` and $type: `#{$type}`";
+		}
+	} @else if $break == larger {
+		@if $type == up {
+			@media screen and (min-width: rem-calc($breakpoint-desktop)) {
+				@content;
+			}
+		} @else if $type == down {
+			@media screen and (max-width: rem-calc($breakpoint-larger - 1)) {
+				@content;
+			}
+		} @else if $type == only {
+			@media screen and (min-width: rem-calc($breakpoint-desktop)) {
+				@content;
+			}
+		} @else {
+			@error "Something went wrong, you used $break: `#{$break}` and $type: `#{$type}`";
+		}
+	} @else {
+		@error "Something went wrong, you used $break: `#{$break}` and $type: `#{$type}`";
+	}
+}

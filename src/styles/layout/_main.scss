@@ -1,0 +1,15 @@
+.container {
+	background-image: url('/src/images/background-big.jpg');
+	background-repeat: no-repeat;
+	background-color: $tomato-color;
+	background-blend-mode: multiply;
+	background-size: cover;
+	overflow-x: hidden;
+	height: 100vh;
+}
+
+.main-container {
+	//max-width: rem-calc(1200);
+	//margin: auto;
+	position: relative;
+}
