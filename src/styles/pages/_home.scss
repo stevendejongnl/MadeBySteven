@@ -176,8 +176,8 @@
 				transition: transform $base-transition-time;
 			}
 
-			&:hover,
-			&--open {
+			&--open,
+			&:hover {
 				.home-project__title {
 					opacity: 0;
 				}
