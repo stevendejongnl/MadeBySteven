@@ -1,16 +1,9 @@
-# Random User Book
-A address book build on the randomuser.io api.
-
-## Preview link
-[random-user-book.netlify.com](https://random-user-book.netlify.com/)
-
-## Example of Dribbble used
-[Address book for mobile Design language exploration by Gleb Kuznetsov](https://dribbble.com/shots/3213453-Address-book-for-mobile-Design-language-exploration)
+# Portfolio
 
 ## Install project
 Use `npm install` to install packages.
 
-Run `grunt` to compile styles and scripts.
+Run `gulp build` to compile styles and scripts.
 
 ## Sass architecture
 
@@ -27,7 +20,8 @@ styles/
 │   └── _typography.scss    # Typography rules
 │
 ├── components/
-│   └── _contacts.scss      # Activities
+│   └── _buttons.scss       # Buttons
+│   └── _project.scss       # Project
 │
 ├── layout/
 │   ├── _grid.scss          # Grid system
@@ -35,7 +29,7 @@ styles/
 │   └── _main.scss          # Main
 │
 ├── pages/
-│   ├── address-book.scss   # Dashboard specific styles
+│   ├── home.scss           # Home
 │   └── ...                 # Etc.
 │
 └── main.scss               # Main Sass file
