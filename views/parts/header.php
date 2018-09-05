@@ -1,25 +1,25 @@
-<header class="main-navigation">
+<header class="main-header">
 	<button class="button--reset button--menu<?= ($pageInfo->page === 'home' ? ' button--home' : ''); ?>" id="openMenu">
 		<span class="line"></span>
 		<span class="line"></span>
 		<span class="line"></span>
 	</button>
 
-	<nav class="main-navigation__container" role="navigation" id="navigation">
-		<ul class="main-navigation--reset main-navigation__list">
-			<li class="main-navigation__item<?= ($pageInfo->page === 'home' ? ' main-navigation__item--active' : ''); ?>">
-				<a href="/" class="main-navigation__link" aria-label="Home">Home</a>
+	<nav class="navigation__container" role="navigation" id="navigation">
+		<ul class="navigation--reset navigation__list">
+			<li class="navigation__item<?= ($pageInfo->page === 'home' ? ' navigation__item--active' : ''); ?>">
+				<a href="/" class="navigation__link" aria-label="Home">Home</a>
 			</li>
-			<li class="main-navigation__item<?= ($pageInfo->page === 'about' ? ' main-navigation__item--active' : ''); ?>">
-				<a href="/about" class="main-navigation__link" aria-label="About">About</a>
+			<li class="navigation__item<?= ($pageInfo->page === 'about' ? ' navigation__item--active' : ''); ?>">
+				<a href="/about" class="navigation__link" aria-label="About">About</a>
 			</li>
-			<li class="main-navigation__item">
-				<a href="/projects" class="main-navigation__link" id="openProjects"
+			<li class="navigation__item">
+				<a href="/projects" class="navigation__link" id="openProjects"
 				   aria-label="Projects">Projects</a>
 			</li>
 		</ul>
 
-		<ul class="main-navigation--reset social-links">
+		<ul class="navigation--reset social-links">
 			<li class="social-links__item">
 				<a href="https://github.com/stevendejongnl" target="_blank" class="social-links__link">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512">

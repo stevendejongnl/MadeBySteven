@@ -8,10 +8,10 @@ export default class Navigation {
     this.project = {
       open: document.querySelector('#openProjects'),
       items: document.querySelector('#projects'),
-      active: document.querySelector('.main-navigation__item--active'),
+      active: document.querySelector('.navigation__item--active'),
     };
 
-    this.parentProject = this.project.open.closest('.main-navigation__item');
+    this.parentProject = this.project.open.closest('.navigation__item');
   }
 
   init() {
@@ -28,12 +28,12 @@ export default class Navigation {
     event.preventDefault();
 
     this.menu.open.classList.toggle('button--open');
-    this.menu.navigation.classList.toggle('main-navigation__open');
+    this.menu.navigation.classList.toggle('navigation__open');
 
     if (this.project.items.classList.contains('project__container--open')) {
       this.project.items.classList.remove('project__container--open');
-      this.project.active.classList.toggle('main-navigation__item--active');
-      this.parentProject.classList.toggle('main-navigation__item--active');
+      this.project.active.classList.toggle('navigation__item--active');
+      this.parentProject.classList.toggle('navigation__item--active');
     }
   }
 
@@ -41,7 +41,7 @@ export default class Navigation {
     event.preventDefault();
 
     this.project.items.classList.toggle('project__container--open');
-    this.project.active.classList.toggle('main-navigation__item--active');
-    this.parentProject.classList.toggle('main-navigation__item--active');
+    this.project.active.classList.toggle('navigation__item--active');
+    this.parentProject.classList.toggle('navigation__item--active');
   }
 }

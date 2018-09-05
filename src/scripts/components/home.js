@@ -89,11 +89,11 @@ export default class Home {
     });
   }
 
-  times(x) {
-    return (f) => {
-      if (x > 0) {
-        f();
-        this.times(x - 1)(f);
+  times(total) {
+    return (current) => {
+      if (total > 0) {
+        current();
+        this.times(total - 1)(current);
       }
     };
   }
