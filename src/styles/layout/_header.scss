@@ -1,6 +1,8 @@
 .main-navigation {
 	position: fixed;
+	min-width: rem-calc(105);
 	min-height: rem-calc(70);
+	z-index: 900;
 
 	&__container {
 		position: fixed;
@@ -8,7 +10,7 @@
 		width: 100%;
 		//height: rem-calc(45);
 		text-align: center;
-		margin-top: rem-calc(-49);
+		margin-top: -100%;
 		background-color: $white-color;
 		opacity: 0;
 		z-index: 80000;
@@ -45,6 +47,7 @@
 	&__open {
 		opacity: 1;
 		margin-left: 0;
+		margin-top: rem-calc(-48);
 	}
 
 	&__item {

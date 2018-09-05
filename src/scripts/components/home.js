@@ -15,6 +15,28 @@ export default class Home {
     this.generatePositions();
     this.generateGrid();
 
+    this.projects.items.forEach((project) => {
+      project.classList.remove('home-project__container--open');
+      project.classList.add('home-project__container--closed');
+
+      project.addEventListener('click', (event) => {
+        if (window.innerWidth < 640) {
+          event.preventDefault();
+
+          const CLICKED = event.target.getAttribute('class');
+          const LOCATION = project.children[0].getAttribute('href');
+
+          if (CLICKED !== 'home-project__container') {
+            document.location = LOCATION;
+            return;
+          }
+
+          project.classList.toggle('home-project__container--closed');
+          project.classList.toggle('home-project__container--open');
+        }
+      });
+    });
+
     window.addEventListener('resize', () => {
       this.generatePositions();
       this.generateGrid(true);
@@ -23,8 +45,18 @@ export default class Home {
 
   generatePositions() {
     this.projects.items.forEach((project) => {
-      const ROWPOS = project.getAttribute('data-row');
-      project.setAttribute('style', `grid-row:${ROWPOS}`);
+      const FIGURE = project.children[0].childNodes[3];
+      let rowPos = project.getAttribute('data-row');
+      let leftPost = project.childNodes;
+      leftPost = (project.offsetLeft + leftPost[1].offsetLeft);
+      rowPos = rowPos.split(',');
+
+      if (window.innerWidth < 640) {
+        project.setAttribute('style', `grid-row:${rowPos[0]};`);
+        FIGURE.setAttribute('style', `margin-left:-${leftPost}px;`);
+      } else {
+        project.setAttribute('style', `grid-row:${rowPos[1]}`);
+      }
     });
   }
 

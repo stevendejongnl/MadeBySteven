@@ -58,7 +58,7 @@
 
 	&-project {
 		position: relative;
-		width: 100vw;
+		width: calc(100vw / 5);
 		height: calc(100vw / 5);
 
 		@include breakpoint(tablet) {
@@ -68,25 +68,43 @@
 
 		&__title {
 			position: absolute;
+			opacity: 0;
 			margin: 0;
 			top: rem-calc(20);
 			right: rem-calc(50);
 			width: 100%;
+			color: $white-color;
+			font-weight: 300;
+			transition: opacity $base-transition-time;
+
+			@include breakpoint(tablet) {
+				opacity: 1;
+			}
 		}
 
 		&__figure {
 			position: absolute;
 			display: none;
-			right: 0;
-			margin: rem-calc(46) rem-calc(46) 0 0;
+			margin: rem-calc(44) rem-calc(44) 0 0;
+			border: rem-calc(2) solid $white-color;
+
+			@include breakpoint(tablet, down) {
+				left: 0;
+				width: calc(100vw - 0.25rem); // 4px
+			}
+
+			@include breakpoint(tablet) {
+				right: 0;
+			}
 
 			&-inner {
 				opacity: 0;
 				padding: rem-calc(25);
-				width: calc(100vw - 3.25rem); // 52px
-				height: calc(((100vw / 5) * 2) - 3.25rem); // 52px
+				width: calc(100vw - 3.375rem); // 54px
+				height: calc(((100vw / 5) * 4) - 3.25rem); // 52px
 				background-color: $tomato-color;
 				z-index: 900;
+				transition: opacity $base-transition-time;
 
 				@include breakpoint(tablet) {
 					width: calc(((100vw / 10) * 3) - 3.25rem); // 52px
@@ -95,9 +113,16 @@
 			}
 		}
 
-		//&__image {
-		//	opacity: 0;
-		//}
+		&__image {
+			max-width: 100%;
+			height: auto;
+			mix-blend-mode: multiply;
+			transition: mix-blend-mode $base-transition-time;
+
+			&:hover {
+				mix-blend-mode: normal;
+			}
+		}
 
 		&__figcaption {
 			position: absolute;
@@ -107,7 +132,16 @@
 			padding-right: rem-calc(15);
 			color: $white-color;
 			text-align: right;
-			transition: font-size $base-transition-time, font-weight $base-transition-time, top $base-transition-time, transform $base-transition-time ;
+			opacity: 0;
+			transition: opacity $base-transition-time, font-size $base-transition-time, font-weight $base-transition-time, top $base-transition-time, transform $base-transition-time ;
+		}
+
+		&__view {
+			display: block;
+			text-align: center;
+			margin-top: rem-calc(10);
+			color: $white-color;
+			text-decoration: underline;
 		}
 
 		&__container {
@@ -127,6 +161,7 @@
 				background-color: white;
 				top: rem-calc(26);
 				left: rem-calc(44);
+				transition: transform $base-transition-time;
 			}
 
 			&::after {
@@ -138,9 +173,11 @@
 				background-color: white;
 				top: rem-calc(44);
 				left: rem-calc(26);
+				transition: transform $base-transition-time;
 			}
 
-			&:hover {
+			&:hover,
+			&--open {
 				.home-project__title {
 					opacity: 0;
 				}
@@ -155,6 +192,7 @@
 				}
 
 				.home-project__figcaption {
+					opacity: 1;
 					text-align: center;
 					transform: translateY(-50%);
 					top: 50%;
@@ -162,9 +200,29 @@
 					font-size: rem-calc(24);
 				}
 
-				//.home-project__image {
-				//	opacity: 1;
-				//}
+				&::before,
+				&::after {
+					transform: rotate(45deg);
+					z-index: 9000;
+				}
+			}
+		}
+
+		@include breakpoint(tablet, down) {
+			&:nth-child(4n+2) {
+				grid-column: 4;
+			}
+
+			&:nth-child(4n+3) {
+				grid-column: 2;
+			}
+
+			&:nth-child(4n+4) {
+				grid-column: 3;
+			}
+
+			&:nth-child(4n+5) {
+				grid-column: 1;
 			}
 		}
 
