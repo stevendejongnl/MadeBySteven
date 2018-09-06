@@ -1,9 +1,10 @@
-.main-navigation {
+.main-header {
 	position: fixed;
 	min-width: rem-calc(105);
 	min-height: rem-calc(70);
 	z-index: 900;
-
+}
+.navigation {
 	&__container {
 		position: fixed;
 		//width: calc(100% - 1.25rem); // 20px
