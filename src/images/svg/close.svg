@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="70px" height="70px" viewBox="0 0 70 70" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 4</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Desktop" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Project-overview" transform="translate(-36.000000, -37.000000)">
+            <g id="Group-4" transform="translate(36.000000, 37.000000)">
+                <rect id="Rectangle-2" stroke="#FFFFFF" fill="#E64A32" x="0.5" y="0.5" width="69" height="69"></rect>
+                <g id="Group" transform="translate(16.000000, 20.000000)"></g>
+                <path d="M22,22 L47.4558441,47.4558441" id="Line-3" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"></path>
+                <path d="M22,47.4558441 L47.4558441,22" id="Line-3" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"></path>
+            </g>
+        </g>
+    </g>
+</svg>
