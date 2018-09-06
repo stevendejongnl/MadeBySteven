@@ -1,17 +1,24 @@
 .page-about {
-	background: linear-gradient(to right, rgba($white-color, 1) 45%, rgba($white-color, 0) 60%), url('/src/images/background-big.jpg');
-	background-image: url('/src/images/background-big.jpg');
-	background-repeat: no-repeat;
-	background-color: $white-color;
-	//background-blend-mode: luminosity;
-	background-size: cover;
 	overflow-x: hidden;
 	height: 100vh;
 
+	@include breakpoint(tablet) {
+		background: linear-gradient(to right, rgba($white-color, 1) 45%, rgba($white-color, 0) 60%), url('/src/images/background-big.jpg');
+		//background-image: url('/src/images/background-big.jpg');
+		background-repeat: no-repeat;
+		background-color: $white-color;
+		background-blend-mode: luminosity;
+		background-size: cover;
+	}
+
 	.about-section {
 		position: absolute;
-		margin-top: rem-calc(105);
+		margin-top: rem-calc(35);
 		width: 100%;
+
+		@include breakpoint(tablet) {
+			margin-top: rem-calc(105);
+		}
 
 		.heading {
 			&--second {
@@ -28,7 +35,7 @@
 					position: absolute;
 					display: block;
 					height: rem-calc(2);
-					width: 30%;
+					width: calc(50% - 3.75rem); // 60px
 					background-color: $tomato-color;
 					top: rem-calc(15);
 				}
@@ -43,6 +50,12 @@
 
 				@include breakpoint(tablet) {
 					font-size: rem-calc(20);
+
+					&::before,
+					&::after {
+						width: calc(50% - 9.375); // 150px
+						top: rem-calc(10);
+					}
 				}
 			}
 		}
