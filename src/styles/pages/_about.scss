@@ -1,0 +1,50 @@
+.page-about {
+	background: linear-gradient(to right, rgba($white-color, 1) 45%, rgba($white-color, 0) 60%), url('/src/images/background-big.jpg');
+	background-image: url('/src/images/background-big.jpg');
+	background-repeat: no-repeat;
+	background-color: $white-color;
+	//background-blend-mode: luminosity;
+	background-size: cover;
+	overflow-x: hidden;
+	height: 100vh;
+
+	.about-section {
+		position: absolute;
+		margin-top: rem-calc(105);
+		width: 100%;
+
+		.heading {
+			&--second {
+				position: relative;
+				font-size: rem-calc(16);
+				font-weight: 400;
+				text-align: center;
+				text-transform: uppercase;
+				color: $tomato-color;
+
+				&::before,
+				&::After {
+					content: '';
+					position: absolute;
+					display: block;
+					height: rem-calc(2);
+					width: 30%;
+					background-color: $tomato-color;
+					top: rem-calc(15);
+				}
+
+				&::before {
+					left: 0;
+				}
+
+				&::after {
+					right: 0;
+				}
+
+				@include breakpoint(tablet) {
+					font-size: rem-calc(20);
+				}
+			}
+		}
+	}
+}

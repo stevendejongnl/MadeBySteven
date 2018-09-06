@@ -23,8 +23,9 @@ styles/
 │   └── _typography.scss    # Typography rules
 │
 ├── components/
-│   └── _buttons.scss       # Buttons
-│   └── _project.scss       # Project
+│   ├── _buttons.scss       # Buttons
+│   ├── _project.scss       # Project
+│   └── _visibility.scss    # Visibility
 │
 ├── layout/
 │   ├── _grid.scss          # Grid system
@@ -32,8 +33,10 @@ styles/
 │   └── _main.scss          # Main
 │
 ├── pages/
-│   ├── home.scss           # Home
-│   └── ...                 # Etc.
+│   ├── _home.scss          # Home
+│   ├── _about.scss         # About
+│   ├── _project.scss       # Project
+│   └── _404.scss           # 404
 │
 └── main.scss               # Main Sass file
 ```

@@ -1,4 +1,4 @@
-<section class="home" id="projectsContainer">
+<section class="home-section" id="projectsContainer">
 	<header class="home__header">
 		<div class="home__heading home__heading--first">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250.92 52.13">

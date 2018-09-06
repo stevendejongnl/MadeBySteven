@@ -9,6 +9,7 @@
 @import 'base/typography';
 
 // Components
+@import 'components/visibility';
 @import 'components/buttons';
 @import 'components/project';
 
@@ -19,3 +20,6 @@
 
 // Pages
 @import 'pages/home';
+@import 'pages/about';
+@import 'pages/project';
+@import 'pages/404';
