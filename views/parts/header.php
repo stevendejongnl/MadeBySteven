@@ -41,8 +41,10 @@
 		<article class="project__item">
 			<a href="/project" class="project__link">
 				<figure class="figure--reset">
-					<img src="https://picsum.photos/400/225?image=2" class="project__image" alt="Project 1">
-					<figcaption class="project__title">Project 1</figcaption>
+					<img src="https://picsum.photos/1600/800?image=2" class="project__image" alt="Project 1">
+					<figcaption class="project__title" onmouseover="this.innerHTML='<span>View</span>';" onmouseout="this.innerHTML='<span>Project 1</span>';">
+                        <span>Project 1</span>
+                    </figcaption>
 				</figure>
 			</a>
 		</article>
@@ -50,8 +52,10 @@
 		<article class="project__item">
 			<a href="/project" class="project__link">
 				<figure class="figure--reset">
-					<img src="https://picsum.photos/400/225?image=3" class="project__image" alt="Project 2">
-					<figcaption class="project__title">Project 2</figcaption>
+					<img src="https://picsum.photos/1600/800?image=3" class="project__image" alt="Project 2">
+					<figcaption class="project__title" onmouseover="this.innerHTML='<span>View</span>';" onmouseout="this.innerHTML='<span>Project 2</span>';">
+                        <span>Project 2</span>
+                    </figcaption>
 				</figure>
 			</a>
 		</article>
@@ -59,8 +63,10 @@
 		<article class="project__item">
 			<a href="/project" class="project__link">
 				<figure class="figure--reset">
-					<img src="https://picsum.photos/400/225?image=4" class="project__image" alt="Project 3">
-					<figcaption class="project__title">Project 3</figcaption>
+					<img src="https://picsum.photos/1600/800?image=4" class="project__image" alt="Project 3">
+					<figcaption class="project__title" onmouseover="this.innerHTML='<span>View</span>';" onmouseout="this.innerHTML='<span>Project 3</span>';">
+                        <span>Project 3</span>
+                    </figcaption>
 				</figure>
 			</a>
 		</article>
@@ -68,8 +74,10 @@
 		<article class="project__item">
 			<a href="/project" class="project__link">
 				<figure class="figure--reset">
-					<img src="https://picsum.photos/400/225?image=5" class="project__image" alt="Project 4">
-					<figcaption class="project__title">Project 4</figcaption>
+					<img src="https://picsum.photos/1600/800?image=5" class="project__image" alt="Project 4">
+					<figcaption class="project__title" onmouseover="this.innerHTML='<span>View</span>';" onmouseout="this.innerHTML='<span>Project 4</span>';">
+                        <span>Project 4</span>
+                    </figcaption>
 				</figure>
 			</a>
 		</article>
@@ -77,8 +85,10 @@
 		<article class="project__item">
 			<a href="/project" class="project__link">
 				<figure class="figure--reset">
-					<img src="https://picsum.photos/400/225?image=6" class="project__image" alt="Project 5">
-					<figcaption class="project__title">Project 5</figcaption>
+					<img src="https://picsum.photos/1600/800?image=6" class="project__image" alt="Project 5">
+					<figcaption class="project__title" onmouseover="this.innerHTML='<span>View</span>';" onmouseout="this.innerHTML='<span>Project 5</span>';">
+                        <span>Project 5</span>
+                    </figcaption>
 				</figure>
 			</a>
 		</article>

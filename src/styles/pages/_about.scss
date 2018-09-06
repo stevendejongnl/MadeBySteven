@@ -53,7 +53,7 @@
 
 					&::before,
 					&::after {
-						width: calc(50% - 9.375); // 150px
+						width: calc(50% - 9.375rem); // 150px
 						top: rem-calc(10);
 					}
 				}

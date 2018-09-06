@@ -46,12 +46,28 @@
 
 	&__title {
 		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-		text-align: center;
+		top: 0;
+		right: 0;
+		bottom: rem-calc(4);
+		left: 0;
 		width: 100%;
 		color: $white-color;
 		font-weight: 500;
+
+		span {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translateY(-50%) translateX(-50%);
+		}
+
+		&:hover {
+			text-transform: uppercase;
+
+			span {
+				text-decoration: underline;
+			}
+		}
 	}
 
 	&__link {

@@ -1,11 +1,17 @@
 .container {
 	background-image: url('/src/images/background-big.jpg');
 	background-repeat: no-repeat;
+	background-position: top center;
+	background-attachment: fixed;
 	background-color: $tomato-color;
 	background-blend-mode: multiply;
 	background-size: cover;
 	overflow-x: hidden;
 	height: 100vh;
+
+	@include breakpoint(tablet) {
+		background-attachment: scroll;
+	}
 }
 
 .main-container {
