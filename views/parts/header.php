@@ -6,7 +6,7 @@
 	</button>
 
 	<nav class="navigation__container" role="navigation" id="navigation">
-		<ul class="navigation--reset navigation__list">
+		<ul class="list--reset navigation__list">
 			<li class="navigation__item<?= ($pageInfo->page === 'home' ? ' navigation__item--active' : ''); ?>">
 				<a href="/" class="navigation__link" aria-label="Home">Home</a>
 			</li>
@@ -19,7 +19,7 @@
 			</li>
 		</ul>
 
-		<ul class="navigation--reset social-links">
+		<ul class="list--reset social-links">
 			<li class="social-links__item">
 				<a href="https://github.com/stevendejongnl" target="_blank" class="social-links__link">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512">

@@ -10,7 +10,7 @@
 
         <div class="love-to-work">
             <h3>I love to work with</h3>
-            <ul>
+            <ul class="list--reset">
                 <li>nothing</li>
                 <li>nothing</li>
                 <li>nothing</li>
