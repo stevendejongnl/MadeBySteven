@@ -12,4 +12,4 @@
 <body class="<?= $getPage->classes; ?>">
 
 <main role="main" class="main-container">
-	<? include_once 'views/parts/header.php'; ?>
+	<? Functions::getPart('header'); ?>

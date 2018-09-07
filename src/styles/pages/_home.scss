@@ -177,7 +177,7 @@
 				position: absolute;
 				height: rem-calc(40);
 				width: rem-calc(2);
-				background-color: white;
+				background-color: $white-color;
 				top: rem-calc(26);
 				left: rem-calc(44);
 				transition: transform $base-transition-time;
@@ -189,7 +189,7 @@
 				position: absolute;
 				height: rem-calc(2);
 				width: rem-calc(40);
-				background-color: white;
+				background-color: $white-color;
 				top: rem-calc(44);
 				left: rem-calc(26);
 				transition: transform $base-transition-time;

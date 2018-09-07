@@ -2,6 +2,8 @@
 import Navigation from './components/navigation.js';
 // eslint-disable-next-line
 import Home from './components/home.js';
+// eslint-disable-next-line
+import Project from './components/project.js';
 
 const PAGE = {
   home: (!!document.querySelector('.page-home')),
@@ -15,4 +17,9 @@ NAVIGATION.init();
 if (PAGE.home) {
   const HOME = new Home();
   HOME.init();
+}
+
+if (PAGE.project) {
+  const PROJECT = new Project();
+  PROJECT.init();
 }

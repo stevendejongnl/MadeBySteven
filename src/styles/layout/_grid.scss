@@ -24,6 +24,12 @@
 			width: calc(100vw / 10);
 		}
 	}
+
+	&--red {
+		.grid__item {
+			border-color: rgba($tomato-color, 0.2);
+		}
+	}
 }
 
 .wrapper {
