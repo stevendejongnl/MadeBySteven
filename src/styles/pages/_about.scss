@@ -18,6 +18,11 @@
 		}
 
 		.heading {
+			&--first {
+				color: $dark-grey-color;
+				font-size: rem-calc(47);
+			}
+
 			&--second {
 				position: relative;
 				font-size: rem-calc(16);
@@ -52,6 +57,79 @@
 					&::after {
 						width: calc(50% - 9.375rem); // 150px
 						top: rem-calc(10);
+					}
+				}
+			}
+
+			&--third,
+			&--fourth {
+				color: $dark-grey-color;
+				font-size: rem-calc(16);
+				font-weight: 500;
+				text-transform: uppercase;
+			}
+		}
+
+		.paragraph {
+			color: $dark-grey-color;
+			font-size: rem-calc(18);
+			font-weight: 300;
+			line-height: rem-calc(25);
+		}
+
+		.about-me {
+			margin-bottom: rem-calc(50);
+
+			@include breakpoint(tablet) {
+				max-width: 50%;
+			}
+		}
+
+		.love-to-work {
+			margin-bottom: rem-calc(50);
+
+			@include breakpoint(tablet) {
+				max-width: 70%;
+			}
+
+			&__list {
+				text-align: center;
+			}
+
+			&__item {
+				display: inline-block;
+				width: calc((100% / 3) - 0.1875rem); // 3px
+				margin-bottom: rem-calc(25);
+
+				@include breakpoint(tablet) {
+					width: rem-calc(75);
+				}
+
+				svg {
+					width: rem-calc(50);
+
+					@include breakpoint(tablet) {
+						width: rem-calc(60);
+					}
+
+					path,
+					polygon {
+						stroke: $tomato-color;
+					}
+				}
+			}
+		}
+
+		.social {
+			margin-bottom: rem-calc(50);
+			&__item {
+				display: inline-block;
+				width: rem-calc(25);
+				padding-right: rem-calc(15);
+
+				svg {
+					path {
+						stroke: $dark-grey-color;
 					}
 				}
 			}

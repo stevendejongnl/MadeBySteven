@@ -96,6 +96,12 @@
 
 	&__item {
 		display: inline-block;
+
+		svg {
+			path {
+				stroke: $dark-grey-color;
+			}
+		}
 	}
 
 	&__link {
