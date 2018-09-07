@@ -1,6 +1,7 @@
 .button {
 	&--menu {
 		position: sticky;
+		position: -webkit-sticky;
 		top: rem-calc(10);
 		left: rem-calc(10);
 		width: rem-calc(45);
@@ -8,6 +9,11 @@
 		background-color: $tomato-color;
 		z-index: 90000;
 		transition: opacity $base-transition-time, transform $base-transition-time, background-color $base-transition-time;
+
+		@supports not (position: sticky) {
+			position: -webkit-sticky;
+			margin-top: rem-calc(10);
+		}
 
 		@include breakpoint(tablet) {
 			top: rem-calc(35);
