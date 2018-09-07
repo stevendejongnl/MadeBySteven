@@ -65,5 +65,5 @@
 		</article>
 	</div>
 
-	<div class="grid grid--red" id="fillGrid"></div>
+	<div class="grid grid--red  " id="fillGrid"></div>
 </div>

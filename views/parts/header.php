@@ -13,7 +13,7 @@
 			<li class="navigation__item<?= ($getPage->slug === 'about' ? ' navigation__item--active' : ''); ?>">
 				<a href="/about" class="navigation__link" aria-label="About">About</a>
 			</li>
-			<li class="navigation__item">
+			<li class="navigation__item<?= ($getPage->slug === 'project' ? ' navigation__item--active' : ''); ?>">
 				<a href="/projects" class="navigation__link" id="openProjects"
 				   aria-label="Projects">Projects</a>
 			</li>

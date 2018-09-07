@@ -4,6 +4,10 @@
 		margin-top: rem-calc(35);
 		width: 100%;
 
+		@include breakpoint(tablet) {
+			margin-top: rem-calc(115);
+		}
+
 		.heading {
 			&--first {
 				position: relative;
@@ -37,7 +41,7 @@
 
 					&::before,
 					&::after {
-						width: calc(50% - 9.375rem); // 150px
+						width: calc(50% - 11.25rem); // 180px
 						top: rem-calc(10);
 					}
 				}
