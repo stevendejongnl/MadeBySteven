@@ -6,6 +6,8 @@
 		background: linear-gradient(to right, rgba($white-color, 1) 45%, rgba($white-color, 0) 60%), url('/src/images/background-about.jpg');
 		background-repeat: no-repeat;
 		background-size: cover;
+		background-position: top center;
+		background-attachment: fixed;
 	}
 
 	.about-section {
