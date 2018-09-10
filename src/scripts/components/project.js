@@ -70,9 +70,9 @@ export default class Project {
 
   generatePositions() {
     this.gallery.items.forEach((item) => {
-      let rowPos = item.getAttribute('data-row');
+      const ROWPOS = item.getAttribute('data-row');
 
-      item.setAttribute('style', `grid-row:${rowPos};`);
+      item.setAttribute('style', `grid-row:${ROWPOS};`);
     });
   }
 

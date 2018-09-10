@@ -15,7 +15,7 @@ export default class Home {
     this.generatePositions();
     this.generateGrid();
 
-    this.projects.container.addEventListener('click', (event) => {
+    this.projects.container.addEventListener(self.clickEvent, (event) => {
       if (event.target.className !== 'home-project__plus') {
         event.preventDefault();
         this.projects.items.forEach((project) => {
@@ -29,7 +29,7 @@ export default class Home {
       project.classList.remove('home-project--open');
       project.classList.add('home-project--closed');
 
-      project.childNodes[1].addEventListener('click', (event) => {
+      project.childNodes[1].addEventListener(self.clickEvent, (event) => {
         event.preventDefault();
 
         if (event.target.className === 'home-project__plus') {
@@ -37,7 +37,7 @@ export default class Home {
           project.classList.toggle('home-project--open');
         }
       });
-      project.childNodes[3].addEventListener('click', (event) => {
+      project.childNodes[3].addEventListener(self.clickEvent, (event) => {
         event.preventDefault();
 
         event.path.forEach((element) => {
@@ -47,6 +47,9 @@ export default class Home {
         });
       });
       if (window.innerWidth >= 640) {
+        project.classList.remove('home-project--open');
+        project.classList.add('home-project--closed');
+
         project.childNodes[1].addEventListener('mouseenter', (event) => {
           event.preventDefault();
 
@@ -113,6 +116,13 @@ export default class Home {
       GRIDITEM.className = 'grid__item';
       this.grid.appendChild(GRIDITEM);
     });
+  }
+
+  static clickEvent() {
+    if ('ontouchstart' in document.documentElement === true)
+      return 'touchstart';
+    else
+      return 'click';
   }
 
   times(total) {
