@@ -15,7 +15,7 @@ export default class Home {
     this.generatePositions();
     this.generateGrid();
 
-    this.projects.container.addEventListener(self.clickEvent, (event) => {
+    this.projects.container.addEventListener(Home.clickEvent(), (event) => {
       if (event.target.className !== 'home-project__plus') {
         event.preventDefault();
         this.projects.items.forEach((project) => {
@@ -29,7 +29,7 @@ export default class Home {
       project.classList.remove('home-project--open');
       project.classList.add('home-project--closed');
 
-      project.childNodes[1].addEventListener(self.clickEvent, (event) => {
+      project.childNodes[1].addEventListener(Home.clickEvent(), (event) => {
         event.preventDefault();
 
         if (event.target.className === 'home-project__plus') {
@@ -37,14 +37,23 @@ export default class Home {
           project.classList.toggle('home-project--open');
         }
       });
-      project.childNodes[3].addEventListener(self.clickEvent, (event) => {
+      project.childNodes[3].addEventListener(Home.clickEvent(), (event) => {
         event.preventDefault();
 
-        event.path.forEach((element) => {
-          if (element.className === 'home-project__container') {
-            window.location = element.getAttribute('href');
+        if (event.path === undefined) {
+          if (event.target.className === 'home-project__figure-inner' || event.target.className === 'home-project__figcaption') {
+            window.location = event.target.parentNode.parentNode.getAttribute('href');
           }
-        });
+          if (event.target.className === 'home-project__image' || event.target.className === 'home-project__view') {
+            window.location = event.target.parentNode.parentNode.parentNode.getAttribute('href');
+          }
+        } else {
+          event.path.forEach((element) => {
+            if (element.className === 'home-project__container') {
+              window.location = element.getAttribute('href');
+            }
+          });
+        }
       });
       if (window.innerWidth >= 640) {
         project.classList.remove('home-project--open');
@@ -119,10 +128,12 @@ export default class Home {
   }
 
   static clickEvent() {
-    if ('ontouchstart' in document.documentElement === true)
-      return 'touchstart';
-    else
-      return 'click';
+    let clickEvent = 'click';
+    if ('ontouchstart' in document.documentElement === true) {
+      clickEvent = 'touchstart';
+    }
+
+    return clickEvent;
   }
 
   times(total) {
