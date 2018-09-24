@@ -1,5 +1,6 @@
 export default class Home {
   constructor() {
+    this.pageContainer = document.querySelector('.page-home');
     this.projects = {
       items: document.querySelectorAll('.home-project'),
       container: document.querySelector('#projectsContainer'),
@@ -115,15 +116,17 @@ export default class Home {
       gridWidth = 5;
     }
 
-    const GRIDHEIGHT = Number((
-      (this.projects.container.offsetHeight / this.project.height)
-      + 2
-    ).toFixed());
+    const BLOCKS = {
+      page: Math.ceil((this.pageContainer.offsetHeight / this.project.height)),
+      needed: Math.ceil((this.projects.container.offsetHeight / this.project.height) + 2),
+    };
 
-    this.times(gridWidth * GRIDHEIGHT)(() => {
-      const GRIDITEM = document.createElement('span');
-      GRIDITEM.className = 'grid__item';
-      this.grid.appendChild(GRIDITEM);
+    const GRID_HEIGHT = (BLOCKS.needed > BLOCKS.page ? BLOCKS.needed : BLOCKS.page);
+
+    this.times(gridWidth * GRID_HEIGHT)(() => {
+      const GRID_ITEM = document.createElement('span');
+      GRID_ITEM.className = 'grid__item';
+      this.grid.appendChild(GRID_ITEM);
     });
   }
 

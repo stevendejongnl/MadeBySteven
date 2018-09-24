@@ -92,7 +92,7 @@
 			border: rem-calc(2) solid $white-color;
 
 			@include breakpoint(tablet, down) {
-				width: calc(100vw - 0.25rem); // 4px
+				//width: calc(100vw - 0.25rem); // 4px
 			}
 
 			@include breakpoint(tablet) {

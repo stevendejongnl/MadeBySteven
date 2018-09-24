@@ -11,6 +11,7 @@
 
 	@include breakpoint(tablet) {
 		background-attachment: scroll;
+		overflow-y: hidden;
 	}
 }
 
