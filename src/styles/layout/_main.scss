@@ -11,12 +11,9 @@
 
 	@include breakpoint(tablet) {
 		background-attachment: scroll;
-		overflow-y: hidden;
 	}
 }
 
 .main-container {
-	//max-width: rem-calc(1200);
-	//margin: auto;
 	position: relative;
 }
