@@ -1,7 +1,7 @@
 .project {
 	&__container {
 		margin-top: calc(-100vh - -4.375rem); // 70px
-		height: calc(100vh - 14.8125rem); // 237px
+		height: calc(100vh - -4.375rem); // 70px
 		overflow-y: scroll;
 		-webkit-overflow-scrolling: touch;
 		grid-template-columns: 1fr;
