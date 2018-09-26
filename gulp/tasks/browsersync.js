@@ -7,6 +7,7 @@ module.exports = function () {
   });
 
   gulp.watch("./src/styles/**/*.{scss,css}", ['stylelint', 'sass']);
+  gulp.watch("**/*.php", ['phplint']);
   gulp.watch("./src/scripts/**/*.js", ['eslint', 'babel']);
   gulp.watch("./").on('change', browserSync.reload);
 };

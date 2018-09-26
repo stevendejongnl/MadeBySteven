@@ -1,1 +1,1 @@
-module.exports = ['eslint', 'stylelint', 'babel', 'sass'];
+module.exports = ['eslint', 'stylelint', 'phplint', 'babel', 'sass'];
