@@ -1,0 +1,126 @@
+[
+  {
+    "name": "Herrie Liefhebbers",
+    "slug": "herrie-liefhebbers",
+    "github": false,
+    "link": "https://herrieliefhebbers.nl",
+    "teaser": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret, et quodcumque tamquam occurreret. Egone quaeris, inquit, quid sentiam? Duo Reges: constructio interrete. Quos quidem tibi studiose et diligenter tractandos magnopere censeo.",
+    "positions": {
+      "column": 9,
+      "plus": 5
+    },
+    "date": "01-10-2017",
+    "client": {
+      "name": "Own Project",
+      "logo": false
+    },
+    "tech": false,
+    "images": [
+      {
+        "image": "https://picsum.photos/1600/800?image=2",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
+        "positions": {
+          "column": 9,
+          "plus": 5
+        }
+      },
+      {
+        "image": "https://picsum.photos/1600/800?image=3",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
+        "positions": {
+          "column": 4,
+          "plus": 0
+        }
+      },
+      {
+        "image": "https://picsum.photos/1600/800?image=4",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
+        "positions": {
+          "column": 7,
+          "plus": 3
+        }
+      },
+      {
+        "image": "https://picsum.photos/1600/800?image=5",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
+        "positions": {
+          "column": 2,
+          "plus": 4
+        }
+      }
+    ]
+  },
+  {
+    "name": "iMailo Affiliate",
+    "slug": "imailo-affiliate",
+    "github": false,
+    "link": "https://imailo.com",
+    "teaser": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret, et quodcumque tamquam occurreret. Egone quaeris, inquit, quid sentiam? Duo Reges: constructio interrete. Quos quidem tibi studiose et diligenter tractandos magnopere censeo.",
+    "positions": {
+      "column": 4,
+      "plus": 0
+    },
+    "date": "01-02-2018",
+    "client": {
+      "name": "iMailo",
+      "logo": false
+    },
+    "tech": [
+      "css3", "gulp", "jquery", "mysql"
+    ]
+  },
+  {
+    "name": "The Recharge Company",
+    "slug": "the-recharge-company",
+    "github": false,
+    "link": "https://app.recharge5.be",
+    "teaser": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret, et quodcumque tamquam occurreret. Egone quaeris, inquit, quid sentiam? Duo Reges: constructio interrete. Quos quidem tibi studiose et diligenter tractandos magnopere censeo.",
+    "positions": {
+      "column": 3,
+      "plus": 2
+    },
+    "date": "01-03-2018",
+    "client": {
+      "name": "The Recharge compnay",
+      "logo": false
+    },
+    "tech": false,
+    "images": [
+      {
+        "image": "https://picsum.photos/1600/800?image=2",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
+        "positions": {
+          "column": 9,
+          "plus": 5
+        }
+      },
+      {
+        "image": "https://picsum.photos/1600/800?image=3",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
+        "positions": {
+          "column": 4,
+          "plus": 0
+        }
+      },
+      {
+        "image": "https://picsum.photos/1600/800?image=4",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
+        "positions": {
+          "column": 7,
+          "plus": 3
+        }
+      },
+      {
+        "image": "https://picsum.photos/1600/800?image=5",
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
+        "positions": {
+          "column": 2,
+          "plus": 4
+        }
+      }
+    ]
+  }
+]

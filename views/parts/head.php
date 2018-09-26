@@ -7,7 +7,7 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title><?= $getPage->title; ?></title>
 
-	<link rel="stylesheet" href="./dist/styles/main.css">
+	<link rel="stylesheet" href="/dist/styles/main.css">
 </head>
 <body class="<?= $getPage->classes; ?>">
 
