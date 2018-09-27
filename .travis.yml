@@ -1,15 +1,32 @@
+sudo: required
+dist: trusty
 
-language: node_js
-node_js:
-- "7"
+language: php
+php:
+  - 7
+  - hhvm
+
+matrix:
+  allow_failures:
+  - php: hhvm
+
+env:
+- NODE_RELEASE=6.x
+- NOTE_RELEASE=7.x
 
 before_install:
+- sudo rm -rf ~/.nvm - curl -sL "https://deb.nodesource.com/setup_${NODE_RELEASE}" | sudo -E bash -
+- sudo apt-get install -y nodejs
 - npm install -g gulp-cli
 
-before_script:
+install:
+- composer install
 - npm install
-script: gulp travis
+
+script:
+- gulp travis
 
 cache:
   directories:
   - "node_modules"
+  - "vendor"

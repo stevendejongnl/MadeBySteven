@@ -1,23 +1,63 @@
 <?
 
-class PageInfo {
-	public $template;
-	public $slug;
-	public $title;
-	public $classes;
+/**
+ * Class PageInfo
+ *
+ * @category Classes
+ * @package MadeBySteven_Portfolio
+ * @author  Steven de Jong <steven@steven-dejong.nl>
+ * @license https://www.gnu.org/licenses/agpl-3.0.txt GNU/AGPLv3
+ * @link    https://madebysteven.nl
+ */
+class PageInfo
+{
 
-	static function getPage() {
-		$path = $_SERVER['REQUEST_URI'];
+    /**
+     * Template type
+     *
+     * @var string $template
+     */
+    public $template;
 
-		$pageInfo = new self();
-		$pageInfo->template = '404';
-		$pageInfo->title = 'Page not found';
-		$pageInfo->classes = 'page-404';
+    /**
+     * Page slug
+     *
+     * @var string $slug
+     */
+    public $slug;
 
-		$pathArray = explode('/', $path);
+    /**
+     * Page title
+     *
+     * @var string $title
+     */
+    public $title;
+
+    /**
+     * Page classes
+     *
+     * @var string $classes
+     */
+    public $classes;
+
+    /**
+     * Classes to get page info
+     *
+     * @return PageInfo
+     */
+    static function getPage()
+    {
+        $path = $_SERVER['REQUEST_URI'];
+
+        $pageInfo = new self();
+        $pageInfo->template = '404';
+        $pageInfo->title = 'Page not found';
+        $pageInfo->classes = 'page-404';
+
+        $pathArray = explode('/', $path);
         array_shift($pathArray);
 
-		if ($pathArray[0] === '') {
+        if ($pathArray[0] === '') {
             $pageInfo->template = 'home';
             $pageInfo->title = 'Made by Steven';
             $pageInfo->classes = 'page-home container';
@@ -32,6 +72,9 @@ class PageInfo {
             $pageInfo->classes = 'page-project';
         }
 
-		return $pageInfo;
-	}
-}
+        return $pageInfo;
+
+    }//end getPage()
+
+
+}//end class
