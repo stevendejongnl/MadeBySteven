@@ -8,7 +8,7 @@ define('corePath', rootPath . "/core");
 define('dataPath', rootPath . "/data");
 define('urlPath', basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)));
 
-include_once 'core/config.php';
+include_once 'core/Config.php';
 
 Config::init();
 

@@ -33,6 +33,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-eslint": "^5.0.0",
     "gulp-sass": "^4.0.1",
+    "gulp-shell": "^0.6.5",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-stylelint": "^7.0.0",
     "require-dir": "^1.0.0",
@@ -41,7 +42,6 @@
     "stylelint-scss": "^3.3.0"
   },
   "dependencies": {
-    "gulp-phplint": "^0.9.0",
     "normalize-scss": "^7.0.1"
   }
 }

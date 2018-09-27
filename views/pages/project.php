@@ -30,7 +30,10 @@
 
         <div class="project-info__client">
             <h3 class="heading--third">Client</h3>
-            <span><?= (!$project->client->logo ? $project->client->name : '<img src="/data/projects/images/$project->slug/logo.png" alt="$project->client->name">'); ?></span>
+            <span><?= (!$project->client->logo ?
+                $project->client->name : '<img src="/data/projects/images/$project->slug/logo.png"
+                    alt="$project->client->name">');
+            ?></span>
         </div>
 
         <div class="project-info__tech">

@@ -10,5 +10,7 @@
     "!dist/**/*.{scss,css}",
     "!**/node_modules/**/*.{scss,css}"
   ],
-  "phplint": []
+  "phpcodesniffer": [
+    "!vendor/**/*.php"
+  ]
 }

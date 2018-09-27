@@ -4,8 +4,12 @@
     <div class="wrapper">
         <article class="about-me">
             <h1 class="heading--first">Steven</h1>
-            <p class="paragraph">Ik ben een gedreven en positief ingestelde Full-stack Developer. Zo heb ik veel ervaring op het gebied van PHP, MySQL, JavaScript (ES5/6), Zurb Foundation en Bootstrap.</p>
-            <p class="paragraph">Door mijn ervaringen als vormgever waarbij ik o.a. gebruik gemaakt heb van Adobe Photoshop, Illustrator en Sketch kan ik makkelijk schakelen en communiceren in een multidisciplinair team.</p>
+            <p class="paragraph">Ik ben een gedreven en positief ingestelde Full-stack Developer. Zo
+                heb ik veel ervaring op het gebied van PHP, MySQL, JavaScript (ES5/6), Zurb
+                Foundation en Bootstrap.</p>
+            <p class="paragraph">Door mijn ervaringen als vormgever waarbij ik o.a. gebruik gemaakt
+                heb van Adobe Photoshop, Illustrator en Sketch kan ik makkelijk schakelen en
+                communiceren in een multidisciplinair team.</p>
         </article>
 
         <div class="love-to-work">
@@ -59,14 +63,16 @@
             <h4 class="heading--fourth">Get in touch</h4>
             <ul class="list--reset social">
                 <li class="social__item">
-                    <a href="https://github.com/stevendejongnl" target="_blank" class="social__link">
-		                <? Functions::getSVG('github'); ?>
+                    <a href="https://github.com/stevendejongnl" target="_blank"
+                       class="social__link">
+                        <? Functions::getSVG('github'); ?>
                     </a>
                 </li>
 
                 <li class="social__item">
-                    <a href="https://www.linkedin.com/in/stevendejongnl" target="_blank" class="social__link">
-			            <? Functions::getSVG('linkedin'); ?>
+                    <a href="https://www.linkedin.com/in/stevendejongnl" target="_blank"
+                       class="social__link">
+                        <? Functions::getSVG('linkedin'); ?>
                     </a>
                 </li>
             </ul>
