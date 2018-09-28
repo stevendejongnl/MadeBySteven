@@ -9,7 +9,7 @@
 
     <link rel="stylesheet" href="/dist/styles/main.css">
 </head>
-<body class="<?= $getPage->classes; ?>">
-
-<main role="main" class="main-container">
+<body>
+<div class="blend-mode-bug-fix <?= $getPage->classes; ?>">
+    <main role="main" class="main-container">
 <? Functions::getPart('header');

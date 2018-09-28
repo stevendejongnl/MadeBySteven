@@ -48,11 +48,12 @@
 	&__open {
 		opacity: 1;
 		margin-left: 0;
-		margin-top: rem-calc(-50);
+		margin-top: 0;
+		//margin-top: rem-calc(-50);
 
-		@supports not (position: sticky) {
-			margin-top: rem-calc(-55);
-		}
+		//@supports not (position: sticky) {
+		//	margin-top: rem-calc(-55);
+		//}
 	}
 
 	&__item {

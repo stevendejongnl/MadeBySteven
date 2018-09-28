@@ -1,7 +1,7 @@
 .project {
 	&__container {
-		margin-top: calc(-100vh - -4.375rem); // 70px
-		height: calc(100vh - -4.375rem); // 70px
+		margin-top: calc(-100vh - -7.625rem); // 122px
+		height: calc(100vh - -7.625rem); // 122px
 		overflow-y: scroll;
 		-webkit-overflow-scrolling: touch;
 		grid-template-columns: 1fr;
@@ -12,7 +12,8 @@
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
 			width: calc(100vw - 31.25rem); // 500px
-			margin-top: rem-calc(-108);
+			//margin-top: rem-calc(-108);
+			margin-top: 0;
 			margin-left: -100vw;
 			padding-top: rem-calc(150);
 			padding-bottom: rem-calc(150);
@@ -20,7 +21,7 @@
 		}
 
 		&--open {
-			margin-top: rem-calc(72);
+			margin-top: rem-calc(122);
 			opacity: 1;
 			border-top: rem-calc(2) solid $tomato-color;
 			background-color: $white-color;
@@ -30,7 +31,8 @@
 			}
 
 			@include breakpoint(tablet) {
-				margin-top: rem-calc(-108);
+				//margin-top: rem-calc(-108);
+				margin-top: 0;
 				margin-left: rem-calc(320);
 				border-top: none;
 				border-left: rem-calc(2) solid $tomato-color;

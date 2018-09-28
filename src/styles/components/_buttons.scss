@@ -1,6 +1,7 @@
 .button {
 	&--menu {
-		position: sticky;
+		//position: sticky;
+		position: fixed;
 		top: rem-calc(10);
 		left: rem-calc(10);
 		width: rem-calc(45);
@@ -9,15 +10,15 @@
 		z-index: 90000;
 		transition: opacity $base-transition-time, transform $base-transition-time, background-color $base-transition-time;
 
-		@supports not (position: sticky) {
-			position: -webkit-sticky;
-			margin-top: rem-calc(10);
-		}
+		//@supports not (position: sticky) {
+		//	position: -webkit-sticky;
+		//	margin-top: rem-calc(10);
+		//}
 
 		@include breakpoint(tablet) {
 			top: rem-calc(35);
 			left: rem-calc(35);
-			margin-top: rem-calc(35);
+			//margin-top: rem-calc(35);
 			width: rem-calc(70);
 			height: rem-calc(70);
 		}

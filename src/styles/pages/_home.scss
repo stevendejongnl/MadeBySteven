@@ -120,10 +120,6 @@
 			height: auto;
 			mix-blend-mode: multiply;
 			transition: mix-blend-mode $base-transition-time;
-
-			&:hover {
-				mix-blend-mode: normal;
-			}
 		}
 
 		&__figcaption {
@@ -200,6 +196,12 @@
 		&__container {
 			position: relative;
 			cursor: pointer;
+
+			&:hover {
+				.home-project__image {
+					mix-blend-mode: normal;
+				}
+			}
 		}
 
 		&--open {
