@@ -1,4 +1,6 @@
 // eslint-disable-next-line
+import Google from './components/google.js';
+// eslint-disable-next-line
 import Navigation from './components/navigation.js';
 // eslint-disable-next-line
 import Home from './components/home.js';
@@ -11,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     about: (!!document.querySelector('.page-about')),
     project: (!!document.querySelector('.page-project')),
   };
+
+  const GOOGLE = new Google();
+  GOOGLE.init();
 
   const NAVIGATION = new Navigation();
   NAVIGATION.init();
