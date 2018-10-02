@@ -1,7 +1,7 @@
 # Portfolio
 
 ## Preview link
-[dev.madebysteven.nl](https://dev.madebysteven.nl)
+[madebysteven.nl][1]
 
 ## Install project
 Use `npm install` to install packages.
@@ -41,3 +41,4 @@ styles/
 └── main.scss               # Main Sass file
 ```
 
+[1]:	https://madebysteven.nl
