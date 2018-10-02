@@ -1,5 +1,95 @@
 [
   {
+    "name": "The Old Dance School Admin",
+    "slug": "the-old-dance-school-admin",
+    "github": false,
+    "link": false,
+    "teaser": "Voor de Old Dance School wordt er een platform ontwikkeld waar de huurders van de appartementen in het complex informatie kunnen inzien over hun appartement.",
+    "description": "Voor de Old Dance School wordt er een platform ontwikkeld waar de huurders van de appartementen in het complex informatie kunnen inzien over hun appartement. Ook kunnen ze hier binnen contact opnemen met de verhuurder en overige documenten als contracten of foto’s van bijv. schade inzien en insturen.<br><br>Dit project bestaat uit meerdere backend, frontend en UX/UI teams waar ik de lead rol heb voor drie backend teams.<br>Daarnaast ontwikkel ik zelf ook mee aan het project.<br>De backend wordt ontwikkeld op PHP7 om een Rest API te generen waar de frontend met React op kan werken.",
+    "positions": {
+      "column": 9,
+      "plus": 5
+    },
+    "date": "01-10-2018",
+    "client": {
+      "name": "The Old Dance School",
+      "logo": false
+    },
+    "tech": [
+      "php", "mysql"
+    ],
+    "images": [
+      {
+        "image": "/data/projects/images/the-old-dance-school-admin/featured.png",
+        "content": false,
+        "positions": {
+          "column": 9,
+          "plus": 5
+        }
+      }
+    ]
+  },
+  {
+    "name": "Office Dashboard",
+    "slug": "office-dashboard",
+    "github": false,
+    "link": false,
+    "teaser": "Is een platform waar je in kunt zien of en waar een werknemer, trainee of stagiair op project is.",
+    "description": "Is een platform waar je in kunt zien of en waar een werknemer, trainee of stagiair op project is.<br>Ook kun je vanuit dit platform het CV/Skills van iemand inzien en vervolgens een CV/export downloaden.<br><br>Dit project is ontwikkeld op Laravel in combinatie met Docker en voor de frontend Vue.js.<br>Voor dit project ben ik bezig met een refactor slag en deployment met Docker op een live server.",
+    "positions": {
+      "column": 5,
+      "plus": 1
+    },
+    "date": "01-10-2018",
+    "client": {
+      "name": "The Old Dance School",
+      "logo": false
+    },
+    "tech": [
+      "laravel"
+    ],
+    "images": [
+      {
+        "image": "/data/projects/images/office-dashboard/featured.png",
+        "content": false,
+        "positions": {
+          "column": 9,
+          "plus": 5
+        }
+      }
+    ]
+  },
+  {
+    "name": "The Old Dance School Site",
+    "slug": "the-old-dance-school-site",
+    "github": false,
+    "link": false,
+    "teaser": "The Old Dance School is een gebouw waar verschillende appartementen worden verhuurd.",
+    "description": "The Old Dance School is een gebouw waar verschillende appartementen worden verhuurd.<br>Hiervoor hebben we een WordPress website opgezet waar overzichtelijk is te zien welke appartementen verhuurd zijn en welke niet. Tevens kun je op de detailpagina alle informatie inzien van een appartement en zijn hier de foto's te bekijken.<br><br>Tijdens de ontwikkeling van deze website ben ik verantwoordelijk voor het aanpassen van Custom Post Types en Field om de appartementen op een eenvoudige manier te kunnen beheren via het CMS. Hierbij voornamelijk gebruik gemaakt van PHP.",
+    "positions": {
+      "column": 2,
+      "plus": 1
+    },
+    "date": "01-08-2018",
+    "client": {
+      "name": "The Old Dance School",
+      "logo": false
+    },
+    "tech": [
+      "php", "wordpress", "sass", "javascript"
+    ],
+    "images": [
+      {
+        "image": "/data/projects/images/the-old-dance-school-site/featured.png",
+        "content": false,
+        "positions": {
+          "column": 4,
+          "plus": 2
+        }
+      }
+    ]
+  },
+  {
     "name": "Holland ConTech & PropTech",
     "slug": "holland-contech-proptech",
     "github": false,
@@ -7,8 +97,8 @@
     "teaser": "Holland ConTech & PropTech wilde een nieuwe website waar hun evenementen, reizen, ebooken en blog post beter zichtbaar zouden worden.",
     "description": "Holland ConTech & PropTech wilde een nieuwe website waar hun evenementen, reizen, ebooken en blog post beter zichtbaar zouden worden. Ook moest het mogelijk zijn om via de website makkelijk in te schrijven voor bijv. evenementen.<br>Alle inschrijvingen moesten in de website zelf en naar Active Campaign doorgeschoten worden.<br>Voor de koppeling met Active Campaign moest ik een PHP API koppeling maken omdat de standaard embed manier met JavaScript niet een optie was.<br>Verder is de website ontwikkeld op het Custom PHP CMS.",
     "positions": {
-      "column": 9,
-      "plus": 5
+      "column": 3,
+      "plus": 4
     },
     "date": "01-4-2018",
       "client": {
