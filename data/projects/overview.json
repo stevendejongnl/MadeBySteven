@@ -1,52 +1,38 @@
 [
   {
-    "name": "Herrie Liefhebbers",
-    "slug": "herrie-liefhebbers",
+    "name": "Holland ConTech & PropTech",
+    "slug": "holland-contech-proptech",
     "github": false,
-    "link": "https://herrieliefhebbers.nl",
-    "teaser": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret, et quodcumque tamquam occurreret. Egone quaeris, inquit, quid sentiam? Duo Reges: constructio interrete. Quos quidem tibi studiose et diligenter tractandos magnopere censeo.",
+    "link": "https://www.contechproptech.nl",
+    "teaser": "Holland ConTech & PropTech wilde een nieuwe website waar hun evenementen, reizen, ebooken en blog post beter zichtbaar zouden worden.",
+    "description": "Holland ConTech & PropTech wilde een nieuwe website waar hun evenementen, reizen, ebooken en blog post beter zichtbaar zouden worden. Ook moest het mogelijk zijn om via de website makkelijk in te schrijven voor bijv. evenementen.<br>Alle inschrijvingen moesten in de website zelf en naar Active Campaign doorgeschoten worden.<br>Voor de koppeling met Active Campaign moest ik een PHP API koppeling maken omdat de standaard embed manier met JavaScript niet een optie was.<br>Verder is de website ontwikkeld op het Custom PHP CMS.",
     "positions": {
       "column": 9,
       "plus": 5
     },
-    "date": "01-10-2017",
-    "client": {
-      "name": "Own Project",
+    "date": "01-4-2018",
+      "client": {
+      "name": "Holland ConTech & PropTech",
       "logo": false
     },
-    "tech": false,
+    "tech": [
+      "php", "jquery", "sass", "foundation"
+    ],
     "images": [
       {
-        "image": "https://picsum.photos/1600/800?image=2",
-        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
+        "image": "/data/projects/images/holland-contech-proptech/featured.png",
+        "content": false,
         "positions": {
           "column": 9,
           "plus": 5
         }
       },
       {
-        "image": "https://picsum.photos/1600/800?image=3",
-        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
+        "image": "/data/projects/images/holland-contech-proptech/events.png",
+        "content": false,
         "positions": {
           "column": 4,
           "plus": 0
-        }
-      },
-      {
-        "image": "https://picsum.photos/1600/800?image=4",
-        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
-        "positions": {
-          "column": 7,
-          "plus": 3
-        }
-      },
-      {
-        "image": "https://picsum.photos/1600/800?image=5",
-        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
-        "positions": {
-          "column": 2,
-          "plus": 4
         }
       }
     ]
@@ -56,8 +42,8 @@
     "slug": "imailo-affiliate",
     "github": false,
     "link": "https://imailo.com",
-    "teaser": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret, et quodcumque tamquam occurreret. Egone quaeris, inquit, quid sentiam? Duo Reges: constructio interrete. Quos quidem tibi studiose et diligenter tractandos magnopere censeo.",
+    "teaser": "Het iMailo Affiliate Platform was toe aan een vernieuwing, het huidige systeem werd te langzaam en optimaliseren was geen optie meer.",
+    "description": "Het iMailo Affiliate Platform was toe aan een vernieuwing, het huidige systeem werd te langzaam en optimaliseren was geen optie meer.<br>Op de huidige database heb ik, in samenwerking met een klein team, daarom een nieuw systeem ontwikkeld. Omdat er veel data in de database zit moest het systeem klein en snel zijn, ook moest er rekening gehouden worden met dat het systeem later nog verder uitgebreid kon worden.<br><br>Ik heb het nieuwe platform gebouwd op het Custom PHP CMS, de front-end is ontwikkeld door een externe partij m.b.v. Bootstrap. Na de oplevering van de Front-end, heb ik deze gekoppeld aan ons systeem en aangepast waar nodig was. Verder wordt veel data opgehaald met JavaScript om realtime data te kunnen tonen.",
     "positions": {
       "column": 4,
       "plus": 0
@@ -68,7 +54,17 @@
       "logo": false
     },
     "tech": [
-      "css3", "gulp", "jquery", "mysql"
+      "php", "css3", "gulp", "jquery", "mysql"
+    ],
+    "images": [
+      {
+        "image": "/data/projects/images/imailo-affiliate/featured.png",
+        "content": false,
+        "positions": {
+          "column": 9,
+          "plus": 5
+        }
+      }
     ]
   },
   {
@@ -76,8 +72,8 @@
     "slug": "the-recharge-company",
     "github": false,
     "link": "https://app.recharge5.be",
-    "teaser": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret, et quodcumque tamquam occurreret. Egone quaeris, inquit, quid sentiam? Duo Reges: constructio interrete. Quos quidem tibi studiose et diligenter tractandos magnopere censeo.",
+    "teaser": "The Recharge Company wilde een nieuw systeem om alle websites binnen één admin panel te kunnen beheren.",
+    "description": "The Recharge Company wilde een nieuw systeem om alle websites binnen één admin panel te kunnen beheren.<br>Ze hebben verschillende recharge programma's met elk een eigen site en daarop gekoppelde klanten.<br><br>We hebben een systeem ontwikkeld waarbij we verschillende websites in de admin konden toevoegen en je vervolgens per website nieuwe programma's kon aanmaken.<br>De klanten konden zich abonneren op elke website met hetzelfde account waardoor de accounts ook overzichtelijker zijn.<br><br>The Recharge is ontwikkeld op het bestaande uiterlijk van de oude sites, ik heb dit alles omgezet naar een Custom PHP CMS. Aan het uiterlijk zijn waar nodig aanpassingen aangebracht. Voor het programma zelf moest er een nieuwe functionaliteit geschreven worden om elke dag een formulier in te vullen en een score terug te krijgen na het invullen. Waardoor er aan het einde van het programma een vergelijking gemaakt kon worden met iedereen die het programma gedaan heeft.",
     "positions": {
       "column": 3,
       "plus": 2
@@ -87,38 +83,24 @@
       "name": "The Recharge compnay",
       "logo": false
     },
-    "tech": false,
+    "tech": [
+      "php", "jquery", "mysql"
+    ],
     "images": [
       {
-        "image": "https://picsum.photos/1600/800?image=2",
-        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
+        "image": "/data/projects/images/the-recharge-company/featured.png",
+        "content": false,
         "positions": {
           "column": 9,
           "plus": 5
         }
       },
       {
-        "image": "https://picsum.photos/1600/800?image=3",
-        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
+        "image": "/data/projects/images/the-recharge-company/scorecard.png",
+        "content": false,
         "positions": {
           "column": 4,
           "plus": 0
-        }
-      },
-      {
-        "image": "https://picsum.photos/1600/800?image=4",
-        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
-        "positions": {
-          "column": 7,
-          "plus": 3
-        }
-      },
-      {
-        "image": "https://picsum.photos/1600/800?image=5",
-        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed fortuna fortis; Quodcumque in mentem incideret",
-        "positions": {
-          "column": 2,
-          "plus": 4
         }
       }
     ]
