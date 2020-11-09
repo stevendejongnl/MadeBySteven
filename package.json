@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Personal Portfolio",
   "main": "index.js",
+  "engines": {
+    "node": "10.11"
+  }
   "scripts": {
     "pretest": "stylelint src/**/*.scss",
     "test": "eslint --ignore-path .gitignore .",
