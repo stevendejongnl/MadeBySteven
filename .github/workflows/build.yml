@@ -30,25 +30,8 @@ jobs:
     - name: Update index.html paths
       run: sed -i 's/\.\/dist\///g' dist/index.html
 
-    - name: Generate Rollup configuration
-      run: |
-        echo "import typescript from 'rollup-plugin-typescript2';" > rollup.config.js
-        echo "" >> rollup.config.js
-        echo "export default {" >> rollup.config.js
-        echo "  input: 'src/main.ts'," >> rollup.config.js
-        echo "  output: {" >> rollup.config.js
-        echo "    file: 'dist/main.js'," >> rollup.config.js
-        echo "    format: 'umd'," >> rollup.config.js
-        echo "    name: 'MadeBySteven'," >> rollup.config.js
-        echo "    exports: 'named'," >> rollup.config.js
-        echo "  }," >> rollup.config.js
-        echo "  plugins: [" >> rollup.config.js
-        echo "    typescript()," >> rollup.config.js
-        echo "  ]," >> rollup.config.js
-        echo "};" >> rollup.config.js      
-
     - name: Build project
-      run: npm install rollup-plugin-typescript2 && npx rollup --config rollup.config.js
+      run: npm install rollup-plugin-typescript2 @rollup/plugin-node-resolve @rollup/plugin-replace && npx rollup --config rollup.config.js
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
