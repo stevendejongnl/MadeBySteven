@@ -3,7 +3,7 @@ name: Test
 on:
   push:
     branches:
-      - '*'  # Voer de test uit bij elke push naar alle branches
+      - '*'
 
 
 jobs:
