@@ -32,11 +32,11 @@ jobs:
 
     - name: Build project
       run: |
-        npm install
-        rollup-plugin-typescript2
-        @rollup/plugin-node-resolve
-        @rollup/plugin-replace
-        rollup-plugin-summary &&
+        npm install \
+        rollup-plugin-typescript2 \
+        @rollup/plugin-node-resolve \
+        @rollup/plugin-replace \
+        rollup-plugin-summary
         
         npx rollup --config rollup.config.js
 
