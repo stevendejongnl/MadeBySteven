@@ -12,6 +12,6 @@ export class MadeBySteven extends LitElement {
       <main class="made-by-steven">
         <slot part="base"></slot>
       </main>
-    `;
+    `
   }
 }

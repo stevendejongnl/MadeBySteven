@@ -1,6 +1,6 @@
 import {expect, fixture, html} from '@open-wc/testing'
 
-import { MadeBySteven } from "./made-by-steven.js"
+import { MadeBySteven } from './made-by-steven.js'
 
 describe('Made by Steven', () => {
   let component: MadeBySteven
@@ -11,6 +11,12 @@ describe('Made by Steven', () => {
 })
 
 const expectMadeByStevenContentDidRender = (component: MadeBySteven): void => {
-  const content = component?.shadowRoot?.querySelector('[part="base"]').textContent
-  expect(content).to.be('Content Yo!')
+  const content = (component.shadowRoot || component).querySelector('[part="base"]')?.textContent
+
+  console.log((component.shadowRoot))
+  console.log((component.shadowRoot?.querySelector('[part="base"]')))
+
+  console.log(content)
+
+  expect(content).to.equal('Content Yo!')
 }

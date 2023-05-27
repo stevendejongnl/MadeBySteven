@@ -15,7 +15,7 @@
     "build:clean": "rimraf ./dist ./tsconfig.tsbuildinfo",
     
     "serve": "npm run build && web-dev-server --node-resolve",
-    "serve:watch": "concurrently 'npm run serve -- --watch' 'npm run build -- --watch'",
+    "serve:watch": "concurrently 'npm run serve -- --watch' 'npm run build:js -- --watch' 'npm run build:css -- --watch'",
 
     "pretest": "npm run build",
     "test": "web-test-runner",
