@@ -19,6 +19,12 @@ jobs:
     - name: Build
       run: npm run build
 
+    - name: Move index.html to dist
+      run: mv index.html dist/
+
+    - name: Update index.html paths
+      run: sed -i 's/\.\/dist\///g' dist/index.html
+
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
