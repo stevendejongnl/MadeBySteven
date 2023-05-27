@@ -1,0 +1,25 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - '*'  # Voer de test uit bij elke push naar alle branches
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run tests with Playwright
+      env:
+        PLAYWRIGHT_BROWSERS: chromium
+      run: |
+        docker run -it --rm \
+          -v $PWD:/usr/src/app \
+          -w /usr/src/app \
+          --network host \
+          mcr.microsoft.com/playwright:v1.34.3-jammy \
+          bash -c "npm ci && npm test"
