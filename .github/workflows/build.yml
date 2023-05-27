@@ -21,11 +21,8 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Build
-      run: npm run build
-
-    - name: Copy lit.js to dist
-      run: cp node_modules/lit/dist/lit.js dist/
+    - name: Build CSS
+      run: npm run build:css
 
     - name: Move index.html to dist
       run: mv index.html dist/
@@ -33,9 +30,23 @@ jobs:
     - name: Update index.html paths
       run: sed -i 's/\.\/dist\///g' dist/index.html
 
-    - name: Update index.html
+    - name: Generate Rollup configuration
       run: |
-        sed -i 's|<script src="./main.js"></script>|<script src="lit.js"></script>\n<script src="./main.js"></script>|' dist/index.html
+        echo "import typescript from 'rollup-plugin-typescript2';" > rollup.config.js
+        echo "" >> rollup.config.js
+        echo "export default {" >> rollup.config.js
+        echo "  input: 'src/main.ts'," >> rollup.config.js
+        echo "  output: {" >> rollup.config.js
+        echo "    file: 'dist/main.js'," >> rollup.config.js
+        echo "    format: 'umd'," >> rollup.config.js
+        echo "  }," >> rollup.config.js
+        echo "  plugins: [" >> rollup.config.js
+        echo "    typescript()," >> rollup.config.js
+        echo "  ]," >> rollup.config.js
+        echo "};" >> rollup.config.js
+
+    - name: Build project
+      run: npx rollup --config rollup.config.js
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
