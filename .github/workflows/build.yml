@@ -46,7 +46,7 @@ jobs:
         echo "};" >> rollup.config.js
 
     - name: Build project
-      run: npx rollup --config rollup.config.js
+      run: npm install rollup-plugin-typescript2 && npx rollup --config rollup.config.js
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
