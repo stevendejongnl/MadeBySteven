@@ -39,11 +39,13 @@ jobs:
         echo "  output: {" >> rollup.config.js
         echo "    file: 'dist/main.js'," >> rollup.config.js
         echo "    format: 'umd'," >> rollup.config.js
+        echo "    name: 'MadeBySteven'," >> rollup.config.js
+        echo "    exports: 'named'," >> rollup.config.js
         echo "  }," >> rollup.config.js
         echo "  plugins: [" >> rollup.config.js
         echo "    typescript()," >> rollup.config.js
         echo "  ]," >> rollup.config.js
-        echo "};" >> rollup.config.js
+        echo "};" >> rollup.config.js      
 
     - name: Build project
       run: npm install rollup-plugin-typescript2 && npx rollup --config rollup.config.js
