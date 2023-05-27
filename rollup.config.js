@@ -6,7 +6,6 @@ import summary from 'rollup-plugin-summary';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import postcss from 'rollup-plugin-postcss';
-import webfontloader from 'webfontloader';
 
 export default {
   input: 'src/main.ts',
@@ -28,19 +27,5 @@ export default {
       extract: true,
       minimize: true,
     }),
-    {
-      name: 'loadGoogleFonts',
-      async buildStart() {
-        await new Promise((resolve, reject) => {
-          webfontloader.load({
-            google: {
-              families: ['DM+Sans:400,700', 'Inter:100,400,500'],
-            },
-            active: resolve,
-            inactive: reject,
-          });
-        });
-      },
-    },
   ],
 };
