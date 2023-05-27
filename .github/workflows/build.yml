@@ -31,7 +31,14 @@ jobs:
       run: sed -i 's/\.\/dist\///g' dist/index.html
 
     - name: Build project
-      run: npm install rollup-plugin-typescript2 @rollup/plugin-node-resolve @rollup/plugin-replace && npx rollup --config rollup.config.js
+      run: |
+        npm install
+        rollup-plugin-typescript2
+        @rollup/plugin-node-resolve
+        @rollup/plugin-replace
+        rollup-plugin-summary &&
+        
+        npx rollup --config rollup.config.js
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
