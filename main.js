@@ -142,4 +142,30 @@ MadeAMenuItem = __decorate([
     e('made-a-menu-item')
 ], MadeAMenuItem);
 
-export { MadeAHeader, MadeALogo, MadeAMenu, MadeAMenuItem, MadeBySteven };
+// import {style} from './made-a-menu-item.style.js'
+let MadeMyName = class MadeMyName extends s {
+    // static override styles = style
+    render() {
+        return x `
+      <slot part="base"></slot>
+    `;
+    }
+};
+MadeMyName = __decorate([
+    e('made-my-name')
+], MadeMyName);
+
+// import {style} from './made-a-menu-item.style.js'
+let MadeMySlogan = class MadeMySlogan extends s {
+    // static override styles = style
+    render() {
+        return x `
+      <slot part="base"></slot>
+    `;
+    }
+};
+MadeMySlogan = __decorate([
+    e('made-my-slogan')
+], MadeMySlogan);
+
+export { MadeAHeader, MadeALogo, MadeAMenu, MadeAMenuItem, MadeBySteven, MadeMyName, MadeMySlogan };
