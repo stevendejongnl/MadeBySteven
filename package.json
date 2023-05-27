@@ -1,0 +1,53 @@
+{
+  "name": "madebysteven.nl",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "prebuild": "npm run build:clean",
+    "build": "concurrently 'npm run build:js' 'npm run build:css'",
+    "build:js": "tsc -b",
+    "build:css": "sass --no-source-map src/main.scss dist/main.css",
+    "build:clean": "rimraf ./dist ./tsconfig.tsbuildinfo",
+    
+    "serve": "npm run build && web-dev-server --node-resolve",
+    "serve:watch": "concurrently 'npm run serve -- --watch' 'npm run build -- --watch'",
+
+    "pretest": "npm run build",
+    "test": "web-test-runner",
+
+    "lint": "eslint 'src/**/*.ts'",
+    "lint:fix": "eslint 'src/**/*.ts' --fix",
+    "stylelint": "stylelint 'src/**/*.{ts,css,scss}'",
+    "stylelint:fix": "stylelint 'src/**/*.{ts,css,scss}' --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lit": "^2.7.4"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4-fix.0",
+    "@open-wc/testing": "^3.1.8",
+    "@types/mocha": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.59.7",
+    "@web/dev-server": "^0.2.1",
+    "@web/dev-server-esbuild": "^0.4.1",
+    "@web/test-runner": "^0.16.1",
+    "@web/test-runner-playwright": "^0.10.0",
+    "concurrently": "^8.0.1",
+    "eslint": "^8.41.0",
+    "postcss-lit": "^1.1.0",
+    "rimraf": "^5.0.1",
+    "sass": "^1.62.1",
+    "stylelint": "^15.6.2",
+    "stylelint-config-standard": "^33.0.0",
+    "stylelint-config-standard-scss": "^9.0.0",
+    "typescript": "^5.0.4"
+  }
+}
