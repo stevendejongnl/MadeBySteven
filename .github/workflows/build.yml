@@ -34,11 +34,16 @@ jobs:
       run: |
         npm install \
         rollup-plugin-typescript2 \
+        rollup-plugin-google-fonts \
+        rollup-plugin-postcss \
         @rollup/plugin-node-resolve \
         @rollup/plugin-replace \
         rollup-plugin-summary
         
         npx rollup --config rollup.config.js
+
+    - name: Remove Google Fonts link
+      run: sed -i '/<link href="https:\/\/fonts\.googleapis\.com\/css2?/d' index.html
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3

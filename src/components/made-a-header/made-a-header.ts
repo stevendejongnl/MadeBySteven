@@ -1,11 +1,11 @@
 import {html, LitElement} from 'lit'
 import {customElement} from 'lit/decorators.js'
 
-// import {style} from './made-a-menu.style.js'
+import {style} from './made-a-header.style.js'
 
 @customElement('made-a-header')
 export class MadeAHeader extends LitElement {
-  // static override styles = style
+  static override styles = style
 
   override render() {
     return html`
