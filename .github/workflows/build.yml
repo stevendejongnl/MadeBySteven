@@ -24,6 +24,9 @@ jobs:
     - name: Build CSS
       run: npm run build:css
 
+    - name: Copy CNAME file
+      run: mv CNAME dist/
+
     - name: Move index.html to dist
       run: mv index.html dist/
 
