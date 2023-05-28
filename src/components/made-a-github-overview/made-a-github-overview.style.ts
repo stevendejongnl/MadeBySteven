@@ -24,7 +24,7 @@ export const style = css`
   
   @media (min-width: 10px) and (max-width: 10000px) {
     .made-a-github-overview {
-      background-color: red;
+      background-color: transparent;
     }
   }
   
