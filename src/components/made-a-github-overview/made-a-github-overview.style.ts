@@ -22,13 +22,7 @@ export const style = css`
     color: var(--url-hover-text-color);
   }
   
-  @media (min-width: 10px) and (max-width: 10000px) {
-    .made-a-github-overview {
-      background-color: transparent;
-    }
-  }
-  
-  @media (min-width: var(--browser-width-medium-minimum)) {
+  @media (min-width: 480px) {
     .made-a-github-overview {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -39,7 +33,7 @@ export const style = css`
     }
   }
   
-  @media (min-width: var(--browser-width-large-minimum)) {
+  @media (min-width: 768px) {
     .made-a-github-overview {
       grid-template-columns: repeat(4, 1fr);
     }
