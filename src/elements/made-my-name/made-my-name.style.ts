@@ -12,7 +12,7 @@ export const style = css`
     grid-area: name;
     font-family: "DM Sans", sans-serif;
     font-size: ${rem(36)};
-    color: #ECEFF4;
+    color: var(--main-text-color);
   }
   slot[part="made-my-slogan"] {
     grid-area: made-my-slogan;

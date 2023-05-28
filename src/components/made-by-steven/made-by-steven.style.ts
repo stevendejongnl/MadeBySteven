@@ -6,9 +6,10 @@ export const style = css`
     grid-template-areas: "made-a-header"
       "main"
       "footer";
-    grid-template-rows: 60px auto 80px;
+    grid-template-rows: 80px auto 80px;
     width: 100vw;
     height: 100vh;
-    background-color: #2E3440;
+    overflow-x: hidden;
+    background-color: var(--main-background-color);
   }
 `
