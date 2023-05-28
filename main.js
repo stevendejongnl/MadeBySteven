@@ -173,13 +173,7 @@ const style$4 = i$2 `
     color: var(--url-hover-text-color);
   }
   
-  @media (min-width: 10px) and (max-width: 10000px) {
-    .made-a-github-overview {
-      background-color: transparent;
-    }
-  }
-  
-  @media (min-width: var(--browser-width-medium-minimum)) {
+  @media (min-width: 480px) {
     .made-a-github-overview {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -190,7 +184,7 @@ const style$4 = i$2 `
     }
   }
   
-  @media (min-width: var(--browser-width-large-minimum)) {
+  @media (min-width: 768px) {
     .made-a-github-overview {
       grid-template-columns: repeat(4, 1fr);
     }
