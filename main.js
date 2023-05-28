@@ -68,16 +68,17 @@ const i=(i,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,
  * SPDX-License-Identifier: BSD-3-Clause
  */var n;null!=(null===(n=window.HTMLSlotElement)||void 0===n?void 0:n.prototype.assignedElements)?(o,n)=>o.assignedElements(n):(o,n)=>o.assignedNodes(n).filter((o=>o.nodeType===Node.ELEMENT_NODE));
 
-const style$5 = i$2 `
+const style$7 = i$2 `
   .made-by-steven {
     display: grid;
     grid-template-areas: "made-a-header"
       "main"
       "footer";
-    grid-template-rows: 60px auto 80px;
+    grid-template-rows: 80px auto 80px;
     width: 100vw;
     height: 100vh;
-    background-color: #2E3440;
+    overflow-x: hidden;
+    background-color: var(--main-background-color);
   }
 `;
 
@@ -90,12 +91,12 @@ let MadeBySteven = class MadeBySteven extends s {
     `;
     }
 };
-MadeBySteven.styles = style$5;
+MadeBySteven.styles = style$7;
 MadeBySteven = __decorate([
     e$1('made-by-steven')
 ], MadeBySteven);
 
-const style$4 = i$2 `
+const style$6 = i$2 `
   :host {
     display: grid;
     grid-area: made-a-header;
@@ -122,12 +123,12 @@ let MadeAHeader = class MadeAHeader extends s {
     `;
     }
 };
-MadeAHeader.styles = style$4;
+MadeAHeader.styles = style$6;
 MadeAHeader = __decorate([
     e$1('made-a-header')
 ], MadeAHeader);
 
-const style$3 = i$2 `
+const style$5 = i$2 `
   .made-a-menu slot[part="base"]::slotted(made-a-menu-item:not(:first-child)) {
     padding-left: 10px;
   }
@@ -142,10 +143,217 @@ let MadeAMenu = class MadeAMenu extends s {
     `;
     }
 };
-MadeAMenu.styles = style$3;
+MadeAMenu.styles = style$5;
 MadeAMenu = __decorate([
     e$1('made-a-menu')
 ], MadeAMenu);
+
+const rem = (px, base = 16) => {
+    return i$2 `${(1 / base * px)}rem`;
+};
+
+const style$4 = i$2 `
+  .made-a-github-overview {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding-top: 40px;
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+  
+  header a {
+    font-size: ${rem(24)};
+    color: var(--url-text-color);
+    text-decoration: none;
+    transition: color .2s ease-in-out;
+  }
+  
+  header a:hover {
+    color: var(--url-hover-text-color);
+  }
+  
+  @media (min-width: 10px) and (max-width: 10000px) {
+    .made-a-github-overview {
+      background-color: red;
+    }
+  }
+  
+  @media (min-width: var(--browser-width-medium-minimum)) {
+    .made-a-github-overview {
+      grid-template-columns: repeat(2, 1fr);
+    }
+      
+    header {
+      grid-column-start: 1;
+      grid-column-end: 3;
+    }
+  }
+  
+  @media (min-width: var(--browser-width-large-minimum)) {
+    .made-a-github-overview {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    
+    header {
+      grid-column-start: 1;
+      grid-column-end: 5;
+    }
+  }
+`;
+
+const github_url = 'https://github.com/stevendejongnl';
+const github_api = 'https://api.github.com/users/stevendejongnl';
+let MadeAGithubOverview = class MadeAGithubOverview extends s {
+    constructor() {
+        super(...arguments);
+        this._repositories = [];
+    }
+    async firstUpdated() {
+        await this.fetchRepositories();
+    }
+    get repositories() {
+        return this._repositories;
+    }
+    async fetchRepositories() {
+        try {
+            const response = await fetch(`${github_api}/repos`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch repositories');
+            }
+            this._repositories = await response.json().then((data) => data.sort((a, b) => {
+                return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+            }));
+            this.requestUpdate();
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+    render() {
+        return x `
+      <section class="made-a-github-overview">
+        <header>
+          <a href="${github_url}" target="_blank">
+            GitHub Projects
+          </a>
+        </header>
+        ${this.repositories.map((repository) => x `<made-a-github-repository part="base" .repository="${repository}"></made-a-github-repository>`)}
+      </section>
+    `;
+    }
+};
+MadeAGithubOverview.styles = style$4;
+MadeAGithubOverview = __decorate([
+    e$1('made-a-github-overview')
+], MadeAGithubOverview);
+
+const style$3 = i$2 `
+  .made-a-github-repository {
+    border: 1px solid var(--main-border-color);
+    border-radius: 5px;
+    padding: 10px;
+    height: calc(100% - 20px);
+  }
+  
+  .title {
+    color: var(--main-text-color);
+    text-decoration: none;
+    transition: color .2s ease-in-out;
+  }
+  
+  .title:hover {
+    color: var(--url-hover-text-color);
+  }
+  
+  .description {
+    color: var(--secondary-text-color)
+  }
+  
+  .languages {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 5px;
+  }
+  
+      
+  .languages li {
+    display: inline-block;
+    color: var(--tertiary-text-color);
+    background-color: var(--tag-background-color);
+    font-size: ${rem(10)};
+    border-radius: 16px;
+    padding: 4px 8px;
+  }
+  
+  .stars {
+    color: var(--secondary-text-color)
+  }
+`;
+
+let MadeAGithubRepository = class MadeAGithubRepository extends s {
+    async firstUpdated() {
+        await this.fetchLanguages();
+    }
+    get languages() {
+        return this._languages;
+    }
+    async fetchLanguages() {
+        if (this.repository?.languages_url) {
+            try {
+                const response = await fetch(this.repository.languages_url);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch languages');
+                }
+                this._languages = await response.json();
+                this.requestUpdate();
+            }
+            catch (error) {
+                console.error(error);
+            }
+        }
+    }
+    constructor() {
+        super();
+        this._languages = {};
+        this.repository = null;
+    }
+    render() {
+        return x `
+      <article class="made-a-github-repository">
+        <a class="title" target="_blank" href="${this.repository?.html_url}">
+          ${this.repository?.name}
+        </a>
+          
+        <div class="description">
+          <p>${this.repository?.description}</p>
+        </div>
+          
+        <footer>
+          <ul class="languages">
+            ${Object.entries(this.languages).map(([language]) => x `
+              <li>${language}</li>
+            `)}
+          </ul>
+          
+          <div class="stars">
+            ${this.repository?.stargazers_count || null}
+          </div>
+        </footer>
+      </article>
+    `;
+    }
+};
+MadeAGithubRepository.styles = style$3;
+__decorate([
+    e({ type: Object })
+], MadeAGithubRepository.prototype, "repository", void 0);
+MadeAGithubRepository = __decorate([
+    e$1('made-a-github-repository')
+], MadeAGithubRepository);
 
 // import {style} from './made-a-logo.style.js'
 let MadeALogo = class MadeALogo extends s {
@@ -162,13 +370,13 @@ MadeALogo = __decorate([
 
 const style$2 = i$2 `
   a {
-    color: #81A1C1;
+    color: var(--url-text-color);
     text-decoration: none;
     transition: color .2s ease-in-out;
   }
   
   a:hover {
-    color: #88C0D0;
+    color: var(--url-hover-text-color);
   }
 `;
 
@@ -193,10 +401,6 @@ MadeAMenuItem = __decorate([
     e$1('made-a-menu-item')
 ], MadeAMenuItem);
 
-const rem = (px, base = 16) => {
-    return i$2 `${(1 / base * px)}rem`;
-};
-
 const style$1 = i$2 `
   :host {
     display: grid;
@@ -208,7 +412,7 @@ const style$1 = i$2 `
     grid-area: name;
     font-family: "DM Sans", sans-serif;
     font-size: ${rem(36)};
-    color: #ECEFF4;
+    color: var(--main-text-color);
   }
   slot[part="made-my-slogan"] {
     grid-area: made-my-slogan;
@@ -231,7 +435,7 @@ MadeMyName = __decorate([
 const style = i$2 `
   slot[part="base"] {
     font-size: ${rem(16)};
-    color: #D8DEE9;
+    color: var(--secondary-text-color);
   }
 `;
 
@@ -247,4 +451,4 @@ MadeMySlogan = __decorate([
     e$1('made-my-slogan')
 ], MadeMySlogan);
 
-export { MadeAHeader, MadeALogo, MadeAMenu, MadeAMenuItem, MadeBySteven, MadeMyName, MadeMySlogan };
+export { MadeAGithubOverview, MadeAGithubRepository, MadeAHeader, MadeALogo, MadeAMenu, MadeAMenuItem, MadeBySteven, MadeMyName, MadeMySlogan };
