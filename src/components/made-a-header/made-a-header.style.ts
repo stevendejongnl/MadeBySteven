@@ -9,7 +9,7 @@ export const style = css`
     padding-left: 20px;
   }
 
-  slot[part="base"] {
+  .made-a-header {
     display: grid;
     grid-template-areas: "made-a-logo"
       "made-my-name"

@@ -9,8 +9,8 @@ export class MadeAHeader extends LitElement {
 
   override render() {
     return html`
-      <header class="made-a-header">
-        <slot part="base"></slot>
+      <header class="made-a-header" part="base">
+        <slot></slot>
       </header>
     `
   }

@@ -10,8 +10,8 @@ export class MadeAContactForm extends LitElement {
 
   override render() {
     return html`
-      <section class="made-a-contact-form">
-        <slot part="base"></slot>
+      <section class="made-a-contact-form" part="base">
+        <slot></slot>
       </section>
     `
   }

@@ -9,8 +9,8 @@ export class MadeBySteven extends LitElement {
 
   override render() {
     return html`
-      <main class="made-by-steven">
-        <slot part="base"></slot>
+      <main class="made-by-steven" part="base">
+        <slot></slot>
       </main>
     `
   }

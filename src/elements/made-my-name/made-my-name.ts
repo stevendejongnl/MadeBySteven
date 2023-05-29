@@ -9,8 +9,13 @@ export class MadeMyName extends LitElement {
 
   override render() {
     return html`
-      <slot part="base"></slot>
-      <slot part="made-my-slogan" name="made-my-slogan"></slot>
+      <div class="made-my-name" part="base">
+        <slot></slot>
+      </div>
+      
+      <div class="made-my-slogan" part="made-my-slogan">
+        <slot name="made-my-slogan"></slot>
+      </div>
     `
   }
 }

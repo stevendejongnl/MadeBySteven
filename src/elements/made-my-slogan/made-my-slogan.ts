@@ -9,7 +9,9 @@ export class MadeMySlogan extends LitElement {
 
   override render() {
     return html`
-      <slot part="base"></slot>
+      <div class="made-my-slogan" part="base">
+        <slot></slot>
+      </div>
     `
   }
 }

@@ -9,8 +9,8 @@ export class MadeAMenu extends LitElement {
 
   override render() {
     return html`
-      <nav class="made-a-menu">
-        <slot part="base"></slot>
+      <nav class="made-a-menu" part="base">
+        <slot></slot>
       </nav>
     `
   }

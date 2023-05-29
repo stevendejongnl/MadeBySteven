@@ -12,8 +12,8 @@ export class MadeAMenuItem extends LitElement {
 
   override render() {
     return html`
-      <a href=${this.url}>
-          <slot part="base"></slot>
+      <a href=${this.url} part="base">
+          <slot></slot>
       </a>
     `
   }

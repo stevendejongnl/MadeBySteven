@@ -78,7 +78,7 @@ export class MadeAGithubRepository extends LitElement {
 
   override render() {
     return html`
-      <article class="made-a-github-repository">
+      <article class="made-a-github-repository" part="base">
         <a class="title" target="_blank" href="${this.repository?.html_url}">
           ${this.repository?.name}
         </a>

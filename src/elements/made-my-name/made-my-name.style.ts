@@ -8,13 +8,15 @@ export const style = css`
       "made-my-slogan";
     grid-template-rows: repeat(2, auto);
   }
-  slot[part="base"] {
+  
+  .made-my-name {
     grid-area: name;
     font-family: "DM Sans", sans-serif;
     font-size: ${rem(36)};
     color: var(--main-text-color);
   }
-  slot[part="made-my-slogan"] {
+
+  .made-my-slogan {
     grid-area: made-my-slogan;
   }
 `
