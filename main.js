@@ -68,7 +68,7 @@ const i=(i,e)=>"method"===e.kind&&e.descriptor&&!("value"in e.descriptor)?{...e,
  * SPDX-License-Identifier: BSD-3-Clause
  */var n;null!=(null===(n=window.HTMLSlotElement)||void 0===n?void 0:n.prototype.assignedElements)?(o,n)=>o.assignedElements(n):(o,n)=>o.assignedNodes(n).filter((o=>o.nodeType===Node.ELEMENT_NODE));
 
-const style$7 = i$2 `
+const style$8 = i$2 `
   .made-by-steven {
     display: grid;
     grid-template-areas: "made-a-header"
@@ -91,12 +91,12 @@ let MadeBySteven = class MadeBySteven extends s {
     `;
     }
 };
-MadeBySteven.styles = style$7;
+MadeBySteven.styles = style$8;
 MadeBySteven = __decorate([
     e$1('made-by-steven')
 ], MadeBySteven);
 
-const style$6 = i$2 `
+const style$7 = i$2 `
   :host {
     display: grid;
     grid-area: made-a-header;
@@ -123,12 +123,12 @@ let MadeAHeader = class MadeAHeader extends s {
     `;
     }
 };
-MadeAHeader.styles = style$6;
+MadeAHeader.styles = style$7;
 MadeAHeader = __decorate([
     e$1('made-a-header')
 ], MadeAHeader);
 
-const style$5 = i$2 `
+const style$6 = i$2 `
   .made-a-menu slot[part="base"]::slotted(made-a-menu-item:not(:first-child)) {
     padding-left: 10px;
   }
@@ -143,7 +143,7 @@ let MadeAMenu = class MadeAMenu extends s {
     `;
     }
 };
-MadeAMenu.styles = style$5;
+MadeAMenu.styles = style$6;
 MadeAMenu = __decorate([
     e$1('made-a-menu')
 ], MadeAMenu);
@@ -152,7 +152,7 @@ const rem = (px, base = 16) => {
     return i$2 `${(1 / base * px)}rem`;
 };
 
-const style$4 = i$2 `
+const style$5 = i$2 `
   .made-a-github-overview {
     display: grid;
     grid-template-columns: 1fr;
@@ -237,12 +237,12 @@ let MadeAGithubOverview = class MadeAGithubOverview extends s {
     `;
     }
 };
-MadeAGithubOverview.styles = style$4;
+MadeAGithubOverview.styles = style$5;
 MadeAGithubOverview = __decorate([
     e$1('made-a-github-overview')
 ], MadeAGithubOverview);
 
-const style$3 = i$2 `
+const style$4 = i$2 `
   .made-a-github-repository {
     border: 1px solid var(--main-border-color);
     border-radius: 5px;
@@ -341,13 +341,29 @@ let MadeAGithubRepository = class MadeAGithubRepository extends s {
     `;
     }
 };
-MadeAGithubRepository.styles = style$3;
+MadeAGithubRepository.styles = style$4;
 __decorate([
     e({ type: Object })
 ], MadeAGithubRepository.prototype, "repository", void 0);
 MadeAGithubRepository = __decorate([
     e$1('made-a-github-repository')
 ], MadeAGithubRepository);
+
+const style$3 = i$2 ``;
+
+let MadeAContactForm = class MadeAContactForm extends s {
+    render() {
+        return x `
+      <section class="made-a-contact-form">
+        <slot part="base"></slot>
+      </section>
+    `;
+    }
+};
+MadeAContactForm.styles = style$3;
+MadeAContactForm = __decorate([
+    e$1('made-a-contact-form')
+], MadeAContactForm);
 
 // import {style} from './made-a-logo.style.js'
 let MadeALogo = class MadeALogo extends s {
@@ -445,4 +461,4 @@ MadeMySlogan = __decorate([
     e$1('made-my-slogan')
 ], MadeMySlogan);
 
-export { MadeAGithubOverview, MadeAGithubRepository, MadeAHeader, MadeALogo, MadeAMenu, MadeAMenuItem, MadeBySteven, MadeMyName, MadeMySlogan };
+export { MadeAContactForm, MadeAGithubOverview, MadeAGithubRepository, MadeAHeader, MadeALogo, MadeAMenu, MadeAMenuItem, MadeBySteven, MadeMyName, MadeMySlogan };
