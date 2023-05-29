@@ -7,8 +7,6 @@ export const style = css`
       "main"
       "footer";
     grid-template-rows: 80px auto 80px;
-    width: 100vw;
-    min-height: 100vh;
     overflow-x: hidden;
     background-color: var(--main-background-color);
   }
