@@ -38,7 +38,7 @@ jobs:
         mv index.html dist/
         mv pages/* dist/
         sed -i 's/\.\/dist\///g' dist/index.html
-        sed -i 's/..\/dist\///g' dist/pages/*.html
+        sed -i 's/..\/dist\///g' dist/*.html
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
