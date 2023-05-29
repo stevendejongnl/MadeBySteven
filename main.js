@@ -85,8 +85,8 @@ const style$8 = i$2 `
 let MadeBySteven = class MadeBySteven extends s {
     render() {
         return x `
-      <main class="made-by-steven">
-        <slot part="base"></slot>
+      <main class="made-by-steven" part="base">
+        <slot></slot>
       </main>
     `;
     }
@@ -105,7 +105,7 @@ const style$7 = i$2 `
     padding-left: 20px;
   }
 
-  slot[part="base"] {
+  .made-a-header {
     display: grid;
     grid-template-areas: "made-a-logo"
       "made-my-name"
@@ -117,8 +117,8 @@ const style$7 = i$2 `
 let MadeAHeader = class MadeAHeader extends s {
     render() {
         return x `
-      <header class="made-a-header">
-        <slot part="base"></slot>
+      <header class="made-a-header" part="base">
+        <slot></slot>
       </header>
     `;
     }
@@ -129,7 +129,7 @@ MadeAHeader = __decorate([
 ], MadeAHeader);
 
 const style$6 = i$2 `
-  .made-a-menu slot[part="base"]::slotted(made-a-menu-item:not(:first-child)) {
+  .made-a-menu ::slotted(made-a-menu-item:not(:first-child)) {
     padding-left: 10px;
   }
 `;
@@ -137,8 +137,8 @@ const style$6 = i$2 `
 let MadeAMenu = class MadeAMenu extends s {
     render() {
         return x `
-      <nav class="made-a-menu">
-        <slot part="base"></slot>
+      <nav class="made-a-menu" part="base">
+        <slot></slot>
       </nav>
     `;
     }
@@ -385,7 +385,7 @@ let MadeAGithubRepository = class MadeAGithubRepository extends s {
     }
     render() {
         return x `
-      <article class="made-a-github-repository">
+      <article class="made-a-github-repository" part="base">
         <a class="title" target="_blank" href="${this.repository?.html_url}">
           ${this.repository?.name}
         </a>
@@ -419,8 +419,8 @@ const style$3 = i$2 ``;
 let MadeAContactForm = class MadeAContactForm extends s {
     render() {
         return x `
-      <section class="made-a-contact-form">
-        <slot part="base"></slot>
+      <section class="made-a-contact-form" part="base">
+        <slot></slot>
       </section>
     `;
     }
@@ -462,8 +462,8 @@ let MadeAMenuItem = class MadeAMenuItem extends s {
     }
     render() {
         return x `
-      <a href=${this.url}>
-          <slot part="base"></slot>
+      <a href=${this.url} part="base">
+          <slot></slot>
       </a>
     `;
     }
@@ -483,13 +483,15 @@ const style$1 = i$2 `
       "made-my-slogan";
     grid-template-rows: repeat(2, auto);
   }
-  slot[part="base"] {
+  
+  .made-my-name {
     grid-area: name;
     font-family: "DM Sans", sans-serif;
     font-size: ${rem(36)};
     color: var(--main-text-color);
   }
-  slot[part="made-my-slogan"] {
+
+  .made-my-slogan {
     grid-area: made-my-slogan;
   }
 `;
@@ -497,8 +499,13 @@ const style$1 = i$2 `
 let MadeMyName = class MadeMyName extends s {
     render() {
         return x `
-      <slot part="base"></slot>
-      <slot part="made-my-slogan" name="made-my-slogan"></slot>
+      <div class="made-my-name" part="base">
+        <slot></slot>
+      </div>
+      
+      <div class="made-my-slogan" part="made-my-slogan">
+        <slot name="made-my-slogan"></slot>
+      </div>
     `;
     }
 };
@@ -508,7 +515,7 @@ MadeMyName = __decorate([
 ], MadeMyName);
 
 const style = i$2 `
-  slot[part="base"] {
+  .made-my-slogan {
     font-size: ${rem(16)};
     color: var(--secondary-text-color);
   }
@@ -517,7 +524,9 @@ const style = i$2 `
 let MadeMySlogan = class MadeMySlogan extends s {
     render() {
         return x `
-      <slot part="base"></slot>
+      <div class="made-my-slogan" part="base">
+        <slot></slot>
+      </div>
     `;
     }
 };
