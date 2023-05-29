@@ -21,28 +21,24 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Build CSS
-      run: npm run build:css
-
-    - name: Copy CNAME file
-      run: mv CNAME dist/
-
-    - name: Move index.html to dist
-      run: mv index.html dist/
-
-    - name: Update index.html paths
-      run: sed -i 's/\.\/dist\///g' dist/index.html
-
-    - name: Build project
+    - name: Build CSS and compile TypeScript
       run: |
+        npm run build:css
         npm install \
-        rollup-plugin-typescript2 \
-        rollup-plugin-postcss \
-        @rollup/plugin-node-resolve \
-        @rollup/plugin-replace \
-        rollup-plugin-summary
-        
+          rollup-plugin-typescript2 \
+          rollup-plugin-postcss \
+          @rollup/plugin-node-resolve \
+          @rollup/plugin-replace \
+          rollup-plugin-summary
         npx rollup --config rollup.config.js
+
+    - name: Move files and update paths
+      run: |
+        mv CNAME dist/
+        mv index.html dist/
+        mv pages/* dist/
+        sed -i 's/\.\/dist\///g' dist/index.html
+        sed -i 's/..\/dist\///g' dist/pages/*.html
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
