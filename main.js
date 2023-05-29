@@ -204,7 +204,14 @@ let MadeAGithubOverview = class MadeAGithubOverview extends s {
         this._repositories = [];
     }
     async firstUpdated() {
-        await this.fetchRepositories();
+        const repositories = this.getRepositoriesFromLocalStorage();
+        if (repositories) {
+            this._repositories = repositories;
+            this.requestUpdate();
+        }
+        else {
+            await this.fetchRepositories();
+        }
     }
     get repositories() {
         return this._repositories;
@@ -215,14 +222,41 @@ let MadeAGithubOverview = class MadeAGithubOverview extends s {
             if (!response.ok) {
                 throw new Error('Failed to fetch repositories');
             }
-            this._repositories = await response.json().then((data) => data.sort((a, b) => {
+            const repositories = await response.json().then((data) => data.sort((a, b) => {
                 return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
             }));
+            this._repositories = repositories;
+            this.saveRepositoriesToLocalStorage(repositories);
             this.requestUpdate();
         }
         catch (error) {
             console.error(error);
         }
+    }
+    saveRepositoriesToLocalStorage(repositories) {
+        const storageKey = 'repositories';
+        const storageValue = JSON.stringify({
+            data: repositories,
+            expiration: Date.now() + 24 * 60 * 60 * 1000 // Vervaldatum na 24 uur (in milliseconden)
+        });
+        localStorage.setItem(storageKey, storageValue);
+    }
+    getRepositoriesFromLocalStorage() {
+        const storageKey = 'repositories';
+        const storageValue = localStorage.getItem(storageKey);
+        if (storageValue) {
+            const repositoriesData = JSON.parse(storageValue);
+            if (this.isRepositoriesExpired(repositoriesData)) {
+                localStorage.removeItem(storageKey);
+                return null;
+            }
+            return repositoriesData.data;
+        }
+        return null;
+    }
+    isRepositoriesExpired(repositoriesData) {
+        const expiration = repositoriesData.expiration;
+        return Date.now() > expiration;
     }
     render() {
         return x `
@@ -290,7 +324,14 @@ const style$4 = i$2 `
 
 let MadeAGithubRepository = class MadeAGithubRepository extends s {
     async firstUpdated() {
-        await this.fetchLanguages();
+        const languages = this.getLanguagesFromLocalStorage();
+        if (languages) {
+            this._languages = languages;
+            this.requestUpdate();
+        }
+        else {
+            await this.fetchLanguages();
+        }
     }
     get languages() {
         return this._languages;
@@ -302,13 +343,40 @@ let MadeAGithubRepository = class MadeAGithubRepository extends s {
                 if (!response.ok) {
                     throw new Error('Failed to fetch languages');
                 }
-                this._languages = await response.json();
+                const languages = await response.json();
+                this._languages = languages;
+                this.saveLanguagesToLocalStorage(languages);
                 this.requestUpdate();
             }
             catch (error) {
                 console.error(error);
             }
         }
+    }
+    saveLanguagesToLocalStorage(languages) {
+        const storageKey = `languages_${this.repository?.name}`;
+        const storageValue = JSON.stringify({
+            data: languages,
+            expiration: Date.now() + 24 * 60 * 60 * 1000 // Vervaldatum na 24 uur (in milliseconden)
+        });
+        localStorage.setItem(storageKey, storageValue);
+    }
+    getLanguagesFromLocalStorage() {
+        const storageKey = `languages_${this.repository?.name}`;
+        const storageValue = localStorage.getItem(storageKey);
+        if (storageValue) {
+            const languagesData = JSON.parse(storageValue);
+            if (this.isLanguagesExpired(languagesData)) {
+                localStorage.removeItem(storageKey);
+                return null;
+            }
+            return languagesData.data;
+        }
+        return null;
+    }
+    isLanguagesExpired(languagesData) {
+        const expiration = languagesData.expiration;
+        return Date.now() > expiration;
     }
     constructor() {
         super();
@@ -321,18 +389,15 @@ let MadeAGithubRepository = class MadeAGithubRepository extends s {
         <a class="title" target="_blank" href="${this.repository?.html_url}">
           ${this.repository?.name}
         </a>
-          
         <div class="description">
           <p>${this.repository?.description}</p>
         </div>
-          
         <footer>
           <ul class="languages">
             ${Object.entries(this.languages).map(([language]) => x `
               <li>${language}</li>
             `)}
           </ul>
-          
           <div class="stars">
             ${this.repository?.stargazers_count || null}
           </div>

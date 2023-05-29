@@ -7,6 +7,9 @@ export declare class MadeAGithubRepository extends LitElement {
     private _languages;
     get languages(): Languages;
     fetchLanguages(): Promise<void>;
+    private saveLanguagesToLocalStorage;
+    private getLanguagesFromLocalStorage;
+    private isLanguagesExpired;
     constructor();
     render(): import("lit-html").TemplateResult<1>;
 }
