@@ -45,6 +45,6 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "lit": "^2.7.4"
+    "lit": "^2.7.6"
   }
 }
