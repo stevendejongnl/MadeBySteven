@@ -33,7 +33,7 @@
     "@web/dev-server": "^0.3.0",
     "@web/dev-server-esbuild": "^0.4.1",
     "@web/test-runner": "^0.16.1",
-    "@web/test-runner-playwright": "^0.10.0",
+    "@web/test-runner-playwright": "^0.10.1",
     "concurrently": "^8.2.0",
     "eslint": "^8.45.0",
     "postcss-lit": "^1.1.0",
