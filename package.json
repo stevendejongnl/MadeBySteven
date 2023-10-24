@@ -35,7 +35,7 @@
     "@web/test-runner": "^0.17.1",
     "@web/test-runner-playwright": "^0.10.1",
     "concurrently": "^8.2.0",
-    "eslint": "^8.45.0",
+    "eslint": "^8.52.0",
     "postcss-lit": "^1.1.0",
     "rimraf": "^5.0.5",
     "sass": "^1.69.2",
