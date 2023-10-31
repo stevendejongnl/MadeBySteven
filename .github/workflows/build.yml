@@ -22,15 +22,7 @@ jobs:
       run: npm ci
 
     - name: Build CSS and compile TypeScript
-      run: |
-        npm run build:css
-        npm install \
-          rollup-plugin-typescript2 \
-          rollup-plugin-postcss \
-          @rollup/plugin-node-resolve \
-          @rollup/plugin-replace \
-          rollup-plugin-summary
-        npx rollup --config rollup.config.js
+      run: npm run build
 
     - name: Move files and update paths
       run: |
