@@ -11,5 +11,5 @@ export declare class MadeAGithubRepository extends LitElement {
     private getLanguagesFromLocalStorage;
     private isLanguagesExpired;
     constructor();
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import("lit").TemplateResult<1>;
 }

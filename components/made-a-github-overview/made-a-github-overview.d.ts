@@ -9,5 +9,5 @@ export declare class MadeAGithubOverview extends LitElement {
     private saveRepositoriesToLocalStorage;
     private getRepositoriesFromLocalStorage;
     private isRepositoriesExpired;
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import("lit").TemplateResult<1>;
 }
