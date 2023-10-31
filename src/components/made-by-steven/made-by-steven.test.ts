@@ -1,5 +1,5 @@
-import {expect, fixture, html} from '@open-wc/testing'
-import {getPart} from '../../helpers/testing'
+import { expect, fixture, html } from '@open-wc/testing'
+import { getPart } from '../../helpers/testing.js'
 
 import { MadeBySteven } from './made-by-steven.js'
 import './made-by-steven.js'

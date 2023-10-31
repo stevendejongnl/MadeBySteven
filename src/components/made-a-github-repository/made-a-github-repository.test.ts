@@ -1,5 +1,5 @@
-import {expect, fixture, html} from '@open-wc/testing'
-import {getPart} from '../../helpers/testing'
+import { expect, fixture, html } from '@open-wc/testing'
+import { getPart } from '../../helpers/testing.js'
 
 import { Repository } from './made-a-github-repository.interface.js'
 import { MadeAGithubRepository } from './made-a-github-repository.js'
@@ -29,15 +29,15 @@ describe('Made by Steven', () => {
 
 const expectRepositoryRenderedCorrectly = (part: Element): void => {
   const title = part.querySelector('.title')
-  expect(title.textContent.trim()).to.equal(repository.name)
-  expect(title.getAttribute('href')).to.equal(repository.html_url)
+  expect(title?.textContent?.trim()).to.equal(repository.name)
+  expect(title?.getAttribute('href')).to.equal(repository.html_url)
 
   const description = part.querySelector('.description')
-  expect(description.textContent.trim()).to.equal(repository.description)
+  expect(description?.textContent?.trim()).to.equal(repository.description)
 
   // const languages = part.querySelector('.languages')
   // Need to make a fetch adapter for testing.
 
   const stars = part.querySelector('.stars')
-  expect(parseInt(stars.textContent.trim())).to.equal(repository.stargazers_count)
+  expect(parseInt(stars?.textContent?.trim() || '0')).to.equal(repository.stargazers_count)
 }

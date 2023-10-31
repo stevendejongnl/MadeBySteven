@@ -17,6 +17,7 @@ parser: '@typescript-eslint/parser'
 parserOptions:
   ecmaVersion: latest
   sourceType: module
+  warnOnUnsupportedTypeScriptVersion: false
 
 plugins:
   - '@typescript-eslint'
@@ -32,13 +33,19 @@ rules:
     - error
     - 2
     - flatTernaryExpressions: false
+      SwitchCase: 1
       ignoredNodes:
       - "TemplateLiteral *"
       - PropertyDefinition[decorators]
       - TSUnionType
       - FunctionExpression[params]:has(Identifier[decorators])
+  "@typescript-eslint/no-non-null-assertion":
+    - error
   "@typescript-eslint/no-explicit-any":
     - off
+  object-curly-spacing:
+    - error
+    - always
   linebreak-style:
     - error
     - unix
