@@ -8,19 +8,21 @@
     "node": "20.8.1"
   },
   "scripts": {
-    "prebuild": "npm run build:clean",
+    "clean": "rimraf ./dist/ ./tsconfig.tsbuildinfo",
+    "prebuild": "npm run clean",
     "build": "concurrently 'npm run build:js' 'npm run build:css'",
-    "build:js": "tsc -b",
+    "build:js": "tspc -b",
     "build:css": "sass --no-source-map src/main.scss dist/main.css",
-    "build:clean": "rimraf ./dist ./tsconfig.tsbuildinfo",
-    "serve": "npm run build && web-dev-server --node-resolve",
-    "serve:watch": "concurrently 'npm run serve -- --watch' 'npm run build:js -- --watch' 'npm run build:css -- --watch'",
-    "pretest": "npm run build",
-    "test": "web-test-runner",
+    "watch": "concurrently --raw 'npm run build:js -- --watch' 'npm run build:css -- --watch'",
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "eslint 'src/**/*.ts' --fix",
     "stylelint": "stylelint 'src/**/*.{ts,css,scss}'",
-    "stylelint:fix": "stylelint 'src/**/*.{ts,css,scss}' --fix"
+    "stylelint:fix": "stylelint 'src/**/*.{ts,css,scss}' --fix",
+    "pretest": "npm run build",
+    "test": "web-test-runner",
+    "test:watch": "web-test-runner --watch",
+    "predev": "concurrently --raw 'tspc -b' 'sass src/main.scss dist/main.css'",
+    "dev": "concurrently --raw 'tspc -b --watch --preserveWatchOutput' 'sass src/main.scss dist/main.css --watch' 'web-test-runner --watch'"
   },
   "keywords": [],
   "author": "",
@@ -43,6 +45,7 @@
     "stylelint": "^15.11.0",
     "stylelint-config-standard": "^34.0.0",
     "stylelint-config-standard-scss": "^11.0.0",
+    "ts-patch": "^3.0.2",
     "typescript": "^5.1.6",
     "typescript-transform-paths": "^3.4.6"
   },
