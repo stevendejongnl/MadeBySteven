@@ -22,7 +22,10 @@
     "test": "web-test-runner",
     "test:watch": "web-test-runner --watch",
     "predev": "concurrently --raw 'tspc -b' 'sass src/main.scss dist/main.css'",
-    "dev": "concurrently --raw 'tspc -b --watch --preserveWatchOutput' 'sass src/main.scss dist/main.css --watch' 'web-test-runner --watch'"
+    "dev": "concurrently --raw 'tspc -b --watch --preserveWatchOutput' 'sass src/main.scss dist/main.css --watch' 'web-test-runner --watch'",
+    "move-files": "bash ./utilities/move-files.sh",
+    "rollup": "npx rollup --config rollup.config.js",
+    "serve": "concurrently  'npm run move-files' 'npm run rollup' 'npx http-serve ./dist'"
   },
   "keywords": [],
   "author": "",
@@ -50,6 +53,11 @@
     "typescript-transform-paths": "^3.4.6"
   },
   "dependencies": {
-    "lit": "^3.0.1"
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.5",
+    "lit": "^3.0.1",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-summary": "^2.0.0",
+    "rollup-plugin-typescript2": "^0.36.0"
   }
 }
