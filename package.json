@@ -25,7 +25,7 @@
     "dev": "concurrently --raw 'tspc -b --watch --preserveWatchOutput' 'sass src/main.scss dist/main.css --watch' 'web-test-runner --watch'",
     "move-files": "bash ./utilities/move-files.sh",
     "rollup": "npx rollup --config rollup.config.js",
-    "serve": "concurrently  'npm run move-files' 'npm run rollup' 'npx http-serve ./dist'"
+    "serve": "concurrently  'npm run move-files' 'npm run build:css' 'npm run rollup' 'npx http-serve ./dist'"
   },
   "keywords": [],
   "author": "",

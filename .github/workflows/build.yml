@@ -22,7 +22,7 @@ jobs:
       run: npm ci
 
     - name: Build CSS and compile TypeScript
-      run: npm run rollup
+      run: npm run build:css && npm run rollup
 
     - name: Move files and update paths
       run: npm run move-files
