@@ -43,6 +43,7 @@
     "@web/test-runner-junit-reporter": "^0.6.2",
     "@web/test-runner-playwright": "^0.10.2",
     "concurrently": "^8.2.2",
+    "conventional-changelog-conventionalcommits": "^7.0.2",
     "eslint": "^8.52.0",
     "postcss-lit": "^1.1.0",
     "rimraf": "^5.0.5",
