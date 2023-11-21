@@ -44,7 +44,7 @@
     "@web/test-runner-playwright": "^0.10.2",
     "concurrently": "^8.2.2",
     "conventional-changelog-conventionalcommits": "^7.0.2",
-    "eslint": "^8.52.0",
+    "eslint": "^8.54.0",
     "postcss-lit": "^1.1.0",
     "rimraf": "^5.0.5",
     "sass": "^1.69.4",
