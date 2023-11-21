@@ -40,7 +40,7 @@
     "@web/dev-server": "^0.4.1",
     "@web/dev-server-esbuild": "^0.4.1",
     "@web/test-runner": "^0.17.2",
-    "@web/test-runner-junit-reporter": "^0.6.2",
+    "@web/test-runner-junit-reporter": "^0.7.0",
     "@web/test-runner-playwright": "^0.11.0",
     "concurrently": "^8.2.2",
     "conventional-changelog-conventionalcommits": "^7.0.2",
