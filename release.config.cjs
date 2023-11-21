@@ -7,7 +7,7 @@ module.exports = {
   branches: [
     'master'
   ],
-  repositoryUrl: 'git@gitlab.com:CloudSuite/cs-elements.git',
+  repositoryUrl: 'git@github.com:stevendejongnl/MadeBySteven.git',
   preset: 'conventionalcommits',
   plugins: [
     [
