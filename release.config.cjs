@@ -131,12 +131,17 @@ module.exports = {
         'npmPublish': false
       }
     ],
-    '@semantic-release/git',
-    {
-      'assets': ['CHANGELOG.md', 'package.json', 'package-lock.json'],
-      'message': 'chore(release): Bump version to ${nextRelease.version} \n\n${nextRelease.notes}'
-      'persist-credentials': false
-    }
+    [
+      '@semantic-release/git',
+      {
+        'assets': ['CHANGELOG.md', 'package.json', 'package-lock.json'],
+        'message': 'chore(release): Bump version to ${nextRelease.version} \n\n${nextRelease.notes}',
+        'persist-credentials': false
+      }
+    ],
+    [
+      '@semantic-release/github'
+    ]
   ],
   ci: true,
   debug: false,
