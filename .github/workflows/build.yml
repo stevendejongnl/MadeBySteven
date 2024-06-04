@@ -5,10 +5,11 @@ on:
     branches:
       - master
       - next
-  workflow_run:
-    workflows: ["Test"]
-    types:
-      - completed
+  # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onworkflow_runbranchesbranches-ignore
+  # workflow_run:
+  #   workflows: ["Test"]
+  #   types:
+  #     - completed
 
 jobs:
   build:
