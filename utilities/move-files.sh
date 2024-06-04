@@ -2,7 +2,7 @@
 
 NEXT_DIR=''
 
-if [ "$1" == "next" ]; then
+if [ "$1" == "refs/heads/next" ]; then
   echo "Moving files to dist/next"
 
   mkdir -p dist/next
