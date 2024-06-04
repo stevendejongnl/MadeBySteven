@@ -60,7 +60,10 @@ module.exports = {
         'npmPublish': false
       }
     ],
-    '@semantic-release/git'
+    '@semantic-release/git',
+    {
+      'persist-credentials': false
+    }
   ],
   ci: true,
   debug: false,
