@@ -1,5 +1,5 @@
 :root {
-  --something: #001100;
+  --something: #0d0;
   --main-text-color: #ECEFF4;
   --secondary-text-color: #D8DEE9;
   --tertiary-text-color: #4C566A;
@@ -22,7 +22,7 @@ html, body {
 }
 
 body {
-  font-family: Inter, sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 h1, h2, h3 {
