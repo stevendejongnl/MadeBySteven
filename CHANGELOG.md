@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/stevendejongnl/MadeBySteven/compare/v1.0.1...v1.0.2) (2024-06-04)
+
+
+### 🐛 Bugfix
+
+* Update workflows and node versions ([7b6cf9a](https://github.com/stevendejongnl/MadeBySteven/commit/7b6cf9a57214f914d86ee46588f3c37dab8361d1))
+
 ## [1.0.1](https://github.com/stevendejongnl/MadeBySteven/compare/v1.0.0...v1.0.1) (2024-06-04)
 
 
