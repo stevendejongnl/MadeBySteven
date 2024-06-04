@@ -37,6 +37,7 @@ jobs:
       if: github.ref == 'refs/heads/master'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
         publish_dir: ./dist
 
     - name: Deploy next to GitHub Pages (madebysteven.nl/next)
@@ -44,6 +45,6 @@ jobs:
       if: github.ref == 'refs/heads/next'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages-next
+        publish_branch: gh-pages
         publish_dir: ./dist
         destination_dir: next
