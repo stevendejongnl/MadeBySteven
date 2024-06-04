@@ -5,6 +5,7 @@ if [ "$1" == "refs/heads/next" ]; then
 
   git clone -b gh-pages https://github.com/stevendejongnl/MadeBySteven.git existing-gh-pages
   rm -rf existing-gh-pages/.git
+  rm -rf existing-gh-pages/next
   cp -r existing-gh-pages/* dist
 
   mkdir -p dist/next
@@ -12,6 +13,7 @@ if [ "$1" == "refs/heads/next" ]; then
   mkdir -p dist/next/elements
   mkdir -p dist/next/helpers
 
+  cp CNAME dist/
   cp index.html dist/next
   cp -r pages/* dist/next
   cp -r dist/* dist/next
