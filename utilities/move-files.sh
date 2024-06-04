@@ -3,10 +3,9 @@
 if [ "$1" == "refs/heads/next" ]; then
   echo "Moving files to dist/next"
 
-  git clone https://github.com/stevendejongnl/MadeBySteven.git dist
-  cd dist
-  git switch gh-pages
-  cd ..
+  git clone -b gh-pages https://github.com/stevendejongnl/MadeBySteven.git existing-gh-pages
+  rm -rf existing-gh-pages/.git
+  mv existing-gh-pages/* dist
 
   mkdir -p dist/next
   mkdir -p dist/next/components
