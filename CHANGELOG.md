@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/stevendejongnl/MadeBySteven/compare/v1.0.2...v1.1.0) (2024-06-04)
+
+
+### ✨ Feature
+
+* Next release ([c5c18cf](https://github.com/stevendejongnl/MadeBySteven/commit/c5c18cfb4f12ec526e2362307b70a65193fb7fe4))
+
 ## [1.0.2](https://github.com/stevendejongnl/MadeBySteven/compare/v1.0.1...v1.0.2) (2024-06-04)
 
 
