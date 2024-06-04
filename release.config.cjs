@@ -84,6 +84,7 @@ for (const rule of rules) {
 module.exports = {
   branches: [
     { name: 'master' },
+    { name: 'next' },
   ],
   repositoryUrl: 'git@github.com:stevendejongnl/MadeBySteven.git',
   preset: 'conventionalcommits',

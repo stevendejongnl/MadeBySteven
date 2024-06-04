@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - next
   workflow_run:
     workflows: ["Test"]
     types:
@@ -31,8 +32,18 @@ jobs:
     - name: Move files and update paths
       run: npm run move-files
 
-    - name: Deploy to GitHub Pages
+    - name: Deploy master to GitHub Pages (madebysteven.nl)
       uses: peaceiris/actions-gh-pages@v4
+      if: github.ref == 'refs/heads/master'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist
+
+    - name: Deploy next to GitHub Pages (madebysteven.nl/next)
+      uses: peaceiris/actions-gh-pages@v4
+      if: github.ref == 'refs/heads/next'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages-next
+        publish_dir: ./dist
+        destination_dir: next

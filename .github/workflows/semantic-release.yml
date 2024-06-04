@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - next
   workflow_run:
     workflows: ["Build"]
     types:
