@@ -1,16 +1,19 @@
 #! /bin/bash
 
-NEXT_DIR=''
-
 if [ "$1" == "refs/heads/next" ]; then
   echo "Moving files to dist/next"
 
   mkdir -p dist/next
-  NEXT_DIR='next/'
+  cp CNAME dist/
+  cp index.html dist/next
+  cp -r pages/* dist/next
+  sed -i 's/\.\/dist\///g' dist/next/index.html
+  sed -i 's/..\/dist\///g' dist/next/*.html
+  exit 0
 fi
 
 cp CNAME dist/
-cp index.html dist/$NEXT_DIR
-cp -r pages/* dist/$NEXT_DIR
-sed -i 's/\.\/dist\///g' "dist/${NEXT_DIR}index.html"
-sed -i 's/..\/dist\///g' "dist/${NEXT_DIR}*.html"
+cp index.html dist/$
+cp -r pages/* dist/
+sed -i 's/\.\/dist\///g' dist/index.html
+sed -i 's/..\/dist\///g' dist/*.html
