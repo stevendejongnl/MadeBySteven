@@ -7,8 +7,6 @@ if [ "$1" == "next" ]; then
 
   mkdir -p dist/next
   NEXT_DIR='next/'
-
-  exit 0
 fi
 
 cp CNAME dist/
