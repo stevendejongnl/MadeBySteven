@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ "$1" == "refs/heads/next" ]; then
   echo "Moving files to dist/next"
