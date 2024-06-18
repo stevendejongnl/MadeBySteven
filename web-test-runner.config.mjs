@@ -31,6 +31,14 @@ export default {
   concurrency: 10,
   browsers: commandLineBrowsers ?? Object.values(browsers),
   filterBrowserLogs: ({ type }) => type !== 'warn',
+  coverageConfig: {
+    report: true,
+    reportDir: 'coverage',
+    reporters: ['cobertura', 'lcov'],
+    exclude: [
+      '**/node_modules/**/*',
+    ],
+  }
   reporters: [
     defaultReporter({
       reportTestResults: true,
@@ -46,7 +54,9 @@ export default {
     <html lang="en-US">
       <head></head>
       <body>
+        <script>window.dependencyType = 'FAKE'</script>
         <link rel="stylesheet" href="dist/main.css">
+        <style> :root { --mbs-transition-duration: 0s; } </style>
         <script type="module" src="${testFramework}"></script>
       </body>
     </html>
