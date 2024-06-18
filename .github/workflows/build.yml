@@ -33,21 +33,6 @@ jobs:
     - name: Move files and update paths
       run: ./bin/publish.sh ${{ github.ref }}
 
-    - name: set up master before next
-      if: github.ref == 'refs/heads/next'
-      run: |
-        git clone --branch master --single-branch --depth 1 https://github.com/stevendejongnl/MadeBySteven.git master
-        cd master
-        npm ci
-        npm run build:css && npm run rollup
-        cp CNAME dist/
-        cp index.html dist/
-        cp -r pages/* dist/
-        sed -i 's/\.\/dist\///g' index.html
-        sed -i 's/..\/dist\///g' *.html
-        cd ../
-        mv master/dist/* dist
-
     - name: Deploy master to GitHub Pages (madebysteven.nl)
       uses: peaceiris/actions-gh-pages@v4
       if: github.ref == 'refs/heads/master'

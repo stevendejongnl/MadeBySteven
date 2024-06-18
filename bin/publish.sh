@@ -3,25 +3,25 @@
 if [ "$1" == "refs/heads/next" ]; then
   echo "Moving files to dist/next"
 
-  git clone -b gh-pages https://github.com/stevendejongnl/MadeBySteven.git existing-gh-pages
-  rm -rf existing-gh-pages/.git
-  rm -rf existing-gh-pages/next
-  cp -r existing-gh-pages/* dist
+  git clone --branch master --single-branch --depth 1 https://github.com/stevendejongnl/MadeBySteven.git master-branch
+  cd master-branch
+  npm ci
+  npm run build:css && npm run rollup
+  npm run move-files
 
-  mkdir -p dist/next
-  mkdir -p dist/next/components
-  mkdir -p dist/next/elements
-  mkdir -p dist/next/helpers
+  cd ../
 
-  cp CNAME dist/
-  cp index.html dist/next
-  cp -r pages/* dist/next
-  cp -r dist/* dist/next
+  mkdir next-branch
+  cp index.html next-branch
+  cp -r pages/* next-branch
+  cp -r dist/* next-branch
 
-  rm -rf dist/next/CNAME
+  cp -r master-branch/dist/* dist
+  mkdir dist/next
+  cp -r next-branch/* dist/next
 
-  sed -i 's/\.\/dist\///g' dist/next/index.html
-  sed -i 's/..\/dist\///g' dist/next/*.html
+  sed -i 's/\.\/dist\///g' next-branch/index.html
+  sed -i 's/..\/dist\///g' next-branch/*.html
   exit 0
 fi
 
