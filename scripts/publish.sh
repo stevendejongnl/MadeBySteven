@@ -14,7 +14,7 @@ if [ "$1" == "refs/heads/next" ]; then
   mkdir next-branch
   cp index.html next-branch
   cp -r pages/* next-branch
-  cp -r dist/* next-branch
+  cp -r dist/* next-branch/dist
 
   cp -r master-branch/dist/* dist
   mkdir dist/next
