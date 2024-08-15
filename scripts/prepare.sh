@@ -1,6 +1,6 @@
 #! /bin/sh
 
-function write_version() {
+function write_version {
   if [ -f package.json ]; then
     PACKAGE_VERSION=$(node -p "require('./package.json').version")
     echo "
