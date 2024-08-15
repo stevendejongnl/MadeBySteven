@@ -45,7 +45,7 @@ jobs:
           path: build-artifact
 
       - name: Copy to public directory
-        run: cp -r build-artifact public
+        run: ls -lah build-artifact && cp -r build-artifact public && ls -lah public
 
       - name: Deploy master to GitHub Pages (madebysteven.nl)
         uses: peaceiris/actions-gh-pages@v4
