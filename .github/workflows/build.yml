@@ -11,35 +11,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.15'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.15'
 
-    - name: Install dependencies
-      run: npm clean-install
+      - name: Install dependencies
+        run: npm clean-install
 
-    - name: Build application
-      run: ./scripts/build.sh
+      - name: Build application
+        run: ./scripts/build.sh
 
-    - name: Move files and update paths
-      run: ./scripts/publish.sh ${{ github.ref }}
+      - name: Move files and update paths
+        run: ./scripts/publish.sh ${{ github.ref }}
 
-    - name: Deploy master to GitHub Pages (madebysteven.nl)
-      uses: peaceiris/actions-gh-pages@v4
-      if: github.ref == 'refs/heads/master'
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: ./dist
+  deploy:
+    runs-on: ubuntu-latest
 
-    - name: Deploy next to GitHub Pages (madebysteven.nl/next)
-      uses: peaceiris/actions-gh-pages@v4
-      if: github.ref == 'refs/heads/next'
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: ./public
+    needs: build
+
+    steps:
+      - name: Deploy master to GitHub Pages (madebysteven.nl)
+        uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/master'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./dist
+
+      - name: Deploy next to GitHub Pages (madebysteven.nl/next)
+        uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/next'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./public
