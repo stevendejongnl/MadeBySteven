@@ -12,10 +12,8 @@ if echo "$ARGUMENTS" | grep -q -- "--help"; then
   exit
 fi
 
-TYPESCRIPT_COMPILE="tspc -b"
-STYLING="sass --no-source-map src/main.scss dist/main.css"
-STYLING_MINIFIED="sass --embed-sources ./src/main.scss ./dist/main.css --style=compressed"
-ROLLUP="rollup --config ./rollup.config.js"
+STYLING="npx sass src/main.scss dist/main.css"
+ROLLUP="npx rollup --config ./rollup.config.js"
 
 if echo "$ARGUMENTS" | grep -q -- "--cleanup"; then
   npm run clean
@@ -28,11 +26,9 @@ if echo "$ARGUMENTS" | grep -q -- "--watch=rollup"; then
 fi
 
 if echo "$ARGUMENTS" | grep -q -- "--watch=styling"; then
-  $STYLING_MINIFIED
-  STYLING_MINIFIED_EXIT_CODE=$?
   $STYLING --watch
   STYLING_EXIT_CODE=$?
-  exit $(($STYLING_MINIFIED_EXIT_CODE + $STYLING_EXIT_CODE))
+  exit $STYLING_EXIT_CODE
 fi
 
 if echo "$ARGUMENTS" | grep -q -- "--no-rollup"; then
@@ -45,24 +41,12 @@ if echo "$ARGUMENTS" | grep -q -- "--no-styling"; then
   STYLING=""
 fi
 
-echo "Run $TYPESCRIPT_COMPILE"
-$TYPESCRIPT_COMPILE
-TYPESCRIPT_COMPILE_EXIT_CODE=$?
-
-echo "Run $TYPESCRIPT_DTS_FILES"
-$TYPESCRIPT_DTS_FILES
-TYPESCRIPT_DTS_FILES_EXIT_CODE=$?
-
 echo "Run $ROLLUP"
 $ROLLUP
 ROLLUP_EXIT_CODE=$?
-
-echo "Run $STYLING_MINIFIED"
-$STYLING_MINIFIED
-STYLING_MINIFIED_EXIT_CODE=$?
 
 echo "Run $STYLING"
 $STYLING
 STYLING_EXIT_CODE=$?
 
-exit $(($TYPESCRIPT_COMPILE_EXIT_CODE + $TYPESCRIPT_DTS_FILES_EXIT_CODE + $ROLLUP_EXIT_CODE + $STYLING_MINIFIED_EXIT_CODE + $STYLING_EXIT_CODE))
+exit $(($ROLLUP_EXIT_CODE + $STYLING_EXIT_CODE))
