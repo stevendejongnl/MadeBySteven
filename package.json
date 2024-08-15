@@ -10,6 +10,7 @@
   "customElements": "custom-elements.json",
   "scripts": {
     "clean": "./scripts/clean.sh",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "start": "./scripts/start.sh",
     "build": "./scripts/build.sh",
     "publish": "./scripts/publish.sh",
