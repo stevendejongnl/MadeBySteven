@@ -9,7 +9,6 @@
   "main": "dist/bundle.min.js",
   "customElements": "custom-elements.json",
   "scripts": {
-    "prepare": "./scripts/prepare.sh",
     "clean": "./scripts/clean.sh",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "./scripts/start.sh",
