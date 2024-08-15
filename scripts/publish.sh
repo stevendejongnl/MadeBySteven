@@ -20,8 +20,7 @@ function prepare_next {
   cp -r pages/* next-branch
   cp -r dist next-branch/dist
 
-  sed -i 's/\.\/dist\///g' next-branch/index.html
-  sed -i 's/..\/dist\///g' next-branch/*.html
+  sed -i 's/\.\/dist\//\/next\/dist\//g' next-branch/*.html
 }
 
 function create_public {
