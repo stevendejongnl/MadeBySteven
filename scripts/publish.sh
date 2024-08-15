@@ -24,13 +24,10 @@ function prepare_next {
   sed -i 's/..\/dist\///g' next-branch/*.html
 }
 
-function cleanup_root {
-  rm -rf index.html pages dist
-}
-
-function move_to_real_directories {
-  cp -r master-branch/* .
-  cp -r next-branch/* .
+function create_public {
+  mkdir -p public/next
+  cp -r master-branch/* public
+  cp -r next-branch/* public/next
 }
 
 function deploy_next {
@@ -41,8 +38,7 @@ function deploy_next {
     clone_master
     build_master
     prepare_next
-    cleanup_root
-    move_to_real_directories
+    create_public
   fi
 }
 
