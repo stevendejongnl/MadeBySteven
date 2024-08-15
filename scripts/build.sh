@@ -20,7 +20,7 @@ STYLING_MINIFIED="sass --embed-sources ./src/main.scss ./dist/bundle.min.css --s
 ROLLUP="rollup --config ./rollup.config.js"
 
 if echo "$ARGUMENTS" | grep -q -- "--cleanup"; then
-  npm run cleanup
+  npm run clean
 fi
 
 # $MONITORING 

@@ -28,10 +28,10 @@ jobs:
       run: npm ci
 
     - name: Build application
-      run: npm run builder
+      run: ./scripts/build.sh
 
     - name: Move files and update paths
-      run: ./bin/publish.sh ${{ github.ref }}
+      run: ./scripts/publish.sh ${{ github.ref }}
 
     - name: Deploy master to GitHub Pages (madebysteven.nl)
       uses: peaceiris/actions-gh-pages@v4

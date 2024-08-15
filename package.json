@@ -4,13 +4,16 @@
   "type": "module",
   "description": "Personal website of Steven de Jong",
   "engines": {
-    "node": "20.14"
+    "node": "20.15"
   },
   "main": "dist/bundle.min.js",
   "customElements": "custom-elements.json",
   "scripts": {
-    "builder": "./bin/builder.sh",
-    "publish": "./bin/publish.sh"
+    "clean": "./scripts/clean.sh",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./scripts/start.sh",
+    "build": "./scripts/build.sh",
+    "publish": "./scripts/publish.sh"
   },
   "keywords": [],
   "author": "Steven de Jong <steven@steven-dejong.nl> (https://madebysteven.nl)",
