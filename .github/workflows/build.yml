@@ -42,7 +42,10 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: build
-          path: public
+          path: build-artifact
+
+      - name: Copy to public directory
+        run: cp -r build-artifact public
 
       - name: Deploy master to GitHub Pages (madebysteven.nl)
         uses: peaceiris/actions-gh-pages@v4
