@@ -26,7 +26,7 @@ function prepare_next {
 
 function create_public {
   mkdir -p public/next
-  cp -r master-branch/* public
+  cp -r master-branch/dist/* public
   cp -r next-branch/* public/next
 }
 
