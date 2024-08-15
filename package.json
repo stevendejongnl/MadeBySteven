@@ -9,6 +9,7 @@
   "main": "dist/bundle.min.js",
   "customElements": "custom-elements.json",
   "scripts": {
+    "prepare": "./scripts/prepare.sh",
     "clean": "./scripts/clean.sh",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "./scripts/start.sh",
@@ -29,6 +30,7 @@
     "@semantic-release/commit-analyzer": "^13.0.0",
     "@semantic-release/git": "^10.0.1",
     "conventional-changelog-conventionalcommits": "^8.0.0",
+    "lit": "^3.2.0",
     "rollup": "^4.20.0",
     "sass": "^1.77.8",
     "semantic-release": "^24.0.0",

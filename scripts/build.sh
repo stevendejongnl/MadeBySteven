@@ -12,12 +12,16 @@ if echo "$ARGUMENTS" | grep -q -- "--help"; then
   exit
 fi
 
+PREPARE="./scripts/prepare.sh"
 STYLING="npx sass src/main.scss dist/main.css"
+IMAGES="cp -r src/images dist/images"
 ROLLUP="npx rollup --config ./rollup.config.js"
 
 if echo "$ARGUMENTS" | grep -q -- "--cleanup"; then
   npm run clean
 fi
+
+$PREPARE
 
 if echo "$ARGUMENTS" | grep -q -- "--watch=rollup"; then
   $ROLLUP --watch
@@ -40,6 +44,8 @@ if echo "$ARGUMENTS" | grep -q -- "--no-styling"; then
   echo "Skipping styling"
   STYLING=""
 fi
+
+$IMAGES
 
 echo "Run $ROLLUP"
 $ROLLUP
