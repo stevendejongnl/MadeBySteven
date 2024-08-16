@@ -5,7 +5,7 @@ write_version() {
     PACKAGE_VERSION=$(node -p "require('./package.json').version")
     echo "
 const log = () => {
-  const url = '/dist/images/phteven.jpg';
+  const url = './images/phteven.jpg';
   const image = new Image();
   image.src = url;
   image.onload = function() {
@@ -18,7 +18,7 @@ const log = () => {
     console.log('%c ', image_style)
   }
 
-  console.log('%c MadeBySteven: $PACKAGE_VERSION', 'color: #ff0000')
+  console.log('%c MadeBySteven: $PACKAGE_VERSION', 'background-color: #2E3440; color: #FFEEAD')
 }
 
 export const version = () => {
