@@ -29,6 +29,10 @@ made-by-steven {
   display: inline-block;
   opacity: 1;
   transition: transform 2.5s, opacity 2.5s, scale 2.5s;
+  transition-delay: 5s;
+}
+made-by-steven[loaded] {
+  transition-delay: 0s;
 }
 @starting-style {
   made-by-steven {

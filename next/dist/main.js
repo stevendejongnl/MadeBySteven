@@ -68,7 +68,7 @@
   }
 `;const styles$1=[mainStyles];
 
-    exports.MadeBySteven=class MadeBySteven extends h{render(){return ke`<main>
+    exports.MadeBySteven=class MadeBySteven extends h{connectedCallback(){super.connectedCallback();this.setAttribute("loaded","");}render(){return ke`<main>
       <mbs-header></mbs-header>
       <mbs-content></mbs-content>
       <mbs-footer></mbs-footer>
