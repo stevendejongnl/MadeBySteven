@@ -5,7 +5,7 @@ write_version() {
     PACKAGE_VERSION=$(node -p "require('./package.json').version")
     echo "
 const log = () => {
-  const url = './images/phteven.jpg';
+  const url = './dist/images/phteven.jpg';
   const image = new Image();
   image.src = url;
   image.onload = function() {
