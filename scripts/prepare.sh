@@ -1,6 +1,6 @@
-#! /bin/sh
+#!/bin/sh
 
-function write_version {
+write_version() {
   if [ -f package.json ]; then
     PACKAGE_VERSION=$(node -p "require('./package.json').version")
     echo "
@@ -18,12 +18,12 @@ const log = () => {
     console.log('%c ', image_style)
   }
 
-  console.log('%c MadeBySteven: 1.1.0', 'color: #ff0000')
+  console.log('%c MadeBySteven: $PACKAGE_VERSION', 'color: #ff0000')
 }
 
 export const version = () => {
   log()
-  return '1.1.0'
+  return '$PACKAGE_VERSION'
 }" > src/version.ts
   fi
 }
