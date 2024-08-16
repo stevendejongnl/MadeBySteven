@@ -25,4 +25,16 @@ h1, h2, h3 {
   font-family: "DM Sans", sans-serif;
 }
 
+made-by-steven {
+  display: inline-block;
+  opacity: 1;
+  transition: transform 2.5s, opacity 2.5s, scale 2.5s;
+}
+@starting-style {
+  made-by-steven {
+    opacity: 0;
+    overflow: hidden;
+  }
+}
+
 /*# sourceMappingURL=main.css.map */
