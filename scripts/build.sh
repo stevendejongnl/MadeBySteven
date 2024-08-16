@@ -12,9 +12,11 @@ if echo "$ARGUMENTS" | grep -q -- "--help"; then
   exit
 fi
 
+mkdir -p ./dist/images
+
 PREPARE="./scripts/prepare.sh"
 STYLING="npx sass src/main.scss dist/main.css"
-IMAGES="cp -r ./src/images ./dist/images"
+IMAGES="cp -r ./src/images/* ./dist/images"
 ROLLUP="npx rollup --config ./rollup.config.js"
 
 if echo "$ARGUMENTS" | grep -q -- "--cleanup"; then
