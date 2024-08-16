@@ -14,7 +14,7 @@ fi
 
 PREPARE="./scripts/prepare.sh"
 STYLING="npx sass src/main.scss dist/main.css"
-IMAGES="mkdir -p dist/images && cp -r src/images dist/images"
+IMAGES="mkdir -p dist/images && cp src/images dist/images"
 ROLLUP="npx rollup --config ./rollup.config.js"
 
 if echo "$ARGUMENTS" | grep -q -- "--cleanup"; then

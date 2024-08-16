@@ -42,10 +42,7 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: build
-          path: build-artifact
-
-      - name: Copy to public directory
-        run: ls -lah build-artifact && cp -r build-artifact public && ls -lah public
+          path: public
 
       - name: Deploy master to GitHub Pages (madebysteven.nl)
         uses: peaceiris/actions-gh-pages@v4
@@ -53,7 +50,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./dist
+          publish_dir: dist
 
       - name: Deploy next to GitHub Pages (madebysteven.nl/next)
         uses: peaceiris/actions-gh-pages@v4
