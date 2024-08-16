@@ -1,0 +1,16 @@
+// https://colorhunt.co/palette/a02334ffad60ffeead96ceb4
+
+/* #A02334 */
+/* #FFAD60 */
+/* #FFEEAD */
+/* #96CEB4 */
+
+:root {
+  --main-text-color: #FFEEAD;
+  --secondary-text-color: #FFAD60
+
+  --url-text-color: #A02334;
+  --url-hover-text-color: rgba(var(--url-text-color), 0.8);
+
+  --main-background-color: #2E3440;
+}
