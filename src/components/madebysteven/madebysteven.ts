@@ -6,6 +6,12 @@ import { styles } from './madebysteven.styles.js'
 export class MadeBySteven extends LitElement {
   static override styles = styles
 
+  override connectedCallback() {
+    super.connectedCallback()
+
+    this.setAttribute('loaded', '')
+  }
+
   override render() {
     return html`<main>
       <mbs-header></mbs-header>
