@@ -39,7 +39,7 @@
 
     exports.MadeBySteven=class MadeBySteven extends h{render(){return ke`<p>Made by Steven</p>`}};exports.MadeBySteven=__decorate([t("made-by-steven")],exports.MadeBySteven);
 
-    const log=()=>{const url="/dist/images/phteven.jpg";const image=new Image;image.src=url;image.onload=function(){const image_style=["font-size: 1px;",`padding: $\{image.height/100*50}px $\{image.width/100*50}px;`,`background: url(${url}) no-repeat;`,"background-size: contain;"].join(" ");console.log("%c ",image_style);};console.log("%c MadeBySteven: 1.1.0","color: #ff0000");};const version=()=>{log();return "1.1.0"};
+    const log=()=>{const url="./images/phteven.jpg";const image=new Image;image.src=url;image.onload=function(){const image_style=["font-size: 1px;",`padding: $\{image.height/100*50}px $\{image.width/100*50}px;`,`background: url(${url}) no-repeat;`,"background-size: contain;"].join(" ");console.log("%c ",image_style);};console.log("%c MadeBySteven: 1.1.0","background-color: #2E3440; color: #FFEEAD");};const version=()=>{log();return "1.1.0"};
 
     const VERSION=version();
 
