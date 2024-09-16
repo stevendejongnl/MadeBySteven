@@ -54,7 +54,7 @@
     "stylelint-config-standard-scss": "^11.1.0",
     "ts-patch": "^3.2.1",
     "typescript": "^5.5.3",
-    "typescript-transform-paths": "^3.4.7"
+    "typescript-transform-paths": "^3.5.1"
   },
   "dependencies": {
     "@rollup/plugin-node-resolve": "^15.2.3",
