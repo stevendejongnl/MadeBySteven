@@ -1,0 +1,9 @@
+.idea
+.rollup.cache
+/blob-report/
+/playwright-report/
+/playwright/.cache/
+/test-results/
+node_modules/
+public/assets
+tsconfig.tsbuildinfo

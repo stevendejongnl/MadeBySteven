@@ -1,0 +1,35 @@
+{
+  "name": "madebysteven",
+  "version": "8.0.0",
+  "description": "",
+  "main": "public/main.js",
+  "scripts": {
+    "precompile": "rm -rf public/assets tsconfig.tsbuildinfo",
+    "compile": "rollup --config rollup.config.ts --plugin typescript --bundleConfigAsCjs",
+    "watch": "npm run compile -- --watch",
+    "prestart": "npm run compile",
+    "start": "npx reload --dir ./public/",
+    "start:test": "npx reload --dir ./public/ --port 3000 .",
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui",
+    "test:chrome": "npx playwright test --project=chromium",
+    "test:debug": "npx playwright test -- debug"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@rollup/plugin-beep": "^1.0.3",
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@types/node": "^22.15.29",
+    "lit": "^3.3.0",
+    "reload": "^3.3.0",
+    "rollup": "^4.41.1",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.3"
+  }
+}
