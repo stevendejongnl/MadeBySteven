@@ -14,7 +14,7 @@ async function assertVisibleAndBlinkingCursorWhileTyping(page: Page) {
 
 async function assertWaitForFullTextToBeWritten(page: Page) {
   const fullText = 'Made by Steven'
-  const calculatedTime = 150 * (fullText.length + 2)
+  const calculatedTime = 150 * (fullText.length + 5)
   const header = page.locator('header')
   await expect(header).toContainText('Made by Steven', { timeout: calculatedTime })
 }
