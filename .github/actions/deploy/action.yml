@@ -3,6 +3,8 @@ description: Deploy to GitHub Pages
 runs:
   using: "composite"
   steps:
+    - uses: actions/checkout@v4
+
     - name: Move public to static-pages
       run: mv public static-pages
 
