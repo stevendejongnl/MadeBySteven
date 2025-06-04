@@ -42,7 +42,7 @@ export class MbsHeading extends LitElement {
       <header>
         <span class="prompt">></span>
         <span class="name">${this.displayedText}</span>
-        <span class="cursor">|</span>
+        <span class="cursor">_</span>
       </header>
     `
   }
