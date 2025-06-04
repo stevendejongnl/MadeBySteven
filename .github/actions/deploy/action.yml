@@ -3,16 +3,17 @@ description: Deploy to GitHub Pages
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
-
     - name: Move public to static-pages
       run: mv public static-pages
+      shell: bash
 
     - name: Copy CNAME to static-pages
       run: cp CNAME static-pages/CNAME
+      shell: bash
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
+      shell: bash
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./static-pages

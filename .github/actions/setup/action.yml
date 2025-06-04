@@ -3,15 +3,16 @@ description: Setup jobs
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
-
     - name: Set up Node.js
       uses: actions/setup-node@v4
+      shell: bash
       with:
         node-version: 20.19.2
 
     - name: Install dependencies
       run: npm ci
+      shell: bash
 
     - name: Build with Rollup
       run: npm run compile
+      shell: bash

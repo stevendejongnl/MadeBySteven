@@ -8,15 +8,16 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
-
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+      shell: bash
 
     - name: Run Playwright tests
       run: npx playwright test
+      shell: bash
 
     - uses: actions/upload-artifact@v4
+      shell: bash
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
