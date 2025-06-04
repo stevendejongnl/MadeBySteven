@@ -204,7 +204,7 @@ let MbsHeading = class MbsHeading extends i {
       <header>
         <span class="prompt">></span>
         <span class="name">${this.displayedText}</span>
-        <span class="cursor">|</span>
+        <span class="cursor">_</span>
       </header>
     `;
     }
@@ -299,7 +299,7 @@ let MbsMainTerm = class MbsMainTerm extends i {
       <main>
         <span class="prompt">></span>
         <span class="name">${this.displayedText}</span>
-        <span class="cursor">|</span>
+        <span class="cursor">_</span>
       </main>
     `;
     }
