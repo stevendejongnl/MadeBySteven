@@ -15,3 +15,5 @@ jobs:
         with:
           retention-days: 30
       - uses: ./.github/actions/deploy
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
