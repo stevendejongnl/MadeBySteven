@@ -10,6 +10,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup/action.yml
-      - uses: ./.github/actions/playwright/action.yml
-      - uses: ./.github/actions/deploy/action.yml
+      - uses: ./.github/actions/setup
+      - uses: ./.github/actions/playwright
+        with:
+          retention-days: 30
+      - uses: ./.github/actions/deploy
