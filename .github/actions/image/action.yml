@@ -14,9 +14,15 @@ runs:
         username: ${{ github.actor }}
         password: ${{ inputs.github-token }}
 
+    - id: repo-name
+      name: Fix repository lowercase name
+      uses: Entepotenz/change-string-case-action-min-dependencies@v1
+      with:
+        string: ${{ github.repository }}
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
         push: true
-        tags: ghcr.io/${{ github.repository.toLowerCase() }}:latest
+        tags: ghcr.io/${{ steps.repo-name.outputs.lowercase }}:latest
