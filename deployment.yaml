@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: madebysteven
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: madebysteven
+  template:
+    metadata:
+      labels:
+        app: madebysteven
+    spec:
+      containers:
+      - name: madebysteven
+        image: ghcr.io/stevendejongnl/madebysteven:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: madebysteven-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: madebysteven
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
