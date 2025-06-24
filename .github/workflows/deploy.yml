@@ -1,11 +1,11 @@
-name: Deploy
+name: Push Image
 
 on:
   push:
     branches: [main]
 
 jobs:
-  build-and-deploy:
+  build-and-push-image:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,6 +14,6 @@ jobs:
       - uses: ./.github/actions/playwright
         with:
           retention-days: 30
-      - uses: ./.github/actions/deploy
+      - uses: ./.github/actions/image
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
