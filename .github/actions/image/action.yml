@@ -19,4 +19,4 @@ runs:
       with:
         context: .
         push: true
-        tags: ghcr.io/${{ github.repository }}:latest
+        tags: ghcr.io/${{ github.repository.toLowerCase() }}:latest
