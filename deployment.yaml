@@ -6,17 +6,42 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: madebysteven-app
+  name: madebysteven-blue
   namespace: madebysteven
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: madebysteven
+      version: blue
   template:
     metadata:
       labels:
         app: madebysteven
+        version: blue
+    spec:
+      containers:
+      - name: madebysteven
+        image: ghcr.io/stevendejongnl/madebysteven:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: madebysteven-green
+  namespace: madebysteven
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: madebysteven
+      version: green
+  template:
+    metadata:
+      labels:
+        app: madebysteven
+        version: green
     spec:
       containers:
       - name: madebysteven
@@ -32,6 +57,7 @@ metadata:
 spec:
   selector:
     app: madebysteven
+    version: blue  # Change to 'green' to switch traffic
   ports:
     - protocol: TCP
       port: 80
