@@ -23,10 +23,29 @@ kind: Service
 metadata:
   name: madebysteven-service
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: madebysteven
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: madebysteven-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: madebysteven.nl
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: madebysteven-service
+                port:
+                  number: 80
