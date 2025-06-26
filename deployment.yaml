@@ -18,34 +18,21 @@ spec:
         ports:
         - containerPort: 80
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  name: madebysteven-service
-spec:
-  type: ClusterIP
-  selector:
-    app: madebysteven
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
----
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: madebysteven-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: madebysteven-website
+  namespace: madebysteven
 spec:
+  ingressClassName: nginx
   rules:
-    - host: madebysteven.nl
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: madebysteven-service
-                port:
-                  number: 80
+  - host: www.madebysteven.nl
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rancher
+            port:
+              number: 80
