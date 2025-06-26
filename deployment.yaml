@@ -1,7 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: madebysteven
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: madebysteven
+  name: madebysteven-app
+  namespace: madebysteven
 spec:
   replicas: 1
   selector:
@@ -18,11 +24,26 @@ spec:
         ports:
         - containerPort: 80
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: madebysteven-app
+  namespace: madebysteven
+spec:
+  selector:
+    app: madebysteven
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: madebysteven-website
+  name: madebysteven-nginx
   namespace: madebysteven
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
   ingressClassName: nginx
   rules:
@@ -33,6 +54,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: rancher
+            name: madebysteven-app
             port:
               number: 80
