@@ -1,0 +1,94 @@
+name: Deploy
+description: Deploy to kubernetes
+inputs:
+  github-token:
+    description: 'GitHub token for deployment'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+
+    - name: Configure kubectl for Rancher
+      run: |
+        mkdir -p ~/.kube
+        echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
+        chmod 600 ~/.kube/config
+        # Skip TLS verification for self-signed certificates
+        kubectl config set-cluster $(kubectl config current-context) --insecure-skip-tls-verify=true
+      shell: bash
+
+    - name: Determine active color
+      id: color
+      run: |
+        ACTIVE=$(kubectl get svc madebysteven-app -n madebysteven -o jsonpath='{.spec.selector.color}' 2>/dev/null || echo "green")
+        if [ "$ACTIVE" = "blue" ]; then
+          echo "NEW_COLOR=green" >> $GITHUB_OUTPUT
+          echo "OLD_COLOR=blue" >> $GITHUB_OUTPUT
+        else
+          echo "NEW_COLOR=blue" >> $GITHUB_OUTPUT
+          echo "OLD_COLOR=green" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+
+    - name: Deploy new version
+      run: |
+        # Update the deployment template with the new color
+        cat > deployment-${{ steps.color.outputs.NEW_COLOR }}.yaml << EOF
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: madebysteven-${{ steps.color.outputs.NEW_COLOR }}
+          namespace: madebysteven
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: madebysteven
+              color: ${{ steps.color.outputs.NEW_COLOR }}
+          template:
+            metadata:
+              labels:
+                app: madebysteven
+                color: ${{ steps.color.outputs.NEW_COLOR }}
+            spec:
+              containers:
+              - name: madebysteven
+                image: ghcr.io/stevendejongnl/madebysteven:${{ steps.color.outputs.NEW_COLOR }}
+        EOF
+        
+        # Apply the new deployment
+        kubectl apply -f deployment-${{ steps.color.outputs.NEW_COLOR }}.yaml
+        kubectl rollout status deployment/madebysteven-${{ steps.color.outputs.NEW_COLOR }} -n madebysteven --timeout=300s
+      shell: bash
+
+    - name: Switch traffic to new version
+      run: |
+        # Create or update the service to point to the new deployment
+        cat > service.yaml << EOF
+        apiVersion: v1
+        kind: Service
+        metadata:
+          name: madebysteven-app
+          namespace: madebysteven
+        spec:
+          ports:
+          - port: 80
+            targetPort: 80
+          selector:
+            app: madebysteven
+            color: ${{ steps.color.outputs.NEW_COLOR }}
+        EOF
+        kubectl apply -f service.yaml
+      shell: bash
+
+    - name: Verify deployment
+      run: |
+        echo "Active color: ${{ steps.color.outputs.NEW_COLOR }}"
+        kubectl get pods -n madebysteven -l app=madebysteven,color=${{ steps.color.outputs.NEW_COLOR }}
+        kubectl get svc -n madebysteven madebysteven-app
+        kubectl get deployment -n madebysteven madebysteven-${{ steps.color.outputs.NEW_COLOR }}
+      shell: bash

@@ -1,19 +1,42 @@
-name: Push Image
-
+name: Build and Deploy
 on:
   push:
-    branches: [main]
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  build-and-push-image:
+  determine-color:
     runs-on: ubuntu-latest
-
+    outputs:
+      new_color: ${{ steps.get-color.outputs.NEW_COLOR }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup
-      - uses: ./.github/actions/playwright
+      - uses: actions/checkout@v3
+      
+      - name: Get next deployment color
+        id: get-color
+        uses: ./.github/actions/deploy
         with:
-          retention-days: 30
-      - uses: ./.github/actions/image
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    needs: determine-color
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Build and push image
+        uses: ./.github/actions/image
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          color: ${{ needs.determine-color.outputs.new_color }}
+
+  deploy:
+    needs: [determine-color, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Deploy to Kubernetes
+        uses: ./.github/actions/deploy
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
