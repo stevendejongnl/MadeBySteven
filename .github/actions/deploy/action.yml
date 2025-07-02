@@ -37,6 +37,11 @@ runs:
         fi
       shell: bash
 
+    - name: Remove existing deployment for new color
+      run: |
+        kubectl delete deployment madebysteven-${{ steps.color.outputs.NEW_COLOR }} -n madebysteven --ignore-not-found
+      shell: bash
+
     - name: Deploy new version
       run: |
         # Create new deployment for the new color
