@@ -8,8 +8,8 @@ jobs:
   determine-color:
     runs-on: ubuntu-latest
     outputs:
-      new_color: ${{ steps.color.outputs.NEW_COLOR }}
-      old_color: ${{ steps.color.outputs.OLD_COLOR }}
+      NEW_COLOR: ${{ steps.color.outputs.NEW_COLOR }}
+      OLD_COLOR: ${{ steps.color.outputs.OLD_COLOR }}
     steps:
       - uses: actions/checkout@v3
       
@@ -40,14 +40,16 @@ jobs:
       
       - name: Debug color value
         run: |
-          echo "Determined color value: ${{ needs.determine-color.outputs.new_color }}"
+          echo "Determined color value: ${{ needs.determine-color.outputs.NEW_COLOR }}"
           
       - name: Build and push image
         uses: docker/build-push-action@v5
+        env:
+          COLOR: ${{ needs.determine-color.outputs.NEW_COLOR }}
         with:
           context: .
           push: true
-          tags: ghcr.io/stevendejongnl/madebysteven:${{ needs.determine-color.outputs.new_color }}
+          tags: ghcr.io/stevendejongnl/madebysteven:${{ env.COLOR }}
 
   deploy:
     needs: [determine-color, build]

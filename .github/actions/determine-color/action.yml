@@ -4,6 +4,13 @@ inputs:
   github-token:
     description: 'GitHub token for ghcr.io'
     required: true
+outputs:
+  NEW_COLOR:
+    description: 'The color for the new deployment (blue/green)'
+    value: ${{ steps.color.outputs.NEW_COLOR }}
+  OLD_COLOR:
+    description: 'The color of the current deployment (blue/green)'
+    value: ${{ steps.color.outputs.OLD_COLOR }}
 runs:
   using: "composite"
   steps:
@@ -18,13 +25,17 @@ runs:
         echo "Checking for existing blue image..."
         if docker manifest inspect ghcr.io/stevendejongnl/madebysteven:blue >/dev/null 2>&1; then
           echo "Blue image found, setting new color to green"
-          echo "NEW_COLOR=green" >> $GITHUB_OUTPUT
-          echo "OLD_COLOR=blue" >> $GITHUB_OUTPUT
+          NEW_COLOR="green"
+          OLD_COLOR="blue"
         else
           echo "Blue image not found, setting new color to blue"
-          echo "NEW_COLOR=blue" >> $GITHUB_OUTPUT
-          echo "OLD_COLOR=green" >> $GITHUB_OUTPUT
+          NEW_COLOR="blue"
+          OLD_COLOR="green"
         fi
+        
+        # Set outputs in the correct format
+        echo "NEW_COLOR=${NEW_COLOR}" >> "$GITHUB_OUTPUT"
+        echo "OLD_COLOR=${OLD_COLOR}" >> "$GITHUB_OUTPUT"
         
         # Debug: Show what we're setting
         echo "Color values being set:"
