@@ -1,0 +1,24 @@
+name: Determine Next Color
+description: Determine next deployment color
+inputs:
+  github-token:
+    description: 'GitHub token for ghcr.io'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Check existing images
+      id: color
+      shell: bash
+      run: |
+        # Authenticate with GHCR
+        echo "${{ inputs.github-token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        
+        # Check if blue image exists
+        if docker manifest inspect ghcr.io/stevendejongnl/madebysteven:blue >/dev/null 2>&1; then
+          echo "NEW_COLOR=green" >> $GITHUB_OUTPUT
+          echo "OLD_COLOR=blue" >> $GITHUB_OUTPUT
+        else
+          echo "NEW_COLOR=blue" >> $GITHUB_OUTPUT
+          echo "OLD_COLOR=green" >> $GITHUB_OUTPUT
+        fi

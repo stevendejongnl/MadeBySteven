@@ -15,10 +15,9 @@ jobs:
       
       - name: Get next deployment color
         id: color
-        uses: ./.github/actions/deploy
+        uses: ./.github/actions/determine-color
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          kubeconfig: ${{ secrets.KUBECONFIG }}
 
   build:
     needs: determine-color
