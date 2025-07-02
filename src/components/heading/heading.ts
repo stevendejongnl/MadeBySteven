@@ -40,9 +40,15 @@ export class MbsHeading extends LitElement {
   override render() {
     return html`
       <header>
-        <span class="prompt">></span>
+        <span class="prompt">&gt;</span>
         <span class="name">${this.displayedText}</span>
         <span class="cursor">_</span>
+        <nav class="menu">
+          <a href="https://ask.steven-dejong.nl" target="_blank" rel="noopener noreferrer">
+            Ask
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none" style="vertical-align: middle; margin-left: 2px;"><path d="M7 13L13 7M13 7H8M13 7V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </nav>
       </header>
     `
   }
