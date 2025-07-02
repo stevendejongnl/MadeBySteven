@@ -60,6 +60,8 @@ runs:
               labels:
                 app: madebysteven
                 color: ${{ steps.color.outputs.NEW_COLOR }}
+              annotations:
+                redeploy-hash: "${{ github.sha }}"
             spec:
               containers:
               - name: madebysteven
