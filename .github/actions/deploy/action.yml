@@ -40,12 +40,11 @@ runs:
     - name: Deploy new version
       run: |
         # Create new deployment for the new color
-        TIMESTAMP=$(date +%s)
         cat > deployment-${{ steps.color.outputs.NEW_COLOR }}.yaml << EOF
         apiVersion: apps/v1
         kind: Deployment
         metadata:
-          name: madebysteven-${{ steps.color.outputs.NEW_COLOR }}-${TIMESTAMP}
+          name: madebysteven-${{ steps.color.outputs.NEW_COLOR }}
           namespace: madebysteven
           labels:
             app: madebysteven
@@ -55,13 +54,12 @@ runs:
           selector:
             matchLabels:
               app: madebysteven
-              deployment: madebysteven-${{ steps.color.outputs.NEW_COLOR }}-${TIMESTAMP}
+              color: ${{ steps.color.outputs.NEW_COLOR }}
           template:
             metadata:
               labels:
                 app: madebysteven
                 color: ${{ steps.color.outputs.NEW_COLOR }}
-                deployment: madebysteven-${{ steps.color.outputs.NEW_COLOR }}-${TIMESTAMP}
             spec:
               containers:
               - name: madebysteven
@@ -70,10 +68,10 @@ runs:
         
         # Apply the new deployment
         kubectl apply -f deployment-${{ steps.color.outputs.NEW_COLOR }}.yaml
-        kubectl rollout status deployment/madebysteven-${{ steps.color.outputs.NEW_COLOR }}-${TIMESTAMP} -n madebysteven --timeout=300s
+        kubectl rollout status deployment/madebysteven-${{ steps.color.outputs.NEW_COLOR }} -n madebysteven --timeout=300s
         
         # Store the deployment name for service update
-        echo "DEPLOYMENT_NAME=madebysteven-${{ steps.color.outputs.NEW_COLOR }}-${TIMESTAMP}" >> $GITHUB_OUTPUT
+        echo "DEPLOYMENT_NAME=madebysteven-${{ steps.color.outputs.NEW_COLOR }}" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Switch traffic to new version
