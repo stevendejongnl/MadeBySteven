@@ -64,6 +64,7 @@ runs:
               containers:
               - name: madebysteven
                 image: ghcr.io/stevendejongnl/madebysteven:${{ steps.color.outputs.NEW_COLOR }}
+                imagePullPolicy: Always
         EOF
         
         # Apply the new deployment
