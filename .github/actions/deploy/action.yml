@@ -4,6 +4,9 @@ inputs:
   github-token:
     description: 'GitHub token for deployment'
     required: true
+  kubeconfig:
+    description: 'Base64 encoded kubeconfig file'
+    required: true
 runs:
   using: "composite"
   steps:
@@ -15,7 +18,7 @@ runs:
     - name: Configure kubectl for Rancher
       run: |
         mkdir -p ~/.kube
-        echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
+        echo "${{ inputs.kubeconfig }}" | base64 --decode > ~/.kube/config
         chmod 600 ~/.kube/config
         # Skip TLS verification for self-signed certificates
         kubectl config set-cluster $(kubectl config current-context) --insecure-skip-tls-verify=true
