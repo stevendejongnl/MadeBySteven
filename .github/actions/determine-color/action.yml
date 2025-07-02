@@ -14,11 +14,18 @@ runs:
         # Authenticate with GHCR
         echo "${{ inputs.github-token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
         
-        # Check if blue image exists
+        # Check if blue image exists and add debug output
+        echo "Checking for existing blue image..."
         if docker manifest inspect ghcr.io/stevendejongnl/madebysteven:blue >/dev/null 2>&1; then
+          echo "Blue image found, setting new color to green"
           echo "NEW_COLOR=green" >> $GITHUB_OUTPUT
           echo "OLD_COLOR=blue" >> $GITHUB_OUTPUT
         else
+          echo "Blue image not found, setting new color to blue"
           echo "NEW_COLOR=blue" >> $GITHUB_OUTPUT
           echo "OLD_COLOR=green" >> $GITHUB_OUTPUT
         fi
+        
+        # Debug: Show what we're setting
+        echo "Color values being set:"
+        cat $GITHUB_OUTPUT

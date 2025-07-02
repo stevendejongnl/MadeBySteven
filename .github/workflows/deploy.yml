@@ -38,14 +38,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
+      - name: Debug color value
+        run: |
+          echo "Determined color value: ${{ needs.determine-color.outputs.new_color }}"
+          
       - name: Build and push image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: |
-            ghcr.io/stevendejongnl/madebysteven:${{ needs.determine-color.outputs.new_color }}
-            ghcr.io/stevendejongnl/madebysteven:latest
+          tags: ghcr.io/stevendejongnl/madebysteven:${{ needs.determine-color.outputs.new_color }}
 
   deploy:
     needs: [determine-color, build]
