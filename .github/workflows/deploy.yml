@@ -43,7 +43,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/stevendejongnl/madebysteven:${{ needs.determine-color.outputs.new_color }}
+          tags: |
+            ghcr.io/stevendejongnl/madebysteven:${{ needs.determine-color.outputs.new_color }}
+            ghcr.io/stevendejongnl/madebysteven:latest
 
   deploy:
     needs: [determine-color, build]
