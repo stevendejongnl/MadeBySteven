@@ -8,12 +8,13 @@ jobs:
   determine-color:
     runs-on: ubuntu-latest
     outputs:
-      new_color: ${{ steps.get-color.outputs.NEW_COLOR }}
+      new_color: ${{ steps.color.outputs.NEW_COLOR }}
+      old_color: ${{ steps.color.outputs.OLD_COLOR }}
     steps:
       - uses: actions/checkout@v3
       
       - name: Get next deployment color
-        id: get-color
+        id: color
         uses: ./.github/actions/deploy
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

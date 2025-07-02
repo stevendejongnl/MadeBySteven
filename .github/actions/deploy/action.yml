@@ -103,10 +103,10 @@ runs:
         kubectl get pods -n madebysteven -l app=madebysteven,color=${{ steps.color.outputs.NEW_COLOR }}
         kubectl get svc -n madebysteven madebysteven-app
         kubectl get deployment -n madebysteven -l app=madebysteven,color=${{ steps.color.outputs.NEW_COLOR }}
+      shell: bash
 
     - name: Cleanup old deployments
       run: |
         # Keep only the most recent deployment for each color
         kubectl get deployment -n madebysteven -l app=madebysteven,color=${{ steps.color.outputs.OLD_COLOR }} --sort-by=.metadata.creationTimestamp -o name | head -n -1 | xargs -r kubectl delete -n madebysteven
-      shell: bash
       shell: bash
