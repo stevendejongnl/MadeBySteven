@@ -9,12 +9,25 @@ export class MbsSuggestions extends LitElement {
   @state()
   private displayedText = ''
 
+  @state()
+  private showLinks = false
+
+  private suggestions = [
+    { text: 'About', href: '/about' },
+    { text: 'Projects', href: '/projects' },
+    { text: 'Contact', href: '/contact' }
+  ]
+
+  private currentSuggestionIndex = 0
   private fullText = ''
   private typingTimeout?: number
 
   override connectedCallback() {
     super.connectedCallback()
     this.displayedText = ''
+    this.showLinks = false
+    this.currentSuggestionIndex = 0
+    this.fullText = this.suggestions[0]?.text || ''
   }
 
   override firstUpdated(_changedProperties: PropertyValues) {
@@ -22,12 +35,26 @@ export class MbsSuggestions extends LitElement {
   }
 
   private typeText(remaining: string) {
-    if (!remaining) return
+    if (!remaining) {
+      if (this.currentSuggestionIndex < this.suggestions.length - 1) {
+        this.typingTimeout = window.setTimeout(() => {
+          this.currentSuggestionIndex++
+          this.displayedText = ''
+          this.fullText = this.suggestions[this.currentSuggestionIndex]?.text || ''
+          this.typeText(this.fullText)
+        }, 500)
+      } else {
+        this.typingTimeout = window.setTimeout(() => {
+          this.showLinks = true
+        }, 700)
+      }
+      return
+    }
     this.displayedText += remaining[0]
     this.requestUpdate()
     this.typingTimeout = window.setTimeout(() => {
       this.typeText(remaining.slice(1))
-    }, 150)
+    }, 80)
   }
 
   override disconnectedCallback() {
@@ -40,9 +67,19 @@ export class MbsSuggestions extends LitElement {
   override render() {
     return html`
       <main>
-        <span class="prompt">></span>
-        <span class="name">${this.displayedText}</span>
-        <span class="cursor">_</span>
+        <span class="prompt">&gt;</span>
+        ${this.showLinks
+          ? html`
+              <ul class="suggestion-links">
+                ${this.suggestions.map(
+                  s => html`<li><a href="${s.href}">${s.text}</a></li>`
+                )}
+              </ul>
+            `
+          : html`
+              <span class="name">${this.displayedText}</span>
+              <span class="cursor">_</span>
+            `}
       </main>
     `
   }
