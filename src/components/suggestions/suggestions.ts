@@ -81,18 +81,13 @@ export class MbsSuggestions extends LitElement {
           ? html`
               <span class="commandline">
                 ${this.suggestions.map(
-                  (s, i) => html`
-                    <a href="${s.href}">${s.text}</a>${i < this.suggestions.length - 1 ? html`<br />` : ''}
-                  `
+                  (s) => html`<a class="commandlink" href="${s.href}">${s.text}</a> `
                 )}
               </span>
             `
           : html`
               <span class="commandline">
-                ${this.displayedTextList.map(
-                  (t, i) => html`${t}${i < this.displayedTextList.length - 1 ? html`<br />` : ''}`
-                )}
-                ${this.displayedText}
+                ${this.displayedTextList.join(' ')}${this.displayedText}
               </span>
               <span class="cursor">_</span>
             `}
