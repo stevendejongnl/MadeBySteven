@@ -78,11 +78,13 @@ export class MbsSuggestions extends LitElement {
         <span class="prompt">&gt;</span>
         ${this.showLinks
           ? html`
-              <ul class="suggestion-links">
+              <span class="commandline">
                 ${this.suggestions.map(
-                  s => html`<li><a href="${s.href}">${s.text}</a></li>`
+                  (s, i) => html`
+                    <a href="${s.href}">${s.text}</a>${i < this.suggestions.length - 1 ? html`<br />` : ''}
+                  `
                 )}
-              </ul>
+              </span>
             `
           : html`
               <span class="commandline">
