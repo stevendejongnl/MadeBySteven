@@ -1,10 +1,13 @@
-import { LitElement, html } from 'lit'
-import { customElement } from 'lit/decorators.js'
+import { LitElement, html, nothing } from 'lit'
+import { customElement, state } from 'lit/decorators.js'
 import { styles } from './main.style.js'
 
 @customElement('mbs-main')
 export class MbsMain extends LitElement {
   static override styles = styles
+
+  @state()
+  private suggestionsFinished = false
 
   private currentPage: string = 'home'
 
@@ -38,6 +41,7 @@ export class MbsMain extends LitElement {
 
   private handleSuggestionsFinished = () => {
     this.currentPage = this.detectPage()
+    this.suggestionsFinished = true
     this.requestUpdate()
   }
 
@@ -45,7 +49,7 @@ export class MbsMain extends LitElement {
     return html`
       <main>
         <mbs-suggestions></mbs-suggestions>
-        ${this.renderPage()}
+        ${this.suggestionsFinished ? this.renderPage() : nothing}
       </main>
     `
   }
