@@ -1,9 +1,9 @@
 import { LitElement, html, PropertyValues } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
-import { styles } from './main-term.style.js'
+import { styles } from './suggestions.style.js'
 
-@customElement('mbs-main-term')
-export class MbsMainTerm extends LitElement {
+@customElement('mbs-suggestions')
+export class MbsSuggestions extends LitElement {
   static override styles = styles
 
   @state()
