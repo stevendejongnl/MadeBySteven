@@ -12,9 +12,6 @@ export class MbsSuggestions extends LitElement {
   @state()
   private displayedTextList: string[] = []
 
-  @state()
-  private showLinks = false
-
   private suggestions = [
     { text: 'About', href: '/about' },
     { text: 'Projects', href: '/projects' },
@@ -29,7 +26,6 @@ export class MbsSuggestions extends LitElement {
     super.connectedCallback()
     this.displayedText = ''
     this.displayedTextList = []
-    this.showLinks = false
     this.currentSuggestionIndex = 0
     this.fullText = this.suggestions[0]?.text || ''
   }
@@ -51,11 +47,6 @@ export class MbsSuggestions extends LitElement {
           this.fullText = this.suggestions[this.currentSuggestionIndex]?.text || ''
           this.typeText(this.fullText)
         }, 500)
-      } else {
-        this.typingTimeout = window.setTimeout(() => {
-          this.showLinks = true
-          // this.requestUpdate()
-        }, 700)
       }
       return
     }
@@ -74,6 +65,7 @@ export class MbsSuggestions extends LitElement {
   }
 
   override render() {
+    const allTyped = this.displayedTextList.length === this.suggestions.length;
     return html`
       <main>
         <span class="prompt">&gt;</span>
@@ -81,9 +73,9 @@ export class MbsSuggestions extends LitElement {
           ${this.suggestions.map((s, i) => {
             if (i < this.displayedTextList.length) {
               return html`<a class="commandlink" href="${s.href}">${this.displayedTextList[i]}</a> `
-            } else if (i === this.displayedTextList.length && !this.showLinks) {
-              return html`<a class="commandlink" href="${s.href}">${this.displayedText}</a>${!this.showLinks ? html`<span class="cursor">_</span>` : ''} `
-            } else if (this.showLinks) {
+            } else if (i === this.displayedTextList.length && !allTyped) {
+              return html`<a class="commandlink" href="${s.href}">${this.displayedText}</a><span class="cursor">_</span> `
+            } else if (allTyped) {
               return html`<a class="commandlink" href="${s.href}">${s.text}</a> `
             }
             return null
