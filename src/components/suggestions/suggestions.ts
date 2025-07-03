@@ -10,6 +10,9 @@ export class MbsSuggestions extends LitElement {
   private displayedText = ''
 
   @state()
+  private displayedTextList: string[] = []
+
+  @state()
   private showLinks = false
 
   private suggestions = [
@@ -25,6 +28,7 @@ export class MbsSuggestions extends LitElement {
   override connectedCallback() {
     super.connectedCallback()
     this.displayedText = ''
+    this.displayedTextList = []
     this.showLinks = false
     this.currentSuggestionIndex = 0
     this.fullText = this.suggestions[0]?.text || ''
@@ -36,6 +40,10 @@ export class MbsSuggestions extends LitElement {
 
   private typeText(remaining: string) {
     if (!remaining) {
+      this.displayedTextList = [
+        ...this.displayedTextList,
+        this.displayedText
+      ]
       if (this.currentSuggestionIndex < this.suggestions.length - 1) {
         this.typingTimeout = window.setTimeout(() => {
           this.currentSuggestionIndex++
@@ -77,7 +85,12 @@ export class MbsSuggestions extends LitElement {
               </ul>
             `
           : html`
-              <span class="name">${this.displayedText}</span>
+              <span class="name">
+                ${this.displayedTextList.map(
+                  (t, i) => html`${t}${i < this.displayedTextList.length - 1 ? html`<br />` : ''}`
+                )}
+                ${this.displayedText}
+              </span>
               <span class="cursor">_</span>
             `}
       </main>
