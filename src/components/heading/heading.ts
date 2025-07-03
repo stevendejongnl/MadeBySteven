@@ -41,7 +41,7 @@ export class MbsHeading extends LitElement {
     return html`
       <header>
         <span class="prompt">&gt;</span>
-        <span class="name">${this.displayedText}</span>
+        <a class="name" href="/">${this.displayedText}</a>
         <span class="cursor">_</span>
         <nav class="menu">
           <a href="https://ask.steven-dejong.nl" target="_blank" rel="noopener noreferrer">

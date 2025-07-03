@@ -23,6 +23,7 @@ export const styles = css`
         grid-area: name;
         color: ${MbsColorScheme.text};
         text-wrap: nowrap;
+        text-decoration: none;
     }
     .cursor {
         grid-area: cursor;
