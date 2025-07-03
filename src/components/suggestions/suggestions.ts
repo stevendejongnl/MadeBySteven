@@ -54,6 +54,7 @@ export class MbsSuggestions extends LitElement {
       } else {
         this.typingTimeout = window.setTimeout(() => {
           this.showLinks = true
+          // this.requestUpdate()
         }, 700)
       }
       return
