@@ -46,6 +46,7 @@ export class MbsSuggestions extends LitElement {
       this.displayedText = ''
       this.handleAllSuggestionsTyped()
     }
+    this.requestUpdate()
   }
 
   private handleAllSuggestionsTyped() {
