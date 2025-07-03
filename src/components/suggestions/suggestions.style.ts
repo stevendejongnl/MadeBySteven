@@ -17,6 +17,12 @@ export const styles = css`
         grid-area: commandline;
         color: ${MbsColorScheme.text};
         text-wrap: nowrap;
+
+        .commandlink {
+            color: ${MbsColorScheme.text};
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
     }
     .cursor {
         grid-area: cursor;
