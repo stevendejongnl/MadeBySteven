@@ -77,20 +77,18 @@ export class MbsSuggestions extends LitElement {
     return html`
       <main>
         <span class="prompt">&gt;</span>
-        ${this.showLinks
-          ? html`
-              <span class="commandline">
-                ${this.suggestions.map(
-                  (s) => html`<a class="commandlink" href="${s.href}">${s.text}</a> `
-                )}
-              </span>
-            `
-          : html`
-              <span class="commandline">
-                ${this.displayedTextList.join(' ')}${this.displayedText}
-              </span>
-              <span class="cursor">_</span>
-            `}
+        <span class="commandline">
+          ${this.suggestions.map((s, i) => {
+            if (i < this.displayedTextList.length) {
+              return html`<a class="commandlink" href="${s.href}">${this.displayedTextList[i]}</a> `
+            } else if (i === this.displayedTextList.length && !this.showLinks) {
+              return html`<a class="commandlink" href="${s.href}">${this.displayedText}</a>${!this.showLinks ? html`<span class="cursor">_</span>` : ''} `
+            } else if (this.showLinks) {
+              return html`<a class="commandlink" href="${s.href}">${s.text}</a> `
+            }
+            return null
+          })}
+        </span>
       </main>
     `
   }
