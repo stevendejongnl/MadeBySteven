@@ -24,7 +24,7 @@ export class MbsSuggestions extends LitElement {
 
   private initState() {
     this.displayedText = ''
-    this.typedSuggestions = []
+    this.typedSuggestions = new Array(this.suggestionList.length).fill('')
     this.currentIndex = 0
     this.currentText = this.suggestionList[0]?.text || ''
   }
@@ -34,10 +34,7 @@ export class MbsSuggestions extends LitElement {
   }
 
   private handleSuggestionEnd() {
-    this.typedSuggestions = [
-      ...this.typedSuggestions,
-      this.displayedText
-    ]
+    this.typedSuggestions[this.currentIndex] = this.displayedText
     if (this.currentIndex < this.suggestionList.length - 1) {
       this.typingTimeout = window.setTimeout(() => {
         this.currentIndex++
@@ -84,15 +81,15 @@ export class MbsSuggestions extends LitElement {
   }
 
   override render() {
-    const allTyped = this.typedSuggestions.length === this.suggestionList.length && this.displayedText === '';
+    const allTyped = this.typedSuggestions.every(text => text.length > 0) && this.displayedText === '';
     return html`
       <main>
         <span class="prompt">&gt;</span>
         <span class="commandline">
           ${this.suggestionList.map((suggestion, index) => {
-            if (index < this.typedSuggestions.length) {
+            if (this.typedSuggestions[index] && (index < this.currentIndex || allTyped)) {
               return html`<a class="commandlink" href="${suggestion.href}">${this.typedSuggestions[index]}</a> `
-            } else if (index === this.typedSuggestions.length && !allTyped) {
+            } else if (index === this.currentIndex && !allTyped) {
               return html`<a class="commandlink" href="${suggestion.href}">${this.displayedText}</a>${!allTyped ? html`<span class="cursor">_</span>` : ''} `
             } else if (allTyped) {
               return html`<a class="commandlink" href="${suggestion.href}">${suggestion.text}</a> `
