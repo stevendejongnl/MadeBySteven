@@ -12,12 +12,25 @@ jobs:
       OLD_COLOR: ${{ steps.color.outputs.OLD_COLOR }}
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Get next deployment color
+      - name: Determine next deployment color
         id: color
-        uses: ./.github/actions/determine-color
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          echo "Checking for existing blue image..."
+          if docker manifest inspect ghcr.io/stevendejongnl/madebysteven:blue >/dev/null 2>&1; then
+            echo "Blue image found, setting new color to green"
+            NEW_COLOR="green"
+            OLD_COLOR="blue"
+          else
+            echo "Blue image not found, setting new color to blue"
+            NEW_COLOR="blue"
+            OLD_COLOR="green"
+          fi
+          echo "NEW_COLOR=${NEW_COLOR}" >> "$GITHUB_OUTPUT"
+          echo "OLD_COLOR=${OLD_COLOR}" >> "$GITHUB_OUTPUT"
+          echo "Color values being set:"
+          cat $GITHUB_OUTPUT
 
   build:
     needs: determine-color
@@ -27,24 +40,25 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Setup Node.js and build app
-        uses: ./.github/actions/setup
-      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.2
+      - name: Install dependencies
+        run: npm ci
+      - name: Build (compile) public directory
+        run: npm run compile
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
       - name: Debug color value
         run: |
           echo "Determined color value: ${{ needs.determine-color.outputs.NEW_COLOR }}"
-          
       - name: Build and push image
         uses: docker/build-push-action@v5
         env:
@@ -59,9 +73,75 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Deploy to Kubernetes
-        uses: ./.github/actions/deploy
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          kubeconfig: ${{ secrets.KUBECONFIG }}
+          version: 'latest'
+      - name: Configure kubectl for Rancher
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
+          chmod 600 ~/.kube/config
+          kubectl config set-cluster $(kubectl config current-context) --insecure-skip-tls-verify=true
+      - name: Remove existing deployment for new color
+        run: |
+          kubectl delete deployment madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }} -n madebysteven --ignore-not-found
+      - name: Deploy new version
+        run: |
+          cat > deployment-${{ needs.determine-color.outputs.NEW_COLOR }}.yaml << EOF
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}
+            namespace: madebysteven
+            labels:
+              app: madebysteven
+              color: ${{ needs.determine-color.outputs.NEW_COLOR }}
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                app: madebysteven
+                color: ${{ needs.determine-color.outputs.NEW_COLOR }}
+            template:
+              metadata:
+                labels:
+                  app: madebysteven
+                  color: ${{ needs.determine-color.outputs.NEW_COLOR }}
+                annotations:
+                  redeploy-hash: "${{ github.sha }}"
+              spec:
+                containers:
+                - name: madebysteven
+                  image: ghcr.io/stevendejongnl/madebysteven:${{ needs.determine-color.outputs.NEW_COLOR }}
+                  imagePullPolicy: Always
+          EOF
+          kubectl apply -f deployment-${{ needs.determine-color.outputs.NEW_COLOR }}.yaml
+          kubectl rollout status deployment/madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }} -n madebysteven --timeout=300s
+      - name: Switch traffic to new version
+        run: |
+          cat > service.yaml << EOF
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: madebysteven-app
+            namespace: madebysteven
+          spec:
+            ports:
+            - port: 80
+              targetPort: 80
+            selector:
+              app: madebysteven
+              color: ${{ needs.determine-color.outputs.NEW_COLOR }}
+          EOF
+          kubectl apply -f service.yaml
+      - name: Verify deployment
+        run: |
+          echo "Active color: ${{ needs.determine-color.outputs.NEW_COLOR }}"
+          echo "Deployment name: madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}"
+          kubectl get pods -n madebysteven -l app=madebysteven,color=${{ needs.determine-color.outputs.NEW_COLOR }}
+          kubectl get svc -n madebysteven madebysteven-app
+          kubectl get deployment -n madebysteven -l app=madebysteven,color=${{ needs.determine-color.outputs.NEW_COLOR }}
+      - name: Cleanup old deployments
+        run: |
+          kubectl get deployment -n madebysteven -l app=madebysteven,color=${{ needs.determine-color.outputs.OLD_COLOR }} --sort-by=.metadata.creationTimestamp -o name | head -n -1 | xargs -r kubectl delete -n madebysteven
