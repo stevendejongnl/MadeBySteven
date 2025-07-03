@@ -85,7 +85,7 @@ export class MbsSuggestions extends LitElement {
               </ul>
             `
           : html`
-              <span class="name">
+              <span class="commandline">
                 ${this.displayedTextList.map(
                   (t, i) => html`${t}${i < this.displayedTextList.length - 1 ? html`<br />` : ''}`
                 )}
