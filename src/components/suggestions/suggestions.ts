@@ -22,32 +22,50 @@ export class MbsSuggestions extends LitElement {
   private fullText = ''
   private typingTimeout?: number
 
-  override connectedCallback() {
-    super.connectedCallback()
+  private initState() {
     this.displayedText = ''
     this.displayedTextList = []
     this.currentSuggestionIndex = 0
     this.fullText = this.suggestions[0]?.text || ''
   }
 
-  override firstUpdated(_changedProperties: PropertyValues) {
+  private startTyping() {
     this.typeText(this.fullText)
+  }
+
+  private handleSuggestionEnd() {
+    this.displayedTextList = [
+      ...this.displayedTextList,
+      this.displayedText
+    ]
+    if (this.currentSuggestionIndex < this.suggestions.length - 1) {
+      this.typingTimeout = window.setTimeout(() => {
+        this.currentSuggestionIndex++
+        this.displayedText = ''
+        this.fullText = this.suggestions[this.currentSuggestionIndex]?.text || ''
+        this.typeText(this.fullText)
+      }, 500)
+    } else {
+      this.handleAllSuggestionsTyped()
+    }
+  }
+
+  private handleAllSuggestionsTyped() {
+    this.dispatchEvent(new CustomEvent('suggestions-finished', { bubbles: true, composed: true }))
+  }
+
+  override connectedCallback() {
+    super.connectedCallback()
+    this.initState()
+  }
+
+  override firstUpdated(_changedProperties: PropertyValues) {
+    this.startTyping()
   }
 
   private typeText(remaining: string) {
     if (!remaining) {
-      this.displayedTextList = [
-        ...this.displayedTextList,
-        this.displayedText
-      ]
-      if (this.currentSuggestionIndex < this.suggestions.length - 1) {
-        this.typingTimeout = window.setTimeout(() => {
-          this.currentSuggestionIndex++
-          this.displayedText = ''
-          this.fullText = this.suggestions[this.currentSuggestionIndex]?.text || ''
-          this.typeText(this.fullText)
-        }, 500)
-      }
+      this.handleSuggestionEnd()
       return
     }
     this.displayedText += remaining[0]
@@ -74,7 +92,7 @@ export class MbsSuggestions extends LitElement {
             if (i < this.displayedTextList.length) {
               return html`<a class="commandlink" href="${s.href}">${this.displayedTextList[i]}</a> `
             } else if (i === this.displayedTextList.length && !allTyped) {
-              return html`<a class="commandlink" href="${s.href}">${this.displayedText}</a><span class="cursor">_</span> `
+              return html`<a class="commandlink" href="${s.href}">${this.displayedText}</a>${!allTyped ? html`<span class="cursor">_</span>` : ''} `
             } else if (allTyped) {
               return html`<a class="commandlink" href="${s.href}">${s.text}</a> `
             }
