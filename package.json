@@ -23,7 +23,7 @@
     "@playwright/test": "^1.55.0",
     "@rollup/plugin-beep": "^1.0.3",
     "@rollup/plugin-commonjs": "^28.0.6",
-    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-typescript": "^12.1.4",
     "@types/node": "^24.5.0",
     "lit": "^3.3.1",
