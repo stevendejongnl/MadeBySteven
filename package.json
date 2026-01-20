@@ -24,16 +24,16 @@
     "npm": ">=11.0.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.0",
+    "@playwright/test": "^1.57.0",
     "@rollup/plugin-beep": "^1.0.3",
-    "@rollup/plugin-commonjs": "^28.0.6",
-    "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rollup/plugin-typescript": "^12.1.4",
-    "@types/node": "^24.5.0",
-    "lit": "^3.3.1",
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@types/node": "^25.0.9",
+    "lit": "^3.3.2",
     "reload": "^3.4.2",
-    "rollup": "^4.52.0",
+    "rollup": "^4.55.2",
     "tslib": "^2.8.1",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   }
 }
