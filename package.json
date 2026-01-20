@@ -19,6 +19,10 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+  "engines": {
+    "node": ">=24.13.0",
+    "npm": ">=11.0.0"
+  },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
     "@rollup/plugin-beep": "^1.0.3",
