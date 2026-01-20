@@ -82,18 +82,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          version: 'latest'
-
-      - name: Configure kubectl for Rancher
-        run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
-          chmod 600 ~/.kube/config
-          kubectl config set-cluster $(kubectl config current-context) --insecure-skip-tls-verify=true
-
       - name: Bypass Cloudflare for Kubernetes deployment
         uses: xiaotianxt/bypass-cloudflare-for-github-action@v2.1.0
         with:
@@ -105,67 +93,112 @@ jobs:
 
       - name: Remove existing deployment for new color
         run: |
-          kubectl delete deployment madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }} -n madebysteven --ignore-not-found
+          curl -X DELETE \
+            -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -k \
+            "${{ secrets.KUBERNETES_API_URL }}/apis/apps/v1/namespaces/madebysteven/deployments/madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}" \
+            2>/dev/null || true
 
       - name: Deploy new version
         run: |
-          cat > deployment-${{ needs.determine-color.outputs.NEW_COLOR }}.yaml << EOF
-          apiVersion: apps/v1
-          kind: Deployment
-          metadata:
-            name: madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}
-            namespace: madebysteven
-            labels:
-              app: madebysteven
-              color: ${{ needs.determine-color.outputs.NEW_COLOR }}
-          spec:
-            replicas: 1
-            selector:
-              matchLabels:
-                app: madebysteven
-                color: ${{ needs.determine-color.outputs.NEW_COLOR }}
-            template:
-              metadata:
-                labels:
-                  app: madebysteven
-                  color: ${{ needs.determine-color.outputs.NEW_COLOR }}
-                annotations:
-                  redeploy-hash: "${{ github.sha }}"
-              spec:
-                containers:
-                - name: madebysteven
-                  image: ghcr.io/stevendejongnl/madebysteven:${{ needs.determine-color.outputs.NEW_COLOR }}
-                  imagePullPolicy: Always
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -k \
+            -d @- \
+            "${{ secrets.KUBERNETES_API_URL }}/apis/apps/v1/namespaces/madebysteven/deployments" << 'EOF'
+          {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+              "name": "madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}",
+              "namespace": "madebysteven",
+              "labels": {
+                "app": "madebysteven",
+                "color": "${{ needs.determine-color.outputs.NEW_COLOR }}"
+              }
+            },
+            "spec": {
+              "replicas": 1,
+              "selector": {
+                "matchLabels": {
+                  "app": "madebysteven",
+                  "color": "${{ needs.determine-color.outputs.NEW_COLOR }}"
+                }
+              },
+              "template": {
+                "metadata": {
+                  "labels": {
+                    "app": "madebysteven",
+                    "color": "${{ needs.determine-color.outputs.NEW_COLOR }}"
+                  },
+                  "annotations": {
+                    "redeploy-hash": "${{ github.sha }}"
+                  }
+                },
+                "spec": {
+                  "containers": [
+                    {
+                      "name": "madebysteven",
+                      "image": "ghcr.io/stevendejongnl/madebysteven:${{ needs.determine-color.outputs.NEW_COLOR }}",
+                      "imagePullPolicy": "Always"
+                    }
+                  ]
+                }
+              }
+            }
+          }
           EOF
-          kubectl apply -f deployment-${{ needs.determine-color.outputs.NEW_COLOR }}.yaml
-          kubectl rollout status deployment/madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }} -n madebysteven --timeout=300s
 
       - name: Switch traffic to new version
         run: |
-          cat > service.yaml << EOF
-          apiVersion: v1
-          kind: Service
-          metadata:
-            name: madebysteven-app
-            namespace: madebysteven
-          spec:
-            ports:
-            - port: 80
-              targetPort: 80
-            selector:
-              app: madebysteven
-              color: ${{ needs.determine-color.outputs.NEW_COLOR }}
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -k \
+            -d @- \
+            "${{ secrets.KUBERNETES_API_URL }}/api/v1/namespaces/madebysteven/services" << 'EOF'
+          {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+              "name": "madebysteven-app",
+              "namespace": "madebysteven"
+            },
+            "spec": {
+              "ports": [
+                {
+                  "port": 80,
+                  "targetPort": 80
+                }
+              ],
+              "selector": {
+                "app": "madebysteven",
+                "color": "${{ needs.determine-color.outputs.NEW_COLOR }}"
+              }
+            }
+          }
           EOF
-          kubectl apply -f service.yaml
 
       - name: Verify deployment
         run: |
           echo "Active color: ${{ needs.determine-color.outputs.NEW_COLOR }}"
           echo "Deployment name: madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}"
-          kubectl get pods -n madebysteven -l app=madebysteven,color=${{ needs.determine-color.outputs.NEW_COLOR }}
-          kubectl get svc -n madebysteven madebysteven-app
-          kubectl get deployment -n madebysteven -l app=madebysteven,color=${{ needs.determine-color.outputs.NEW_COLOR }}
+          curl -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" -k \
+            "${{ secrets.KUBERNETES_API_URL }}/api/v1/namespaces/madebysteven/pods?labelSelector=app=madebysteven,color=${{ needs.determine-color.outputs.NEW_COLOR }}"
 
       - name: Cleanup old deployments
         run: |
-          kubectl get deployment -n madebysteven -l app=madebysteven,color=${{ needs.determine-color.outputs.OLD_COLOR }} --sort-by=.metadata.creationTimestamp -o name | head -n -1 | xargs -r kubectl delete -n madebysteven
+          curl -X GET \
+            -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -k \
+            "${{ secrets.KUBERNETES_API_URL }}/apis/apps/v1/namespaces/madebysteven/deployments?labelSelector=app=madebysteven,color=${{ needs.determine-color.outputs.OLD_COLOR }}" | \
+            jq -r '.items[:-1] | .[].metadata.name' | \
+            while read deployment; do
+              curl -X DELETE \
+                -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
+                -k \
+                "${{ secrets.KUBERNETES_API_URL }}/apis/apps/v1/namespaces/madebysteven/deployments/$deployment"
+            done
