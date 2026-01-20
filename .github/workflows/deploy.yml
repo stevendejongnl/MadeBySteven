@@ -97,7 +97,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
             -H "Content-Type: application/json" \
             -k \
-            "${{ secrets.KUBERNETES_API_URL }}/apis/apps/v1/namespaces/madebysteven/deployments/madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}" \
+            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/apis/apps/v1/namespaces/madebysteven/deployments/madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}" \
             2>/dev/null || true
 
       - name: Deploy new version
@@ -107,7 +107,7 @@ jobs:
             -H "Content-Type: application/json" \
             -k \
             -d @- \
-            "${{ secrets.KUBERNETES_API_URL }}/apis/apps/v1/namespaces/madebysteven/deployments" << 'EOF'
+            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/apis/apps/v1/namespaces/madebysteven/deployments" << 'EOF'
           {
             "apiVersion": "apps/v1",
             "kind": "Deployment",
@@ -158,7 +158,7 @@ jobs:
             -H "Content-Type: application/json" \
             -k \
             -d @- \
-            "${{ secrets.KUBERNETES_API_URL }}/api/v1/namespaces/madebysteven/services" << 'EOF'
+            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/api/v1/namespaces/madebysteven/services" << 'EOF'
           {
             "apiVersion": "v1",
             "kind": "Service",
@@ -186,7 +186,7 @@ jobs:
           echo "Active color: ${{ needs.determine-color.outputs.NEW_COLOR }}"
           echo "Deployment name: madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}"
           curl -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" -k \
-            "${{ secrets.KUBERNETES_API_URL }}/api/v1/namespaces/madebysteven/pods?labelSelector=app=madebysteven,color=${{ needs.determine-color.outputs.NEW_COLOR }}"
+            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/api/v1/namespaces/madebysteven/pods?labelSelector=app=madebysteven,color=${{ needs.determine-color.outputs.NEW_COLOR }}"
 
       - name: Cleanup old deployments
         run: |
@@ -194,11 +194,11 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
             -H "Content-Type: application/json" \
             -k \
-            "${{ secrets.KUBERNETES_API_URL }}/apis/apps/v1/namespaces/madebysteven/deployments?labelSelector=app=madebysteven,color=${{ needs.determine-color.outputs.OLD_COLOR }}" | \
+            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/apis/apps/v1/namespaces/madebysteven/deployments?labelSelector=app=madebysteven,color=${{ needs.determine-color.outputs.OLD_COLOR }}" | \
             jq -r '.items[:-1] | .[].metadata.name' | \
             while read deployment; do
               curl -X DELETE \
                 -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
                 -k \
-                "${{ secrets.KUBERNETES_API_URL }}/apis/apps/v1/namespaces/madebysteven/deployments/$deployment"
+                "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/apis/apps/v1/namespaces/madebysteven/deployments/$deployment"
             done
