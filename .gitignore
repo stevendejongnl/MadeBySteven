@@ -3,7 +3,10 @@
 /blob-report/
 /playwright-report/
 /playwright/.cache/
+.playwright-mcp/
+design/
 /test-results/
+
 node_modules/
 public/assets
 tsconfig.tsbuildinfo

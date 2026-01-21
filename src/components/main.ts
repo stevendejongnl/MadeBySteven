@@ -1,3 +1,7 @@
 export { MbsHeading } from './heading/heading.js'
 export { MbsMain } from './main/main.js'
 export { MbsSuggestions } from './suggestions/suggestions.js'
+export { MbsTerminalHeader } from './terminal-header/terminal-header.js'
+export { MbsProfileCard } from './profile-card/profile-card.js'
+export { MbsSkillsList } from './skills-list/skills-list.js'
+export { MbsStatsBar } from './stats-bar/stats-bar.js'
