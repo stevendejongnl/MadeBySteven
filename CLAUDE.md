@@ -14,10 +14,10 @@ This is a Lit-based personal portfolio website built with TypeScript and Vite.
 
 ```bash
 npm install          # Install dependencies
-npm run dev          # Start dev server (auto-rebuilds)
-npm run build        # Production build
-npm run test:pw      # Run Playwright tests
-npm run lint         # Lint code
+npm start            # Start dev server
+npm test             # Run full test suite
+npm run typecheck    # Type check without building
+npm run test:fast    # Quick test run (Chromium only, no retries)
 ```
 
 ## Architecture
@@ -132,6 +132,21 @@ Edit `src/styles.ts` and update Dracula theme variables across all components.
 2. The profile card, skills list, and stats bar are custom elements
 3. Check `shadowRoot` property to inspect their internal DOM
 4. Use `console.log()` statements in component methods
+
+## Git Hooks
+
+This project uses `simple-git-hooks` for automated quality checks:
+
+- **pre-commit**: Runs TypeScript type checking (`npm run typecheck`)
+- **pre-push**: Runs fast test suite (`npm run test:fast`)
+
+To skip hooks in emergencies:
+```bash
+git commit --no-verify
+git push --no-verify
+```
+
+After cloning the repo, hooks are automatically installed via the `prepare` script during `npm install`.
 
 ## Performance Notes
 

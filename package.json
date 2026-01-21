@@ -13,12 +13,19 @@
     "test": "npx playwright test",
     "test:ui": "npx playwright test --ui",
     "test:chrome": "npx playwright test --project=chromium",
-    "test:debug": "npx playwright test -- debug"
+    "test:debug": "npx playwright test -- debug",
+    "typecheck": "tsc --project tsconfig.check.json --noEmit",
+    "test:fast": "playwright test --project=chromium --retries=0",
+    "prepare": "simple-git-hooks"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
+  "simple-git-hooks": {
+    "pre-commit": "npm run typecheck",
+    "pre-push": "npm run test:fast"
+  },
   "engines": {
     "node": ">=24.13.0",
     "npm": ">=11.0.0"
@@ -33,6 +40,7 @@
     "lit": "^3.3.2",
     "reload": "^3.4.2",
     "rollup": "^4.55.2",
+    "simple-git-hooks": "^2.13.1",
     "tslib": "^2.8.1",
     "typescript": "^5.9.3"
   }

@@ -17,8 +17,6 @@ export class MbsHomePage extends LitElement {
 
   @state() private showSkills: boolean = false
 
-  @state() private showStats: boolean = false
-
   @state() private skillsFinished: boolean = false
 
   private titleTimeout: number | undefined
@@ -85,7 +83,6 @@ export class MbsHomePage extends LitElement {
   private onSkillsFinished(): void {
     window.setTimeout(() => {
       this.skillsFinished = true
-      this.showStats = true
       this.requestUpdate()
     }, 200)
   }
