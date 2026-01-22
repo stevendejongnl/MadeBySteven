@@ -16,13 +16,15 @@ export const homeStyles = css`
   }
 
   .main-title {
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: 900;
-    letter-spacing: 0.15em;
+    letter-spacing: 0;
     color: #50fa7b;
     margin: 0 0 24px 0;
     line-height: 1.2;
     min-height: 60px;
+    display: inline-block;
+    white-space: nowrap;
   }
 
   .title-cursor {
@@ -121,8 +123,10 @@ export const homeStyles = css`
 
     .main-title {
       font-size: 2rem;
+      letter-spacing: 0.15em;
       white-space: normal;
       word-spacing: 100vw;
+      display: block;
     }
 
     .tagline {
