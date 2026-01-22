@@ -1,6 +1,7 @@
 from ..dtos.github_user_dto import GitHubUserDTO
 from ...domain.repositories.github_repository import GitHubRepository
 from ...domain.value_objects.username import Username
+from ...infrastructure.config import settings
 
 
 class FetchGitHubUser:
@@ -9,12 +10,9 @@ class FetchGitHubUser:
     def __init__(self, repository: GitHubRepository):
         self._repository = repository
 
-    async def execute(self, username: str) -> GitHubUserDTO:
+    async def execute(self) -> GitHubUserDTO:
         """
-        Execute the use case with a username string.
-
-        Args:
-            username: GitHub username as string
+        Execute the use case with configured GitHub username.
 
         Returns:
             GitHubUserDTO with user information
@@ -23,7 +21,7 @@ class FetchGitHubUser:
             ValueError: If username is invalid
             Exception: If GitHub API call fails
         """
-        username_vo = Username(username)
+        username_vo = Username(settings.GITHUB_USERNAME)
         user = await self._repository.fetch_user(username_vo)
 
         return GitHubUserDTO(

@@ -9,30 +9,28 @@ from src.presentation.container import Container
 router = APIRouter()
 
 
-@router.get("/user/{username}", response_model=GitHubUserDTO)
+@router.get("/profiles/github", response_model=GitHubUserDTO, tags=["profiles"])
 @inject
-async def get_user(
-    username: str,
+async def get_github_profile(
     use_case: FetchGitHubUser = Depends(Provide[Container.fetch_github_user_use_case])
 ):
-    """Fetch GitHub user profile by username"""
+    """Fetch GitHub user profile"""
     try:
-        return await use_case.execute(username)
+        return await use_case.execute()
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/stats/{username}", response_model=GitHubStatsDTO)
+@router.get("/stats", response_model=GitHubStatsDTO, tags=["stats"])
 @inject
-async def get_stats(
-    username: str,
+async def get_global_stats(
     use_case: FetchGitHubStats = Depends(Provide[Container.fetch_github_stats_use_case])
 ):
-    """Fetch GitHub statistics for user"""
+    """Fetch aggregated statistics"""
     try:
-        return await use_case.execute(username)
+        return await use_case.execute()
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:

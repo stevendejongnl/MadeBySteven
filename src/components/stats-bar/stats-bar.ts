@@ -40,8 +40,8 @@ export class MbsStatsBar extends LitElement {
   private async loadStats(): Promise<void> {
     try {
       const [user, contributions] = await Promise.all([
-        fetchGitHubUser('stevendejongnl'),
-        fetchGitHubStats('stevendejongnl'),
+        fetchGitHubUser(),
+        fetchGitHubStats(),
       ]);
 
       this.stats = {

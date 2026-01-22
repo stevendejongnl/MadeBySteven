@@ -38,7 +38,7 @@ def create_app() -> FastAPI:
         return {"status": "ok"}
 
     # API routes (register FIRST before static files)
-    app.include_router(routers.github.router, prefix="/api/v1/github", tags=["github"])
+    app.include_router(routers.github.router, prefix="/api/v1")
 
     # Mount static files if they exist
     web_app_dist = Path(__file__).parent.parent.parent.parent.parent / "web-app" / "public"

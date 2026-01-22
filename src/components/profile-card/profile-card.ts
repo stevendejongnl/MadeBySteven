@@ -23,7 +23,7 @@ export class MbsProfileCard extends LitElement {
 
   private async loadUserData(): Promise<void> {
     try {
-      const userData = await fetchGitHubUser('stevendejongnl');
+      const userData = await fetchGitHubUser();
       this.user = {
         login: userData.login,
         avatar_url: userData.avatar_url,

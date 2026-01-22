@@ -50,22 +50,22 @@ function getCachedData<T>(key: string): T | null {
   }
 }
 
-export async function fetchGitHubUser(username: string): Promise<GitHubUser> {
-  const cached = getCachedData<GitHubUser>(`user_${username}`);
+export async function fetchGitHubUser(): Promise<GitHubUser> {
+  const cached = getCachedData<GitHubUser>('profile_github');
   if (cached) return cached;
 
   try {
-    const response = await fetch(`${API_BASE}/github/user/${username}`);
+    const response = await fetch(`${API_BASE}/profiles/github`);
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
     }
     const user: GitHubUser = await response.json();
-    setCachedData(`user_${username}`, user, CACHE_TTL_USER);
+    setCachedData('profile_github', user, CACHE_TTL_USER);
     return user;
   } catch (error) {
     console.error('Failed to fetch GitHub user:', error);
     const fallback: GitHubUser = {
-      login: username,
+      login: 'github',
       avatar_url: '',
       public_repos: 0,
       followers: 0,
@@ -76,20 +76,20 @@ export async function fetchGitHubUser(username: string): Promise<GitHubUser> {
   }
 }
 
-export async function fetchGitHubStats(username: string): Promise<number> {
-  const cached = getCachedData<number>(`stats_${username}`);
+export async function fetchGitHubStats(): Promise<number> {
+  const cached = getCachedData<number>('stats_global');
   if (cached !== null) return cached;
 
   try {
-    const response = await fetch(`${API_BASE}/github/stats/${username}`);
+    const response = await fetch(`${API_BASE}/stats`);
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
     }
     const data = await response.json();
-    setCachedData(`stats_${username}`, data.contributions, CACHE_TTL_STATS);
+    setCachedData('stats_global', data.contributions, CACHE_TTL_STATS);
     return data.contributions;
   } catch (error) {
-    console.error('Failed to fetch GitHub stats:', error);
+    console.error('Failed to fetch stats:', error);
     return 0;
   }
 }

@@ -12,17 +12,8 @@ async def test_fetch_github_stats():
     use_case = FetchGitHubStats(mock_repo)
 
     # Act
-    result = await use_case.execute("stevendejongnl")
+    result = await use_case.execute()
 
     # Assert
     assert result.contributions == 100
     mock_repo.fetch_contributions.assert_called_once()
-
-
-@pytest.mark.asyncio
-async def test_fetch_github_stats_with_invalid_username():
-    mock_repo = AsyncMock()
-    use_case = FetchGitHubStats(mock_repo)
-
-    with pytest.raises(ValueError):
-        await use_case.execute("")

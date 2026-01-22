@@ -21,7 +21,7 @@ async def test_fetch_github_user():
     use_case = FetchGitHubUser(mock_repo)
 
     # Act
-    result = await use_case.execute("stevendejongnl")
+    result = await use_case.execute()
 
     # Assert
     assert result.login == "stevendejongnl"
@@ -29,12 +29,3 @@ async def test_fetch_github_user():
     assert result.followers == 5
     assert result.name == "Steven"
     mock_repo.fetch_user.assert_called_once()
-
-
-@pytest.mark.asyncio
-async def test_fetch_github_user_with_invalid_username():
-    mock_repo = AsyncMock()
-    use_case = FetchGitHubUser(mock_repo)
-
-    with pytest.raises(ValueError):
-        await use_case.execute("")
