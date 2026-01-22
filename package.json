@@ -23,7 +23,7 @@
   "type": "module",
   "simple-git-hooks": {
     "pre-commit": "npm run typecheck",
-    "pre-push": "npm run test:fast"
+    "pre-push": "npm run backend-test-fast && npm run test:fast"
   },
   "engines": {
     "node": ">=24.12.0",
