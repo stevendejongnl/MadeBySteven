@@ -198,6 +198,7 @@ All endpoints are under `/api/`:
 | `src/pages/home/home.ts` | Main page component with animation orchestration |
 | `src/components/profile-card/` | GitHub profile display |
 | `src/components/stats-bar/` | GitHub stats with event-based loading |
+| `src/components/contribution-graph/` | GitHub contribution calendar grid |
 | `src/services/github-api.ts` | Backend API client with localStorage caching |
 | `src/styles.ts` | Global Dracula theme colors |
 | `vite.config.ts` | Vite dev server config with API proxy |
@@ -208,8 +209,13 @@ All endpoints are under `/api/`:
 |------|---------|
 | `backend/src/main.py` | FastAPI app entry point |
 | `backend/src/domain/entities/github_user.py` | Domain entity with validation |
+| `backend/src/domain/entities/contribution_calendar.py` | Contribution calendar entity |
+| `backend/src/domain/value_objects/contribution_day.py` | Individual day contribution data |
+| `backend/src/domain/value_objects/contribution_week.py` | Weekly contribution collection |
+| `backend/src/application/dtos/contribution_dto.py` | Contribution data transfer objects |
 | `backend/src/application/use_cases/fetch_github_user.py` | Use case for fetching GitHub user |
-| `backend/src/infrastructure/repositories/github_http_repository.py` | GitHub API HTTP client |
+| `backend/src/application/use_cases/fetch_github_contributions.py` | Use case for fetching contributions with level calculation |
+| `backend/src/infrastructure/repositories/github_http_repository.py` | GitHub API HTTP client with GraphQL |
 | `backend/src/infrastructure/cache/in_memory_cache.py` | In-memory cache implementation |
 | `backend/src/presentation/api/routers/github.py` | API route handlers |
 | `backend/src/presentation/container.py` | Dependency injection container |
@@ -309,6 +315,14 @@ git push --no-verify
 6. **Fresh Docker Builds**: `make dev-full` rebuilds frontend locally before starting Docker. This ensures port 8000 serves fresh code. If you change source and the browser shows old code, restart `make dev-full` to rebuild.
 
 7. **Multi-stage Docker Build**: `backend/Dockerfile` builds web app first (stage 1), then Python runtime (stage 2+). Ensure both Node.js and Python dependencies are installed
+
+8. **GitHub Contribution Graph**: Requires `GITHUB_TOKEN` for GraphQL API access:
+   - Create a token at https://github.com/settings/tokens (classic token)
+   - Minimum scope: `read:user`
+   - Add to `.env` file in project root: `GITHUB_TOKEN=ghp_xxxxxxxxxxxx`
+   - Without token, GraphQL API returns HTTP 401 error
+   - Frontend gracefully shows empty calendar if backend fails
+   - Token is NOT shared with frontend; all GitHub API calls go through backend
 
 ## Common Tasks
 

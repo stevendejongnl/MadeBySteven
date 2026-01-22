@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     # Cache
     CACHE_TTL_USER: int = 3600  # 1 hour
     CACHE_TTL_STATS: int = 1800  # 30 minutes
+    CACHE_TTL_CONTRIBUTIONS: int = 14400  # 4 hours
 
 
 settings = Settings()

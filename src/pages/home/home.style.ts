@@ -77,6 +77,24 @@ export const homeStyles = css`
     background-color: #282a36;
   }
 
+  .contributions-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 80px auto 0;
+    padding: 0 24px 40px 24px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    color: #8be9fd;
+    font-weight: bold;
+    margin: 0 0 24px 0;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+    letter-spacing: 0.1em;
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;

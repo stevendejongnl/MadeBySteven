@@ -4,6 +4,7 @@ import { homeStyles } from './home.style.js'
 import '../../components/profile-card/profile-card.js'
 import '../../components/skills-list/skills-list.js'
 import '../../components/stats-bar/stats-bar.js'
+import '../../components/contribution-graph/contribution-graph.js'
 
 @customElement('mbs-home-page')
 export class MbsHomePage extends LitElement {
@@ -18,6 +19,8 @@ export class MbsHomePage extends LitElement {
   @state() private showSkills: boolean = false
 
   @state() private skillsFinished: boolean = false
+
+  @state() private showContributions: boolean = false
 
   private titleTimeout: number | undefined
 
@@ -84,6 +87,12 @@ export class MbsHomePage extends LitElement {
     window.setTimeout(() => {
       this.skillsFinished = true
       this.requestUpdate()
+
+      // Show contributions 500ms after stats bar
+      window.setTimeout(() => {
+        this.showContributions = true
+        this.requestUpdate()
+      }, 500)
     }, 200)
   }
 
@@ -119,6 +128,15 @@ export class MbsHomePage extends LitElement {
       <div class="status-footer">
         <mbs-stats-bar .skillsFinished="${this.skillsFinished}"></mbs-stats-bar>
       </div>
+
+      ${this.showContributions
+        ? html`
+            <div class="contributions-section">
+              <h2 class="section-title">GitHub Contributions</h2>
+              <mbs-contribution-graph></mbs-contribution-graph>
+            </div>
+          `
+        : ''}
     `
   }
 }

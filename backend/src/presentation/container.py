@@ -1,5 +1,6 @@
 from dependency_injector import containers, providers
 
+from ..application.use_cases.fetch_github_contributions import FetchGitHubContributions
 from ..application.use_cases.fetch_github_stats import FetchGitHubStats
 from ..application.use_cases.fetch_github_user import FetchGitHubUser
 from ..infrastructure.cache.in_memory_cache import InMemoryCache
@@ -23,5 +24,9 @@ class Container(containers.DeclarativeContainer):
     )
     fetch_github_stats_use_case = providers.Factory(
         FetchGitHubStats,
+        repository=github_repository
+    )
+    fetch_github_contributions_use_case = providers.Factory(
+        FetchGitHubContributions,
         repository=github_repository
     )

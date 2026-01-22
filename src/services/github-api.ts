@@ -1,10 +1,26 @@
-interface GitHubUser {
+export interface GitHubUser {
   login: string
   avatar_url: string
   public_repos: number
   followers: number
   name: string | null
   bio: string | null
+}
+
+export interface ContributionDay {
+  date: string
+  count: number
+  level: number
+}
+
+export interface ContributionWeek {
+  days: ContributionDay[]
+}
+
+export interface GitHubContributions {
+  weeks: ContributionWeek[]
+  total_contributions: number
+  max_contributions: number
 }
 
 interface CachedData<T> {
@@ -15,6 +31,7 @@ interface CachedData<T> {
 
 const CACHE_TTL_USER = 3600000;
 const CACHE_TTL_STATS = 1800000;
+const CACHE_TTL_CONTRIBUTIONS = 14400000; // 4 hours
 const API_BASE = import.meta.env['VITE_API_URL'] || '/api/v1';
 
 function getCacheKey(key: string): string {
@@ -91,6 +108,29 @@ export async function fetchGitHubStats(): Promise<number> {
   } catch (error) {
     console.error('Failed to fetch stats:', error);
     return 0;
+  }
+}
+
+export async function fetchGitHubContributions(): Promise<GitHubContributions> {
+  const cached = getCachedData<GitHubContributions>('contributions_calendar');
+  if (cached) return cached;
+
+  try {
+    const response = await fetch(`${API_BASE}/contributions`);
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    const data: GitHubContributions = await response.json();
+    setCachedData('contributions_calendar', data, CACHE_TTL_CONTRIBUTIONS);
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch GitHub contributions:', error);
+    const fallback: GitHubContributions = {
+      weeks: [],
+      total_contributions: 0,
+      max_contributions: 0,
+    };
+    return fallback;
   }
 }
 
