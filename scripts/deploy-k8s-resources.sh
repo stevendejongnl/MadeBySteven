@@ -60,6 +60,29 @@ if [ "${DEBUG:-0}" = "1" ]; then
   set -x
 fi
 
+echo ""
+echo "Cleaning up old resources..."
+# Delete old Ingress resources that might conflict
+# (madebysteven-nginx from old deployment)
+old_ingress_names=("madebysteven-nginx" "madebysteven-app")
+for old_name in "${old_ingress_names[@]}"; do
+  if [ "$old_name" != "$INGRESS_NAME" ]; then
+    old_status=$(curl -s -o /dev/null -w "%{http_code}" \
+      -H "Authorization: Bearer $KUBERNETES_TOKEN" \
+      -k \
+      "$KUBERNETES_API_URL/apis/networking.k8s.io/v1/namespaces/$NAMESPACE/ingresses/$old_name" 2>&1)
+    if [ "$old_status" = "200" ]; then
+      echo "  Deleting old Ingress: $old_name"
+      curl -s -X DELETE \
+        -H "Authorization: Bearer $KUBERNETES_TOKEN" \
+        -k \
+        "$KUBERNETES_API_URL/apis/networking.k8s.io/v1/namespaces/$NAMESPACE/ingresses/$old_name" > /dev/null 2>&1
+      echo "  ✓ Old Ingress deleted"
+    fi
+  fi
+done
+echo ""
+
 # Function to check if resource exists
 resource_exists() {
   local api_path=$1
