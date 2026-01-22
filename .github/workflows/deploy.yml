@@ -45,7 +45,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24.13.0
+          node-version: 24.12.0
 
       - name: Install dependencies
         run: npm ci
@@ -73,6 +73,7 @@ jobs:
           COLOR: ${{ needs.determine-color.outputs.NEW_COLOR }}
         with:
           context: .
+          file: backend/Dockerfile
           push: true
           tags: ghcr.io/stevendejongnl/madebysteven:${{ env.COLOR }}
 
@@ -140,9 +141,44 @@ jobs:
                 "spec": {
                   "containers": [
                     {
-                      "name": "madebysteven",
+                      "name": "app",
                       "image": "ghcr.io/stevendejongnl/madebysteven:${{ needs.determine-color.outputs.NEW_COLOR }}",
-                      "imagePullPolicy": "Always"
+                      "imagePullPolicy": "Always",
+                      "ports": [
+                        {
+                          "containerPort": 8000
+                        }
+                      ],
+                      "env": [
+                        {
+                          "name": "GITHUB_TOKEN",
+                          "valueFrom": {
+                            "secretKeyRef": {
+                              "name": "github-token",
+                              "key": "token",
+                              "optional": true
+                            }
+                          }
+                        }
+                      ],
+                      "livenessProbe": {
+                        "httpGet": {
+                          "path": "/api/health",
+                          "port": 8000
+                        },
+                        "initialDelaySeconds": 10,
+                        "periodSeconds": 30,
+                        "timeoutSeconds": 5
+                      },
+                      "readinessProbe": {
+                        "httpGet": {
+                          "path": "/api/health",
+                          "port": 8000
+                        },
+                        "initialDelaySeconds": 5,
+                        "periodSeconds": 10,
+                        "timeoutSeconds": 5
+                      }
                     }
                   ]
                 }
@@ -153,33 +189,12 @@ jobs:
 
       - name: Switch traffic to new version
         run: |
-          curl -X POST \
+          curl -X PATCH \
             -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
-            -H "Content-Type: application/json" \
+            -H "Content-Type: application/merge-patch+json" \
             -k \
-            -d @- \
-            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/api/v1/namespaces/madebysteven/services" << 'EOF'
-          {
-            "apiVersion": "v1",
-            "kind": "Service",
-            "metadata": {
-              "name": "madebysteven-app",
-              "namespace": "madebysteven"
-            },
-            "spec": {
-              "ports": [
-                {
-                  "port": 80,
-                  "targetPort": 80
-                }
-              ],
-              "selector": {
-                "app": "madebysteven",
-                "color": "${{ needs.determine-color.outputs.NEW_COLOR }}"
-              }
-            }
-          }
-          EOF
+            -d '{"spec":{"selector":{"color":"${{ needs.determine-color.outputs.NEW_COLOR }}"}}}' \
+            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/api/v1/namespaces/madebysteven/services/madebysteven"
 
       - name: Verify deployment
         run: |

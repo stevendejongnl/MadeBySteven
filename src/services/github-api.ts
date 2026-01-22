@@ -15,7 +15,7 @@ interface CachedData<T> {
 
 const CACHE_TTL_USER = 3600000;
 const CACHE_TTL_STATS = 1800000;
-const API_BASE = 'https://api.github.com';
+const API_BASE = import.meta.env['VITE_API_URL'] || '/api/v1';
 
 function getCacheKey(key: string): string {
   return `mbs_github_cache_${key}`;
@@ -55,9 +55,9 @@ export async function fetchGitHubUser(username: string): Promise<GitHubUser> {
   if (cached) return cached;
 
   try {
-    const response = await fetch(`${API_BASE}/users/${username}`);
+    const response = await fetch(`${API_BASE}/github/user/${username}`);
     if (!response.ok) {
-      throw new Error(`GitHub API error: ${response.status}`);
+      throw new Error(`API error: ${response.status}`);
     }
     const user: GitHubUser = await response.json();
     setCachedData(`user_${username}`, user, CACHE_TTL_USER);
@@ -81,11 +81,13 @@ export async function fetchGitHubStats(username: string): Promise<number> {
   if (cached !== null) return cached;
 
   try {
-    // Contribution data requires GitHub GraphQL API or GitHub Contributions page
-    // For now, return a placeholder value. In production, you'd use GraphQL or Contributions API
-    const contributionCount = 0;
-    setCachedData(`stats_${username}`, contributionCount, CACHE_TTL_STATS);
-    return contributionCount;
+    const response = await fetch(`${API_BASE}/github/stats/${username}`);
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    const data = await response.json();
+    setCachedData(`stats_${username}`, data.contributions, CACHE_TTL_STATS);
+    return data.contributions;
   } catch (error) {
     console.error('Failed to fetch GitHub stats:', error);
     return 0;

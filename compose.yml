@@ -1,0 +1,29 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: madebysteven
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=true
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+    volumes:
+      - ./backend/src:/app/src
+      - ./public:/web-app/public
+
+  # Development: separate frontend with HMR
+  web-dev:
+    image: node:24-slim
+    working_dir: /app
+    command: npm start
+    container_name: madebysteven-web-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    environment:
+      - VITE_API_URL=http://localhost:8000/api/v1
+    profiles:
+      - dev

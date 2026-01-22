@@ -3,70 +3,125 @@ kind: Namespace
 metadata:
   name: madebysteven
 ---
+# Blue Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: madebysteven-blue
   namespace: madebysteven
+  labels:
+    app: madebysteven
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: madebysteven
-      version: blue
+      color: blue
   template:
     metadata:
       labels:
         app: madebysteven
-        version: blue
+        color: blue
     spec:
       containers:
-      - name: madebysteven
-        image: ghcr.io/stevendejongnl/madebysteven:latest
+      - name: app
+        image: ghcr.io/stevendejongnl/madebysteven:blue
+        imagePullPolicy: Always
         ports:
-        - containerPort: 80
+        - containerPort: 8000
+        env:
+        - name: GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-token
+              key: token
+              optional: true
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
 ---
+# Green Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: madebysteven-green
   namespace: madebysteven
+  labels:
+    app: madebysteven
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: madebysteven
-      version: green
+      color: green
   template:
     metadata:
       labels:
         app: madebysteven
-        version: green
+        color: green
     spec:
       containers:
-      - name: madebysteven
-        image: ghcr.io/stevendejongnl/madebysteven:latest
+      - name: app
+        image: ghcr.io/stevendejongnl/madebysteven:green
+        imagePullPolicy: Always
         ports:
-        - containerPort: 80
+        - containerPort: 8000
+        env:
+        - name: GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-token
+              key: token
+              optional: true
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
 ---
+# Service (switch color label for blue-green deployment)
 apiVersion: v1
 kind: Service
 metadata:
-  name: madebysteven-app
+  name: madebysteven
   namespace: madebysteven
+  labels:
+    app: madebysteven
 spec:
+  type: ClusterIP
   selector:
     app: madebysteven
-    version: blue  # Change to 'green' to switch traffic
+    color: blue  # Switch to 'green' for blue-green deployment
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 8000
+      targetPort: 8000
 ---
+# Ingress
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: madebysteven-nginx
+  name: madebysteven
   namespace: madebysteven
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
@@ -80,6 +135,16 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: madebysteven-app
+            name: madebysteven
             port:
-              number: 80
+              number: 8000
+  - host: madebysteven.nl
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: madebysteven
+            port:
+              number: 8000

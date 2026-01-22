@@ -1,5 +1,5 @@
 import { css } from 'lit';
-import { MbsColorScheme } from 'styles.js';
+import { MbsColorScheme } from '../styles.js';
 
 export const styles = css`
     :host {
