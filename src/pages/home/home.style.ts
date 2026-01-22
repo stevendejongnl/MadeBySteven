@@ -125,7 +125,6 @@ export const homeStyles = css`
       font-size: 2rem;
       letter-spacing: 0.15em;
       white-space: normal;
-      word-spacing: 100vw;
       display: block;
     }
 
