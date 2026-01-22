@@ -15,6 +15,7 @@
     "test:debug": "npx playwright test -- debug",
     "typecheck": "tsc --project tsconfig.check.json --noEmit",
     "test:fast": "playwright test --project=chromium --retries=0",
+    "test:e2e": "playwright test --project=chromium --retries=0",
     "prepare": "simple-git-hooks"
   },
   "keywords": [],
@@ -23,7 +24,7 @@
   "type": "module",
   "simple-git-hooks": {
     "pre-commit": "npm run typecheck && cd backend && uv run ruff check src && uv run mypy src && cd ..",
-    "pre-push": "cd backend && uv run pytest -x && cd .. && npm run test:fast"
+    "pre-push": "bash scripts/test-pre-push.sh"
   },
   "engines": {
     "node": ">=24.12.0",
