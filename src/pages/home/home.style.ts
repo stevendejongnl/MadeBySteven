@@ -58,25 +58,24 @@ export const homeStyles = css`
 
   .skills-and-contributions {
     display: flex;
-    gap: 32px;
+    gap: 48px;
     align-items: flex-start;
     margin-bottom: 32px;
     opacity: 0;
     animation: fadeIn 0.5s ease-out forwards;
-    overflow: hidden;
   }
 
   .skills-section {
-    flex: 0 1 auto;
-    min-width: 0;
+    flex: 0 0 auto;
+    width: 280px;
     opacity: 1;
     animation: fadeIn 0.5s ease-out forwards;
   }
 
   .contributions-section {
-    flex: 0 1 auto;
+    flex: 1 1 auto;
     min-width: 0;
-    max-width: 100%;
+    min-height: 0;
     opacity: 0;
     animation: fadeIn 0.5s ease-out forwards;
   }

@@ -17,7 +17,7 @@ export const contributionGraphStyles = css`
 
   .month-labels {
     display: grid;
-    grid-template-columns: repeat(52, 1fr);
+    grid-template-columns: repeat(52, minmax(0, 1fr));
     gap: 3px;
     margin-bottom: 8px;
     font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
