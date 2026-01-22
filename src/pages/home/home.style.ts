@@ -23,8 +23,6 @@ export const homeStyles = css`
     margin: 0 0 24px 0;
     line-height: 1.2;
     min-height: 60px;
-    display: flex;
-    align-items: center;
   }
 
   .title-cursor {
@@ -123,6 +121,8 @@ export const homeStyles = css`
 
     .main-title {
       font-size: 2rem;
+      white-space: normal;
+      word-spacing: 100vw;
     }
 
     .tagline {

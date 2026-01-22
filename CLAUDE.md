@@ -287,6 +287,29 @@ The backend uses TDD with co-located tests:
 - **State Management**: `@state()` for internal, `@property()` for external
 - **Testing**: Playwright E2E tests in `tests/` directory
 
+### Testing Visual Changes with Playwright
+
+**Important workflow for testing UI/styling changes:**
+
+1. **Start the development server**:
+   ```bash
+   make dev-full
+   ```
+   This runs the complete stack and serves the app at **http://localhost:8000** (not localhost:3000)
+
+2. **Always test with Playwright plugin** before committing visual changes:
+   - Use the Playwright MCP plugin to take screenshots at multiple screen sizes
+   - Test at minimum: desktop (1280px), tablet (768px), and mobile (375px)
+   - Verify responsive behavior and CSS changes across all breakpoints
+
+3. **Example Playwright testing commands**:
+   - Navigate to http://localhost:8000
+   - Resize viewport: `browser_resize(width, height)`
+   - Take screenshots: `browser_take_screenshot(filename)`
+   - Check element state: `browser_snapshot()`
+
+This ensures CSS changes render correctly before deployment and catches responsive design issues early.
+
 ### Git Hooks
 
 This project uses `simple-git-hooks` for automated quality checks:
