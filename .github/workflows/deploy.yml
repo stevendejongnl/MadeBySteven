@@ -44,6 +44,20 @@ jobs:
       - name: TypeScript type checking
         run: npm run typecheck
 
+  backend-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Lint with ruff
+        run: cd backend && uv sync --frozen && uv run ruff check src
+      - name: Type check with mypy
+        run: cd backend && uv run mypy src
+
   backend-tests:
     runs-on: ubuntu-latest
     steps:
@@ -57,7 +71,7 @@ jobs:
         run: cd backend && uv sync --frozen && uv run pytest --tb=short
 
   build:
-    needs: [determine-color, typecheck, backend-tests]
+    needs: [determine-color, typecheck, backend-lint, backend-tests]
     runs-on: ubuntu-latest
     permissions:
       packages: write
