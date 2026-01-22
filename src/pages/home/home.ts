@@ -20,8 +20,6 @@ export class MbsHomePage extends LitElement {
 
   @state() private skillsFinished: boolean = false
 
-  @state() private showContributions: boolean = false
-
   private titleTimeout: number | undefined
 
   private profileTimeout: number | undefined
@@ -86,7 +84,6 @@ export class MbsHomePage extends LitElement {
   private onSkillsFinished(): void {
     window.setTimeout(() => {
       this.skillsFinished = true
-      this.showContributions = true
       this.requestUpdate()
     }, 200)
   }
@@ -119,13 +116,9 @@ export class MbsHomePage extends LitElement {
                 ></mbs-skills-list>
               </div>
 
-              ${this.showContributions
-                ? html`
-                    <div class="contributions-section">
-                      <mbs-contribution-graph></mbs-contribution-graph>
-                    </div>
-                  `
-                : ''}
+              <div class="contributions-section">
+                <mbs-contribution-graph></mbs-contribution-graph>
+              </div>
             </div>`
           : ''}
       </section>
