@@ -4,14 +4,34 @@ export const contributionGraphStyles = css`
   :host {
     display: block;
     width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 24px;
   }
 
   .calendar-container {
-    padding: 24px 0;
+    container-type: inline-size;
+    container-name: calendar;
+    padding: 0;
     position: relative;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .month-labels {
+    display: grid;
+    grid-template-columns: repeat(52, 1fr);
+    gap: 3px;
+    margin-bottom: 8px;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+    font-size: 10px;
+    color: #6272a4;
+  }
+
+  .month-label {
+    text-align: left;
+    padding-left: 2px;
+    grid-column: span 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .loading {
@@ -24,21 +44,22 @@ export const contributionGraphStyles = css`
 
   .calendar-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(12px, 1fr));
+    grid-template-columns: repeat(52, minmax(0, 1fr));
     gap: 3px;
     padding: 16px 0;
-    overflow-x: auto;
+    width: 100%;
   }
 
   .calendar-week {
     display: flex;
     flex-direction: column;
     gap: 3px;
+    width: 100%;
   }
 
   .contribution-cell {
-    width: 12px;
-    height: 12px;
+    width: 100%;
+    aspect-ratio: 1;
     border-radius: 2px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -46,6 +67,8 @@ export const contributionGraphStyles = css`
     animation: fadeIn 0.5s ease-out forwards;
     animation-delay: var(--animation-delay, 0ms);
     opacity: 0;
+    min-width: 3px;
+    max-width: 12px;
   }
 
   .contribution-cell:hover {
@@ -138,13 +161,8 @@ export const contributionGraphStyles = css`
     }
   }
 
-  /* Responsive design */
-  @media (max-width: 600px) {
-    .contribution-cell {
-      width: 10px;
-      height: 10px;
-    }
-
+  /* Container-based responsive sizing */
+  @container calendar (max-width: 450px) {
     .calendar-grid {
       gap: 2px;
     }
@@ -153,9 +171,51 @@ export const contributionGraphStyles = css`
       gap: 2px;
     }
 
-    .tooltip {
-      font-size: 11px;
-      padding: 6px 10px;
+    .contribution-cell {
+      max-width: 10px;
+    }
+
+    .month-labels {
+      gap: 2px;
+      font-size: 9px;
+    }
+  }
+
+  /* Extra small containers */
+  @container calendar (max-width: 350px) {
+    .contribution-cell {
+      max-width: 8px;
+    }
+
+    .month-labels {
+      font-size: 8px;
+    }
+  }
+
+  /* Fallback for browsers without container query support */
+  @supports not (container-type: inline-size) {
+    @media (max-width: 600px) {
+      .calendar-grid {
+        gap: 2px;
+      }
+
+      .calendar-week {
+        gap: 2px;
+      }
+
+      .contribution-cell {
+        max-width: 10px;
+      }
+
+      .month-labels {
+        gap: 2px;
+        font-size: 9px;
+      }
+
+      .tooltip {
+        font-size: 11px;
+        padding: 6px 10px;
+      }
     }
   }
 `;

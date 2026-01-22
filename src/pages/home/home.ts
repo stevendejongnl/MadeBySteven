@@ -86,13 +86,8 @@ export class MbsHomePage extends LitElement {
   private onSkillsFinished(): void {
     window.setTimeout(() => {
       this.skillsFinished = true
+      this.showContributions = true
       this.requestUpdate()
-
-      // Show contributions 500ms after stats bar
-      window.setTimeout(() => {
-        this.showContributions = true
-        this.requestUpdate()
-      }, 500)
     }, 200)
   }
 
@@ -117,10 +112,20 @@ export class MbsHomePage extends LitElement {
           : ''}
 
         ${this.showSkills
-          ? html`<div class="skills-section">
-              <mbs-skills-list
-                @skills-finished="${() => this.onSkillsFinished()}"
-              ></mbs-skills-list>
+          ? html`<div class="skills-and-contributions">
+              <div class="skills-section">
+                <mbs-skills-list
+                  @skills-finished="${() => this.onSkillsFinished()}"
+                ></mbs-skills-list>
+              </div>
+
+              ${this.showContributions
+                ? html`
+                    <div class="contributions-section">
+                      <mbs-contribution-graph></mbs-contribution-graph>
+                    </div>
+                  `
+                : ''}
             </div>`
           : ''}
       </section>
@@ -128,15 +133,6 @@ export class MbsHomePage extends LitElement {
       <div class="status-footer">
         <mbs-stats-bar .skillsFinished="${this.skillsFinished}"></mbs-stats-bar>
       </div>
-
-      ${this.showContributions
-        ? html`
-            <div class="contributions-section">
-              <h2 class="section-title">GitHub Contributions</h2>
-              <mbs-contribution-graph></mbs-contribution-graph>
-            </div>
-          `
-        : ''}
     `
   }
 }

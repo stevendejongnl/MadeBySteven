@@ -56,8 +56,28 @@ export const homeStyles = css`
     animation: fadeIn 0.5s ease-out 2.2s forwards;
   }
 
+  .skills-and-contributions {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+    overflow: hidden;
+  }
+
   .skills-section {
+    flex: 0 1 auto;
+    min-width: 0;
     opacity: 1;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .contributions-section {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    opacity: 0;
     animation: fadeIn 0.5s ease-out forwards;
   }
 
@@ -75,24 +95,6 @@ export const homeStyles = css`
     width: 100%;
     z-index: 100;
     background-color: #282a36;
-  }
-
-  .contributions-section {
-    width: 100%;
-    max-width: 900px;
-    margin: 80px auto 0;
-    padding: 0 24px 40px 24px;
-    opacity: 0;
-    animation: fadeIn 0.5s ease-out forwards;
-  }
-
-  .section-title {
-    font-size: 1.5rem;
-    color: #8be9fd;
-    font-weight: bold;
-    margin: 0 0 24px 0;
-    font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
-    letter-spacing: 0.1em;
   }
 
   @keyframes fadeIn {
@@ -126,6 +128,23 @@ export const homeStyles = css`
 
     .tagline {
       font-size: 1rem;
+    }
+
+    .skills-and-contributions {
+      flex-direction: column;
+      gap: 32px;
+      width: 100%;
+    }
+
+    .skills-section {
+      flex: 1 1 auto;
+      width: 100%;
+    }
+
+    .contributions-section {
+      flex: 1 1 auto;
+      width: 100%;
+      max-width: 100%;
     }
   }
 `;

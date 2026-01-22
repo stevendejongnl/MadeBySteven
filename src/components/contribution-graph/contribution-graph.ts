@@ -3,6 +3,11 @@ import { customElement, state } from 'lit/decorators.js';
 import { fetchGitHubContributions, ContributionDay, ContributionWeek } from '../../services/github-api.js';
 import { contributionGraphStyles } from './contribution-graph.style.js';
 
+interface MonthLabel {
+  name: string;
+  startIndex: number;
+}
+
 @customElement('mbs-contribution-graph')
 export class MbsContributionGraph extends LitElement {
   static override styles = contributionGraphStyles;
@@ -12,6 +17,8 @@ export class MbsContributionGraph extends LitElement {
   @state() private loading: boolean = true;
 
   @state() private totalContributions: number = 0;
+
+  @state() private monthLabels: MonthLabel[] = [];
 
   @state() private tooltipData: { date: string; count: number; x: number; y: number } | null = null;
 
@@ -25,6 +32,7 @@ export class MbsContributionGraph extends LitElement {
       const contributions = await fetchGitHubContributions();
       this.weeks = contributions.weeks;
       this.totalContributions = contributions.total_contributions;
+      this.calculateMonthLabels();
       this.loading = false;
       this.requestUpdate();
 
@@ -37,6 +45,37 @@ export class MbsContributionGraph extends LitElement {
       this.loading = false;
       this.requestUpdate();
     }
+  }
+
+  private calculateMonthLabels(): void {
+    const labels: MonthLabel[] = [];
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    let lastMonth = -1;
+
+    this.weeks.forEach((week, index) => {
+      // Use first day of week to determine month
+      const firstDay = week.days[0];
+      if (firstDay && firstDay.date) {
+        const date = new Date(firstDay.date);
+        const month = date.getMonth();
+
+        // New month detected
+        if (month !== lastMonth) {
+          const monthName = monthNames[month];
+          if (monthName) {
+            labels.push({
+              name: monthName,
+              startIndex: index
+            });
+          }
+          lastMonth = month;
+        }
+      }
+    });
+
+    this.monthLabels = labels;
   }
 
   private animateCalendar(): void {
@@ -92,6 +131,21 @@ export class MbsContributionGraph extends LitElement {
         ${this.loading
           ? html`<div class="loading">Loading contributions...</div>`
           : html`
+              <!-- Month labels above calendar -->
+              <div class="month-labels">
+                ${this.monthLabels.map(
+                  (label) => html`
+                    <span
+                      class="month-label"
+                      style="grid-column: ${label.startIndex + 1}"
+                    >
+                      ${label.name}
+                    </span>
+                  `
+                )}
+              </div>
+
+              <!-- Calendar grid -->
               <div class="calendar-grid">
                 ${this.weeks.map(
                   (week) => html`
