@@ -297,12 +297,20 @@ The backend uses TDD with co-located tests:
    ```
    This runs the complete stack and serves the app at **http://localhost:8000** (not localhost:3000)
 
-2. **Always test with Playwright plugin** before committing visual changes:
+2. **CSS changes require rebuild**: When you modify CSS files (`.style.ts`), you must restart the dev server:
+   ```bash
+   # Stop the running dev-full (Ctrl+C)
+   # Then rebuild and restart:
+   make dev-full
+   ```
+   CSS changes are bundled during the initial Docker build and don't auto-reload like TypeScript changes do. The rebuild compiles the updated CSS and includes it in the served assets.
+
+3. **Always test with Playwright plugin** before committing visual changes:
    - Use the Playwright MCP plugin to take screenshots at multiple screen sizes
    - Test at minimum: desktop (1280px), tablet (768px), and mobile (375px)
    - Verify responsive behavior and CSS changes across all breakpoints
 
-3. **Example Playwright testing commands**:
+4. **Example Playwright testing commands**:
    - Navigate to http://localhost:8000
    - Resize viewport: `browser_resize(width, height)`
    - Take screenshots: `browser_take_screenshot(filename)`
@@ -346,6 +354,8 @@ git push --no-verify
    - Without token, GraphQL API returns HTTP 401 error
    - Frontend gracefully shows empty calendar if backend fails
    - Token is NOT shared with frontend; all GitHub API calls go through backend
+
+9. **CSS Changes Require Docker Rebuild**: Unlike TypeScript changes which auto-reload, CSS modifications (`.style.ts` files) are bundled during Docker build. Always run `make dev-full` again after editing CSS to pick up changes. Changes to TypeScript component files will auto-reload, but CSS needs a rebuild.
 
 ## Common Tasks
 

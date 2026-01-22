@@ -123,9 +123,10 @@ export const homeStyles = css`
 
     .main-title {
       font-size: 2rem;
-      letter-spacing: 0.15em;
+      letter-spacing: 0;
       white-space: normal;
       display: block;
+      max-width: 80px;
     }
 
     .tagline {

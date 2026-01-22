@@ -17,9 +17,15 @@ export class MbsStatsBar extends LitElement {
 
   @state() private loading: boolean = true;
 
+  @state() private isSmallDevice: boolean = window.innerWidth <= 768;
+
   private dataLoaded: boolean = false;
 
   private _skillsFinished: boolean = false;
+
+  private resizeListener = () => {
+    this.isSmallDevice = window.innerWidth <= 768;
+  };
 
   @property()
   get skillsFinished(): boolean {
@@ -35,6 +41,12 @@ export class MbsStatsBar extends LitElement {
   override connectedCallback(): void {
     super.connectedCallback();
     this.loadStats();
+    window.addEventListener('resize', this.resizeListener);
+  }
+
+  override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    window.removeEventListener('resize', this.resizeListener);
   }
 
   private async loadStats(): Promise<void> {
@@ -67,26 +79,30 @@ export class MbsStatsBar extends LitElement {
   override render() {
     return html`
       <div class="status-bar">
-        <div class="stats-content ${this.loading ? 'hidden' : ''}">
-          <div class="stat-item">
-            <span class="stat-label">Contributions:</span>
-            <span class="stat-value">${this.stats.contributions}</span>
-          </div>
+        ${!this.isSmallDevice
+          ? html`
+              <div class="stats-content ${this.loading ? 'hidden' : ''}">
+                <div class="stat-item">
+                  <span class="stat-label">Contributions:</span>
+                  <span class="stat-value">${this.stats.contributions}</span>
+                </div>
 
-          <div class="stat-separator">|</div>
+                <div class="stat-separator">|</div>
 
-          <div class="stat-item">
-            <span class="stat-label">Public Repos:</span>
-            <span class="stat-value">${this.stats.repos}</span>
-          </div>
+                <div class="stat-item">
+                  <span class="stat-label">Public Repos:</span>
+                  <span class="stat-value">${this.stats.repos}</span>
+                </div>
 
-          <div class="stat-separator">|</div>
+                <div class="stat-separator">|</div>
 
-          <div class="stat-item">
-            <span class="stat-label">Followers:</span>
-            <span class="stat-value">${this.stats.followers}</span>
-          </div>
-        </div>
+                <div class="stat-item">
+                  <span class="stat-label">Followers:</span>
+                  <span class="stat-value">${this.stats.followers}</span>
+                </div>
+              </div>
+            `
+          : ''}
 
         <div class="status-item ${this.loading ? 'loading' : ''}">
           <span class="stat-label">Status:</span>

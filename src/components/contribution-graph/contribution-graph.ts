@@ -22,9 +22,21 @@ export class MbsContributionGraph extends LitElement {
 
   @state() private tooltipData: { date: string; count: number; x: number; y: number } | null = null;
 
+  @state() private isSmallDevice: boolean = window.innerWidth <= 768;
+
+  private resizeListener = () => {
+    this.isSmallDevice = window.innerWidth <= 768;
+  };
+
   override connectedCallback(): void {
     super.connectedCallback();
     this.loadContributions();
+    window.addEventListener('resize', this.resizeListener);
+  }
+
+  override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    window.removeEventListener('resize', this.resizeListener);
   }
 
   private async loadContributions(): Promise<void> {
@@ -181,7 +193,7 @@ export class MbsContributionGraph extends LitElement {
                   `
                 : ''}
 
-              ${this.weeks.length > 0
+              ${this.weeks.length > 0 && this.isSmallDevice
                 ? html`<div class="total-contributions">Total: ${this.totalContributions} contributions</div>`
                 : ''}
             `}
