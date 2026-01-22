@@ -18,3 +18,10 @@ class GitHubContributionsDTO(BaseModel):
     weeks: list[ContributionWeekDTO]
     total_contributions: int
     max_contributions: int
+
+
+class GitLabContributionsDTO(BaseModel):
+    """Data Transfer Object for GitLab contribution calendar"""
+    weeks: list[ContributionWeekDTO]
+    total_contributions: int
+    max_contributions: int

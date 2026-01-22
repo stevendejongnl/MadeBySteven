@@ -22,6 +22,12 @@ class Settings(BaseSettings):
     GITHUB_TOKEN: str | None = None
     GITHUB_API_BASE: str = "https://api.github.com"
 
+    # GitLab
+    GITLAB_USERNAME: str = "stevendejong"
+    GITLAB_TOKEN: str | None = None
+    GITLAB_API_BASE: str = "https://gitlab.com/api/v4"
+    GITLAB_INSTANCE: str = "https://gitlab.com"
+
     # Cache
     CACHE_TTL_USER: int = 3600  # 1 hour
     CACHE_TTL_STATS: int = 1800  # 30 minutes

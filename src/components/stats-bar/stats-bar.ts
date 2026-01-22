@@ -1,19 +1,20 @@
 import { LitElement, html } from 'lit';
 import { customElement, state, property } from 'lit/decorators.js';
-import { fetchGitHubUser, fetchGitHubStats } from '../../services/github-api.js';
+import { fetchGitHubUser, fetchAggregatedStats } from '../../services/github-api.js';
 import { statsBarStyles } from './stats-bar.style.js';
 
 interface Stats {
   contributions: number
   repos: number
   followers: number
+  contributionTooltip: string
 }
 
 @customElement('mbs-stats-bar')
 export class MbsStatsBar extends LitElement {
   static override styles = statsBarStyles;
 
-  @state() private stats: Stats = { contributions: 0, repos: 0, followers: 0 };
+  @state() private stats: Stats = { contributions: 0, repos: 0, followers: 0, contributionTooltip: '' };
 
   @state() private loading: boolean = true;
 
@@ -51,15 +52,19 @@ export class MbsStatsBar extends LitElement {
 
   private async loadStats(): Promise<void> {
     try {
-      const [user, contributions] = await Promise.all([
+      const [user, aggregatedStats] = await Promise.all([
         fetchGitHubUser(),
-        fetchGitHubStats(),
+        fetchAggregatedStats(),
       ]);
 
+      const breakdown = aggregatedStats.source_breakdown;
+      const tooltip = `GitHub: ${breakdown.github} | GitLab: ${breakdown.gitlab}`;
+
       this.stats = {
-        contributions,
+        contributions: aggregatedStats.total_contributions,
         repos: user.public_repos,
         followers: user.followers,
+        contributionTooltip: tooltip,
       };
 
       this.dataLoaded = true;
@@ -84,7 +89,7 @@ export class MbsStatsBar extends LitElement {
               <div class="stats-content ${this.loading ? 'hidden' : ''}">
                 <div class="stat-item">
                   <span class="stat-label">Contributions:</span>
-                  <span class="stat-value">${this.stats.contributions}</span>
+                  <span class="stat-value" title="${this.stats.contributionTooltip}">${this.stats.contributions}</span>
                 </div>
 
                 <div class="stat-separator">|</div>

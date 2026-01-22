@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from dependency_injector.wiring import Provide, inject
 
 from src.application.dtos.contribution_dto import GitHubContributionsDTO
-from src.application.dtos.github_user_dto import GitHubStatsDTO, GitHubUserDTO
+from src.application.dtos.github_user_dto import AggregatedStatsDTO, GitHubUserDTO
+from src.application.use_cases.fetch_aggregated_stats import FetchAggregatedStats
 from src.application.use_cases.fetch_github_contributions import FetchGitHubContributions
-from src.application.use_cases.fetch_github_stats import FetchGitHubStats
 from src.application.use_cases.fetch_github_user import FetchGitHubUser
 from src.presentation.container import Container
 
@@ -25,12 +25,12 @@ async def get_github_profile(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/stats", response_model=GitHubStatsDTO, tags=["stats"])
+@router.get("/stats", response_model=AggregatedStatsDTO, tags=["stats"])
 @inject
 async def get_global_stats(
-    use_case: FetchGitHubStats = Depends(Provide[Container.fetch_github_stats_use_case])
+    use_case: FetchAggregatedStats = Depends(Provide[Container.fetch_aggregated_stats_use_case])
 ):
-    """Fetch aggregated statistics"""
+    """Fetch aggregated statistics from GitHub and GitLab"""
     try:
         return await use_case.execute()
     except ValueError as e:

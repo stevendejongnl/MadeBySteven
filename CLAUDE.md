@@ -182,12 +182,52 @@ All endpoints are under `/api/`:
 
 - GitHub username is configured via `GITHUB_USERNAME` environment variable (defaults to `stevendejongnl`)
 - Backend proxies GitHub API calls via `GitHubHttpRepository`
+- Uses GitHub GraphQL API for contribution calendar with rate limit handling
 - Two-layer caching:
   - Backend: In-memory cache with TTL (1hr for user, 30min for stats)
   - Frontend: `localStorage` cache with TTL (same durations)
 - Graceful error handling with fallback values
 - Avatar URL uses GitHub redirect: `https://github.com/{username}.png`
-- Architecture supports multiple profile providers (GitHub, GitLab, Gitea, etc.) via extensible `/api/v1/profiles/{service}` pattern
+- Token-based authentication via `GITHUB_TOKEN` environment variable (optional, recommended to avoid rate limits)
+
+### GitLab API Integration
+
+**File**: `src/services/github-api.ts` (frontend) + `backend/src/infrastructure/repositories/gitlab_http_repository.py` (backend)
+
+- GitLab username is configured via `GITLAB_USERNAME` environment variable (defaults to `stevendejong`)
+- Backend proxies GitLab API calls via `GitLabHttpRepository` implementing generic `ContributionRepository` interface
+- Uses GitLab's public calendar endpoint (`/users/{username}/calendar.json`) for contribution data
+- **Aggregated Stats**: `/api/v1/stats` endpoint returns combined totals from GitHub + GitLab:
+  ```json
+  {
+    "total_contributions": 1801,
+    "source_breakdown": {
+      "github": 1234,
+      "gitlab": 567
+    }
+  }
+  ```
+- Same caching strategy as GitHub (30min stats, 4hr calendar)
+- Token-based authentication via `GITLAB_TOKEN` environment variable (optional, `read_user` scope required)
+- Parallel fetching using `asyncio.gather()` for optimal performance
+- Graceful degradation: if one source fails, aggregation continues with available data
+
+### Multi-Source Architecture
+
+The backend implements a **generic repository pattern** that enables multi-source contribution aggregation:
+
+1. **Domain Layer**: `ContributionRepository` abstract interface (contract for any contribution source)
+2. **Infrastructure Layer**:
+   - `GitHubHttpRepository` - GitHub GraphQL implementation
+   - `GitLabHttpRepository` - GitLab REST implementation
+3. **Application Layer**: `FetchAggregatedStats` use case fetches from all repositories in parallel
+4. **Presentation Layer**: `/api/v1/stats` endpoint returns aggregated data
+
+To add more sources (Gitea, Bitbucket, etc.):
+1. Create `{Service}HttpRepository` extending `ContributionRepository`
+2. Add to dependency injection container
+3. Add configuration environment variables
+4. No API changes needed (aggregation is automatic)
 
 ## Important Files
 
@@ -212,13 +252,19 @@ All endpoints are under `/api/`:
 | `backend/src/domain/entities/contribution_calendar.py` | Contribution calendar entity |
 | `backend/src/domain/value_objects/contribution_day.py` | Individual day contribution data |
 | `backend/src/domain/value_objects/contribution_week.py` | Weekly contribution collection |
-| `backend/src/application/dtos/contribution_dto.py` | Contribution data transfer objects |
+| `backend/src/domain/repositories/contribution_repository.py` | Generic repository interface for contributions |
+| `backend/src/application/dtos/contribution_dto.py` | Contribution data transfer objects (GitHub, GitLab) |
 | `backend/src/application/use_cases/fetch_github_user.py` | Use case for fetching GitHub user |
-| `backend/src/application/use_cases/fetch_github_contributions.py` | Use case for fetching contributions with level calculation |
+| `backend/src/application/use_cases/fetch_github_contributions.py` | Use case for fetching GitHub contributions |
+| `backend/src/application/use_cases/fetch_gitlab_contributions.py` | Use case for fetching GitLab contributions |
+| `backend/src/application/use_cases/fetch_aggregated_stats.py` | Use case for aggregating contributions from multiple sources |
 | `backend/src/infrastructure/repositories/github_http_repository.py` | GitHub API HTTP client with GraphQL |
+| `backend/src/infrastructure/repositories/gitlab_http_repository.py` | GitLab API HTTP client with calendar endpoint |
 | `backend/src/infrastructure/cache/in_memory_cache.py` | In-memory cache implementation |
-| `backend/src/presentation/api/routers/github.py` | API route handlers |
-| `backend/src/presentation/container.py` | Dependency injection container |
+| `backend/src/infrastructure/config.py` | Configuration with GitHub & GitLab environment variables |
+| `backend/src/presentation/api/routers/github.py` | GitHub API route handlers (includes aggregated stats) |
+| `backend/src/presentation/api/routers/gitlab.py` | GitLab API route handlers |
+| `backend/src/presentation/container.py` | Dependency injection container with all repositories and use cases |
 
 ### DevOps
 
@@ -355,7 +401,20 @@ git push --no-verify
    - Frontend gracefully shows empty calendar if backend fails
    - Token is NOT shared with frontend; all GitHub API calls go through backend
 
-9. **CSS Changes Require Docker Rebuild**: Unlike TypeScript changes which auto-reload, CSS modifications (`.style.ts` files) are bundled during Docker build. Always run `make dev-full` again after editing CSS to pick up changes. Changes to TypeScript component files will auto-reload, but CSS needs a rebuild.
+9. **GitLab Contribution Calendar**: Uses public REST endpoint (no auth required):
+   - GitLab username configured via `GITLAB_USERNAME` environment variable (defaults to `stevendejong`)
+   - Optional `GITLAB_TOKEN` for avoiding rate limits (create at https://gitlab.com/-/profile/personal_access_tokens with `read_user` scope)
+   - Calendar endpoint: `https://gitlab.com/users/{username}/calendar.json`
+   - If calendar is private, endpoint returns 404 (gracefully handled)
+   - Frontend shows aggregated total of GitHub + GitLab contributions in stats bar
+
+10. **Aggregated Stats Caching**: Stats endpoint (`/api/v1/stats`) returns combined total:
+    - Backend caches aggregated result for 30 minutes
+    - Frontend caches with same TTL under key `mbs_github_cache_stats_aggregated`
+    - If one source fails, aggregation continues with available data
+    - Parallel fetching via `asyncio.gather()` minimizes total request time
+
+11. **CSS Changes Require Docker Rebuild**: Unlike TypeScript changes which auto-reload, CSS modifications (`.style.ts` files) are bundled during Docker build. Always run `make dev-full` again after editing CSS to pick up changes. Changes to TypeScript component files will auto-reload, but CSS needs a rebuild.
 
 ## Common Tasks
 
@@ -407,9 +466,13 @@ Edit `src/styles.ts` and update Dracula theme variables across all components.
 
 ## Future Enhancements
 
-1. **GraphQL for Contributions**: Real contribution count via GitHub GraphQL API (currently placeholder)
+1. **More Contribution Sources**: Extend `ContributionRepository` for Gitea, Bitbucket, or GitLab self-hosted instances
+   - Already supports extensible pattern (generic repository interface)
+   - Just need to create `{Service}HttpRepository` and add to DI container
 2. **Redis Cache**: Replace in-memory cache for multi-replica deployments
+   - Currently uses in-memory cache (good for single-replica deployments)
+   - Redis would enable caching across multiple instances
 3. **Rate Limiting**: Protect API from abuse
 4. **Monitoring**: Add Prometheus metrics and Sentry error tracking
-5. **Authentication**: Protect sensitive endpoints
-6. **Database**: Persistent storage for caching instead of in-memory
+5. **Authentication**: Protect sensitive endpoints with API keys or OAuth
+6. **Database**: Persistent storage for caching instead of in-memory (could use SQLite or PostgreSQL)

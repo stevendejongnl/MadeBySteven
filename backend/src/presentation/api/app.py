@@ -14,7 +14,7 @@ def create_app() -> FastAPI:
     """Create and configure FastAPI application with DI container"""
     # Initialize DI container
     container = Container()
-    container.wire(modules=["src.presentation.api.routers.github"])
+    container.wire(modules=["src.presentation.api.routers.github", "src.presentation.api.routers.gitlab"])
 
     app = FastAPI(
         title=settings.APP_NAME,
@@ -39,6 +39,7 @@ def create_app() -> FastAPI:
 
     # API routes (register FIRST before static files)
     app.include_router(routers.github.router, prefix="/api/v1")
+    app.include_router(routers.gitlab.router, prefix="/api/v1")
 
     # Mount static files if they exist
     web_app_dist = Path(__file__).parent.parent.parent.parent.parent / "web-app" / "public"

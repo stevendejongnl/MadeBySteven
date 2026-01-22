@@ -12,5 +12,11 @@ class GitHubUserDTO(BaseModel):
 
 
 class GitHubStatsDTO(BaseModel):
-    """Data Transfer Object for GitHub stats"""
+    """Data Transfer Object for GitHub stats (legacy)"""
     contributions: int
+
+
+class AggregatedStatsDTO(BaseModel):
+    """Data Transfer Object for aggregated statistics from multiple sources"""
+    total_contributions: int
+    source_breakdown: dict[str, int]

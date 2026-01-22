@@ -23,6 +23,14 @@ export interface GitHubContributions {
   max_contributions: number
 }
 
+export interface AggregatedStats {
+  total_contributions: number
+  source_breakdown: {
+    github: number
+    gitlab: number
+  }
+}
+
 interface CachedData<T> {
   data: T
   timestamp: number
@@ -103,11 +111,38 @@ export async function fetchGitHubStats(): Promise<number> {
       throw new Error(`API error: ${response.status}`);
     }
     const data = await response.json();
-    setCachedData('stats_global', data.contributions, CACHE_TTL_STATS);
-    return data.contributions;
+    // Support both old format (data.contributions) and new format (data.total_contributions)
+    const contributions = data.total_contributions ?? data.contributions ?? 0;
+    setCachedData('stats_global', contributions, CACHE_TTL_STATS);
+    return contributions;
   } catch (error) {
     console.error('Failed to fetch stats:', error);
     return 0;
+  }
+}
+
+export async function fetchAggregatedStats(): Promise<AggregatedStats> {
+  const cached = getCachedData<AggregatedStats>('stats_aggregated');
+  if (cached) return cached;
+
+  try {
+    const response = await fetch(`${API_BASE}/stats`);
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    const data: AggregatedStats = await response.json();
+    setCachedData('stats_aggregated', data, CACHE_TTL_STATS);
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch aggregated stats:', error);
+    const fallback: AggregatedStats = {
+      total_contributions: 0,
+      source_breakdown: {
+        github: 0,
+        gitlab: 0,
+      },
+    };
+    return fallback;
   }
 }
 
