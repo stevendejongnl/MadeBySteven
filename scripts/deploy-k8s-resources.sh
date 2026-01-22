@@ -45,11 +45,20 @@ echo "=========================================="
 echo "Deploying Kubernetes resources"
 echo "=========================================="
 echo "Namespace: $NAMESPACE"
-echo "Deployment: $DEPLOYMENT_NAME (color: $DEPLOYMENT_COLOR, replicas: $REPLICAS)"
-echo "Image: $CONTAINER_IMAGE"
+if [ -n "$CONTAINER_IMAGE" ]; then
+  echo "Deployment: $DEPLOYMENT_NAME (color: $DEPLOYMENT_COLOR, replicas: $REPLICAS)"
+  echo "Image: $CONTAINER_IMAGE"
+fi
 echo "Service: $SERVICE_NAME (port $SERVICE_PORT → $CONTAINER_PORT)"
 echo "Ingress: $INGRESS_NAME (domain $DOMAIN)"
+echo "Kubernetes API: $KUBERNETES_API_URL"
 echo ""
+
+# Enable debug mode with DEBUG=1
+if [ "${DEBUG:-0}" = "1" ]; then
+  echo "DEBUG MODE ENABLED"
+  set -x
+fi
 
 # Function to check if resource exists
 resource_exists() {
@@ -87,33 +96,41 @@ apply_resource() {
   # Check if resource exists
   if resource_exists "$api_path_base/$resource_name"; then
     echo "  Updating $resource_kind: $resource_name"
-    curl -X PATCH \
+    response=$(curl -s -w "\n%{http_code}" -X PATCH \
       -H "Authorization: Bearer $KUBERNETES_TOKEN" \
       -H "Content-Type: application/merge-patch+json" \
       -k \
       -d "$resource_json" \
-      "$KUBERNETES_API_URL$api_path_base/$resource_name" \
-      -o /dev/null -s \
-      2>/dev/null || {
-        echo "  ⚠️  PATCH failed, resource may not exist"
-        return 1
-      }
+      "$KUBERNETES_API_URL$api_path_base/$resource_name" 2>&1)
+    http_code=$(echo "$response" | tail -n 1)
+    body=$(echo "$response" | head -n -1)
+
+    if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+      echo "  ✓ $resource_kind updated (HTTP $http_code)"
+    else
+      echo "  ❌ PATCH failed with HTTP $http_code"
+      echo "  Response: $body"
+      return 1
+    fi
   else
     echo "  Creating $resource_kind: $resource_name"
-    curl -X POST \
+    response=$(curl -s -w "\n%{http_code}" -X POST \
       -H "Authorization: Bearer $KUBERNETES_TOKEN" \
       -H "Content-Type: application/json" \
       -k \
       -d "$resource_json" \
-      "$KUBERNETES_API_URL$api_path_base" \
-      -o /dev/null -s \
-      2>/dev/null || {
-        echo "  ⚠️  POST failed, could not create resource"
-        return 1
-      }
-  fi
+      "$KUBERNETES_API_URL$api_path_base" 2>&1)
+    http_code=$(echo "$response" | tail -n 1)
+    body=$(echo "$response" | head -n -1)
 
-  echo "  ✓ $resource_kind deployed"
+    if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+      echo "  ✓ $resource_kind created (HTTP $http_code)"
+    else
+      echo "  ❌ POST failed with HTTP $http_code"
+      echo "  Response: $body"
+      return 1
+    fi
+  fi
 }
 
 # Deploy Service
@@ -245,5 +262,48 @@ EOF
 fi
 
 echo "=========================================="
-echo "✓ Kubernetes resources deployed successfully"
+echo "Verifying deployed resources..."
+echo "=========================================="
+
+# Verify Service
+echo "Checking Service: $SERVICE_NAME"
+service_status=$(curl -s -o /dev/null -w "%{http_code}" \
+  -H "Authorization: Bearer $KUBERNETES_TOKEN" \
+  -k \
+  "$KUBERNETES_API_URL/api/v1/namespaces/$NAMESPACE/services/$SERVICE_NAME" 2>&1)
+if [ "$service_status" = "200" ]; then
+  echo "  ✓ Service exists (HTTP $service_status)"
+else
+  echo "  ❌ Service not found (HTTP $service_status)"
+fi
+
+# Verify Ingress
+echo "Checking Ingress: $INGRESS_NAME"
+ingress_status=$(curl -s -o /dev/null -w "%{http_code}" \
+  -H "Authorization: Bearer $KUBERNETES_TOKEN" \
+  -k \
+  "$KUBERNETES_API_URL/apis/networking.k8s.io/v1/namespaces/$NAMESPACE/ingresses/$INGRESS_NAME" 2>&1)
+if [ "$ingress_status" = "200" ]; then
+  echo "  ✓ Ingress exists (HTTP $ingress_status)"
+else
+  echo "  ❌ Ingress not found (HTTP $ingress_status)"
+fi
+
+# Verify Deployment if created
+if [ -n "$CONTAINER_IMAGE" ]; then
+  echo "Checking Deployment: $DEPLOYMENT_NAME"
+  deployment_status=$(curl -s -o /dev/null -w "%{http_code}" \
+    -H "Authorization: Bearer $KUBERNETES_TOKEN" \
+    -k \
+    "$KUBERNETES_API_URL/apis/apps/v1/namespaces/$NAMESPACE/deployments/$DEPLOYMENT_NAME" 2>&1)
+  if [ "$deployment_status" = "200" ]; then
+    echo "  ✓ Deployment exists (HTTP $deployment_status)"
+  else
+    echo "  ❌ Deployment not found (HTTP $deployment_status)"
+  fi
+fi
+
+echo ""
+echo "=========================================="
+echo "✓ Kubernetes resources deployment complete"
 echo "=========================================="
