@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${DEPLOYMENT_NAME}
+  namespace: ${NAMESPACE}
+  labels:
+    app: ${APP_NAME}
+    color: ${DEPLOYMENT_COLOR}
+spec:
+  replicas: ${REPLICAS}
+  selector:
+    matchLabels:
+      app: ${APP_NAME}
+      color: ${DEPLOYMENT_COLOR}
+  template:
+    metadata:
+      labels:
+        app: ${APP_NAME}
+        color: ${DEPLOYMENT_COLOR}
+      annotations:
+        redeploy-hash: "${COMMIT_SHA}"
+    spec:
+      containers:
+      - name: app
+        image: ${CONTAINER_IMAGE}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: ${CONTAINER_PORT}
+        env:
+        - name: GITHUB_USERNAME
+          value: "${GITHUB_USERNAME}"
+        - name: GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-token
+              key: token
+              optional: true
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: ${CONTAINER_PORT}
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: ${CONTAINER_PORT}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5

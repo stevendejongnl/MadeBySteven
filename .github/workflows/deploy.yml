@@ -159,16 +159,7 @@ jobs:
           disable_bot_fight_mode: 'true'
           bfm_propagation_delay: 45
 
-      - name: Remove existing deployment for new color
-        run: |
-          curl -X DELETE \
-            -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -k \
-            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/apis/apps/v1/namespaces/madebysteven/deployments/madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}" \
-            2>/dev/null || true
-
-      - name: Deploy Service and Ingress resources
+      - name: Deploy Kubernetes resources (Service, Ingress, Deployment)
         env:
           KUBERNETES_TOKEN: ${{ secrets.KUBERNETES_TOKEN }}
           KUBERNETES_API_URL: ${{ secrets.KUBERNETES_API_URL }}
@@ -177,100 +168,15 @@ jobs:
           SERVICE_NAME: madebysteven
           SERVICE_PORT: 8000
           CONTAINER_PORT: 8000
+          DEPLOYMENT_NAME: madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}
           DEPLOYMENT_COLOR: ${{ needs.determine-color.outputs.NEW_COLOR }}
+          CONTAINER_IMAGE: ghcr.io/stevendejongnl/madebysteven:${{ needs.determine-color.outputs.NEW_COLOR }}
           INGRESS_NAME: madebysteven
           DOMAIN: madebysteven.nl
+          GITHUB_USERNAME: stevendejongnl
+          COMMIT_SHA: ${{ github.sha }}
+          REPLICAS: 1
         run: bash scripts/deploy-k8s-resources.sh
-
-      - name: Deploy new version
-        run: |
-          curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -k \
-            -d @- \
-            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/apis/apps/v1/namespaces/madebysteven/deployments" << 'EOF'
-          {
-            "apiVersion": "apps/v1",
-            "kind": "Deployment",
-            "metadata": {
-              "name": "madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}",
-              "namespace": "madebysteven",
-              "labels": {
-                "app": "madebysteven",
-                "color": "${{ needs.determine-color.outputs.NEW_COLOR }}"
-              }
-            },
-            "spec": {
-              "replicas": 1,
-              "selector": {
-                "matchLabels": {
-                  "app": "madebysteven",
-                  "color": "${{ needs.determine-color.outputs.NEW_COLOR }}"
-                }
-              },
-              "template": {
-                "metadata": {
-                  "labels": {
-                    "app": "madebysteven",
-                    "color": "${{ needs.determine-color.outputs.NEW_COLOR }}"
-                  },
-                  "annotations": {
-                    "redeploy-hash": "${{ github.sha }}"
-                  }
-                },
-                "spec": {
-                  "containers": [
-                    {
-                      "name": "app",
-                      "image": "ghcr.io/stevendejongnl/madebysteven:${{ needs.determine-color.outputs.NEW_COLOR }}",
-                      "imagePullPolicy": "Always",
-                      "ports": [
-                        {
-                          "containerPort": 8000
-                        }
-                      ],
-                      "env": [
-                        {
-                          "name": "GITHUB_USERNAME",
-                          "value": "stevendejongnl"
-                        },
-                        {
-                          "name": "GITHUB_TOKEN",
-                          "valueFrom": {
-                            "secretKeyRef": {
-                              "name": "github-token",
-                              "key": "token",
-                              "optional": true
-                            }
-                          }
-                        }
-                      ],
-                      "livenessProbe": {
-                        "httpGet": {
-                          "path": "/api/health",
-                          "port": 8000
-                        },
-                        "initialDelaySeconds": 10,
-                        "periodSeconds": 30,
-                        "timeoutSeconds": 5
-                      },
-                      "readinessProbe": {
-                        "httpGet": {
-                          "path": "/api/health",
-                          "port": 8000
-                        },
-                        "initialDelaySeconds": 5,
-                        "periodSeconds": 10,
-                        "timeoutSeconds": 5
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-          EOF
 
       - name: Switch traffic to new version
         run: |

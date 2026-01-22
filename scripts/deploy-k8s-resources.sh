@@ -36,13 +36,19 @@ for var in "${required_vars[@]}"; do
   fi
 done
 
+# Optional variables with defaults
+REPLICAS="${REPLICAS:-1}"
+GITHUB_USERNAME="${GITHUB_USERNAME:-stevendejongnl}"
+COMMIT_SHA="${COMMIT_SHA:-unknown}"
+
 echo "=========================================="
 echo "Deploying Kubernetes resources"
 echo "=========================================="
 echo "Namespace: $NAMESPACE"
+echo "Deployment: $DEPLOYMENT_NAME (color: $DEPLOYMENT_COLOR, replicas: $REPLICAS)"
+echo "Image: $CONTAINER_IMAGE"
 echo "Service: $SERVICE_NAME (port $SERVICE_PORT → $CONTAINER_PORT)"
 echo "Ingress: $INGRESS_NAME (domain $DOMAIN)"
-echo "Deployment color: $DEPLOYMENT_COLOR"
 echo ""
 
 # Function to check if resource exists
@@ -68,6 +74,9 @@ apply_resource() {
       ;;
     Ingress)
       api_path_base="/apis/networking.k8s.io/v1/namespaces/$NAMESPACE/ingresses"
+      ;;
+    Deployment)
+      api_path_base="/apis/apps/v1/namespaces/$NAMESPACE/deployments"
       ;;
     *)
       echo "❌ Unknown resource kind: $resource_kind"
@@ -172,6 +181,69 @@ EOF
 apply_resource "$ingress_json"
 
 echo ""
+
+# Deploy Deployment (only if CONTAINER_IMAGE is provided)
+if [ -n "$CONTAINER_IMAGE" ]; then
+  echo "Deploying Deployment..."
+  deployment_json=$(cat <<EOF
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "$DEPLOYMENT_NAME",
+    "namespace": "$NAMESPACE",
+    "labels": {"app": "$APP_NAME", "color": "$DEPLOYMENT_COLOR"}
+  },
+  "spec": {
+    "replicas": $REPLICAS,
+    "selector": {"matchLabels": {"app": "$APP_NAME", "color": "$DEPLOYMENT_COLOR"}},
+    "template": {
+      "metadata": {
+        "labels": {"app": "$APP_NAME", "color": "$DEPLOYMENT_COLOR"},
+        "annotations": {"redeploy-hash": "$COMMIT_SHA"}
+      },
+      "spec": {
+        "containers": [{
+          "name": "app",
+          "image": "$CONTAINER_IMAGE",
+          "imagePullPolicy": "Always",
+          "ports": [{"containerPort": $CONTAINER_PORT}],
+          "env": [
+            {"name": "GITHUB_USERNAME", "value": "$GITHUB_USERNAME"},
+            {
+              "name": "GITHUB_TOKEN",
+              "valueFrom": {
+                "secretKeyRef": {
+                  "name": "github-token",
+                  "key": "token",
+                  "optional": true
+                }
+              }
+            }
+          ],
+          "livenessProbe": {
+            "httpGet": {"path": "/api/health", "port": $CONTAINER_PORT},
+            "initialDelaySeconds": 10,
+            "periodSeconds": 30,
+            "timeoutSeconds": 5
+          },
+          "readinessProbe": {
+            "httpGet": {"path": "/api/health", "port": $CONTAINER_PORT},
+            "initialDelaySeconds": 5,
+            "periodSeconds": 10,
+            "timeoutSeconds": 5
+          }
+        }]
+      }
+    }
+  }
+}
+EOF
+)
+  apply_resource "$deployment_json"
+  echo ""
+fi
+
 echo "=========================================="
 echo "✓ Kubernetes resources deployed successfully"
 echo "=========================================="
