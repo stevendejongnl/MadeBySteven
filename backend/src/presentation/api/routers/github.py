@@ -3,6 +3,7 @@ from dependency_injector.wiring import Provide, inject
 
 from src.application.dtos.contribution_dto import GitHubContributionsDTO
 from src.application.dtos.github_user_dto import AggregatedStatsDTO, GitHubUserDTO
+from src.application.use_cases.fetch_aggregated_contributions import FetchAggregatedContributions
 from src.application.use_cases.fetch_aggregated_stats import FetchAggregatedStats
 from src.application.use_cases.fetch_github_contributions import FetchGitHubContributions
 from src.application.use_cases.fetch_github_user import FetchGitHubUser
@@ -45,6 +46,20 @@ async def get_contributions(
     use_case: FetchGitHubContributions = Depends(Provide[Container.fetch_github_contributions_use_case])
 ):
     """Fetch GitHub contribution calendar (365 days)"""
+    try:
+        return await use_case.execute()
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/contributions/aggregated", response_model=GitHubContributionsDTO, tags=["contributions"])
+@inject
+async def get_aggregated_contributions(
+    use_case: FetchAggregatedContributions = Depends(Provide[Container.fetch_aggregated_contributions_use_case])
+):
+    """Fetch aggregated contribution calendar from GitHub and GitLab (merged totals per day)"""
     try:
         return await use_case.execute()
     except ValueError as e:

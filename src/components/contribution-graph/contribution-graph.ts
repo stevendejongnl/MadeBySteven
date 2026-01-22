@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
-import { fetchGitHubContributions, ContributionDay, ContributionWeek } from '../../services/github-api.js';
+import { fetchAggregatedContributions, ContributionDay, ContributionWeek } from '../../services/github-api.js';
 import { contributionGraphStyles } from './contribution-graph.style.js';
 
 interface MonthLabel {
@@ -41,7 +41,7 @@ export class MbsContributionGraph extends LitElement {
 
   private async loadContributions(): Promise<void> {
     try {
-      const contributions = await fetchGitHubContributions();
+      const contributions = await fetchAggregatedContributions();
       this.weeks = contributions.weeks;
       this.totalContributions = contributions.total_contributions;
       this.calculateMonthLabels();

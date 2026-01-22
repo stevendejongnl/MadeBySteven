@@ -169,6 +169,29 @@ export async function fetchGitHubContributions(): Promise<GitHubContributions> {
   }
 }
 
+export async function fetchAggregatedContributions(): Promise<GitHubContributions> {
+  const cached = getCachedData<GitHubContributions>('contributions_calendar_aggregated');
+  if (cached) return cached;
+
+  try {
+    const response = await fetch(`${API_BASE}/contributions/aggregated`);
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    const data: GitHubContributions = await response.json();
+    setCachedData('contributions_calendar_aggregated', data, CACHE_TTL_CONTRIBUTIONS);
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch aggregated contributions:', error);
+    const fallback: GitHubContributions = {
+      weeks: [],
+      total_contributions: 0,
+      max_contributions: 0,
+    };
+    return fallback;
+  }
+}
+
 export function getAvatarUrl(user: { login: string; avatar_url: string }, useFallback: boolean = false): string {
   // Use GitHub's redirect URL format which is more reliable
   if (!useFallback) {

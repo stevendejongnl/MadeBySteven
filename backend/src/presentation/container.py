@@ -1,5 +1,6 @@
 from dependency_injector import containers, providers
 
+from ..application.use_cases.fetch_aggregated_contributions import FetchAggregatedContributions
 from ..application.use_cases.fetch_aggregated_stats import FetchAggregatedStats
 from ..application.use_cases.fetch_github_contributions import FetchGitHubContributions
 from ..application.use_cases.fetch_github_stats import FetchGitHubStats
@@ -44,6 +45,14 @@ class Container(containers.DeclarativeContainer):
     )
     fetch_aggregated_stats_use_case = providers.Factory(
         FetchAggregatedStats,
+        repositories=providers.List(github_repository, gitlab_repository),
+        usernames=providers.Dict({
+            "github": settings.GITHUB_USERNAME,
+            "gitlab": settings.GITLAB_USERNAME,
+        })
+    )
+    fetch_aggregated_contributions_use_case = providers.Factory(
+        FetchAggregatedContributions,
         repositories=providers.List(github_repository, gitlab_repository),
         usernames=providers.Dict({
             "github": settings.GITHUB_USERNAME,
