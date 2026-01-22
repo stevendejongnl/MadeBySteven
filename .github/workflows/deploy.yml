@@ -11,23 +11,28 @@ jobs:
       NEW_COLOR: ${{ steps.color.outputs.NEW_COLOR }}
       OLD_COLOR: ${{ steps.color.outputs.OLD_COLOR }}
     steps:
-      - uses: actions/checkout@v4
-
       - name: Determine next deployment color
         id: color
         shell: bash
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          echo "Checking for existing blue image..."
-          if docker manifest inspect ghcr.io/stevendejongnl/madebysteven:blue >/dev/null 2>&1; then
-            echo "Blue image found, setting new color to green"
+          echo "Checking for existing deployments in Kubernetes..."
+
+          # Check if blue deployment exists
+          blue_status=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
+            -k \
+            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/apis/apps/v1/namespaces/madebysteven/deployments/madebysteven-blue" 2>&1)
+
+          if [ "$blue_status" = "200" ]; then
+            echo "Blue deployment found, switching to green"
             NEW_COLOR="green"
             OLD_COLOR="blue"
           else
-            echo "Blue image not found, setting new color to blue"
+            echo "Blue deployment not found, deploying blue"
             NEW_COLOR="blue"
             OLD_COLOR="green"
           fi
+
           echo "NEW_COLOR=${NEW_COLOR}" >> "$GITHUB_OUTPUT"
           echo "OLD_COLOR=${OLD_COLOR}" >> "$GITHUB_OUTPUT"
           echo "Color values being set:"
@@ -130,19 +135,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug color value
-        run: |
-          echo "Determined color value: ${{ needs.determine-color.outputs.NEW_COLOR }}"
-
       - name: Build and push image
         uses: docker/build-push-action@v5
-        env:
-          COLOR: ${{ needs.determine-color.outputs.NEW_COLOR }}
         with:
           context: .
           file: backend/Dockerfile
           push: true
-          tags: ghcr.io/stevendejongnl/madebysteven:${{ env.COLOR }}
+          tags: |
+            ghcr.io/stevendejongnl/madebysteven:latest
+            ghcr.io/stevendejongnl/madebysteven:${{ github.sha }}
 
   deploy:
     needs: [determine-color, build]
@@ -170,7 +171,7 @@ jobs:
           CONTAINER_PORT: 8000
           DEPLOYMENT_NAME: madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}
           DEPLOYMENT_COLOR: ${{ needs.determine-color.outputs.NEW_COLOR }}
-          CONTAINER_IMAGE: ghcr.io/stevendejongnl/madebysteven:${{ needs.determine-color.outputs.NEW_COLOR }}
+          CONTAINER_IMAGE: ghcr.io/stevendejongnl/madebysteven:${{ github.sha }}
           INGRESS_NAME: madebysteven
           DOMAIN: madebysteven.nl
           GITHUB_USERNAME: stevendejongnl
