@@ -1,4 +1,4 @@
-.PHONY: help install dev dev-full test backend-test frontend-test backend-dev frontend-dev clean
+.PHONY: help install dev dev-full test backend-test frontend-test backend-dev frontend-dev e2e clean
 
 help:
 	@echo "Available commands:"
@@ -7,11 +7,11 @@ help:
 	@echo "  make dev-full        - Start backend + frontend with HMR (ports 8000, 3000)"
 	@echo "  make backend-dev     - Start backend dev server with auto-reload"
 	@echo "  make frontend-dev    - Start frontend dev server with HMR"
-	@echo "  make test            - Run all tests (backend + frontend)"
+	@echo "  make test            - Run all tests (backend + frontend E2E)"
 	@echo "  make backend-test    - Run backend tests"
 	@echo "  make backend-test-fast - Run backend tests quickly (exit on first failure)"
-	@echo "  make frontend-test   - Run frontend tests"
-	@echo "  make frontend-test-fast - Run frontend tests (Chromium only, no retries)"
+	@echo "  make frontend-test   - Run frontend tests (Playwright)"
+	@echo "  make e2e             - Run E2E tests (Playwright, requires servers)"
 	@echo "  make clean           - Clean up Docker containers"
 
 install:
@@ -45,6 +45,9 @@ frontend-test:
 
 frontend-test-fast:
 	npm run test:fast
+
+e2e:
+	npm run test:e2e
 
 clean:
 	docker-compose down -v
