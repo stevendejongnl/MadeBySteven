@@ -2,11 +2,11 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   root: '.',
+  publicDir: false,
   build: {
     outDir: 'public',
     emptyOutDir: true,
     rollupOptions: {
-      input: 'src/main.ts',
       output: {
         entryFileNames: 'assets/[name].js',
         chunkFileNames: 'assets/[name].js',
