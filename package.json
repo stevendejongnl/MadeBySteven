@@ -22,8 +22,8 @@
   "license": "ISC",
   "type": "module",
   "simple-git-hooks": {
-    "pre-commit": "npm run typecheck",
-    "pre-push": "cd backend && uv run ruff check src && uv run mypy src && uv run pytest -x && cd .. && npm run test:fast"
+    "pre-commit": "npm run typecheck && cd backend && uv run ruff check src && uv run mypy src && cd ..",
+    "pre-push": "cd backend && uv run pytest -x && cd .. && npm run test:fast"
   },
   "engines": {
     "node": ">=24.12.0",
