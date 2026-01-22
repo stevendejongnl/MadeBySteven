@@ -1,15 +1,13 @@
-.idea
-.rollup.cache
-/blob-report/
-/playwright-report/
-/playwright/.cache/
-.playwright-mcp/
-design/
-/test-results/
+# Environment & Configuration
+.env
+.env.local
 
-node_modules/
-public/assets
-tsconfig.tsbuildinfo
+# IDE & Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 
 # Python
 __pycache__/
@@ -19,11 +17,18 @@ __pycache__/
 .venv/
 venv/
 
-# Environment
-.env
-.env.local
+# Node.js & Frontend Build
+node_modules/
+public/assets/
+tsconfig.tsbuildinfo
+.rollup.cache/
 
-# IDE
-.vscode/
-*.swp
-*.swo
+# Testing & Reports
+/blob-report/
+/playwright-report/
+/playwright/.cache/
+.playwright-mcp/
+/test-results/
+
+# Project Specific
+design/
