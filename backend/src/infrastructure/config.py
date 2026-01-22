@@ -18,6 +18,7 @@ class Settings(BaseSettings):
     ]
 
     # GitHub
+    GITHUB_USERNAME: str = "stevendejongnl"
     GITHUB_TOKEN: str | None = None
     GITHUB_API_BASE: str = "https://api.github.com"
 

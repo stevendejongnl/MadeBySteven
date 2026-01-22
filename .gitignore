@@ -10,3 +10,20 @@ design/
 node_modules/
 public/assets
 tsconfig.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+.venv/
+venv/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+*.swp
+*.swo

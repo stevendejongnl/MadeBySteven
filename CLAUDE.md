@@ -35,23 +35,55 @@ make install
 
 ### Development
 
-**Backend only** (API server on port 8000):
-```bash
-make backend-dev
-# or: cd backend && uv run uvicorn src.main:app --reload
-```
+#### Recommended: Docker-based Full Stack (single terminal)
 
-**Frontend only** (Dev server on port 3000):
-```bash
-make frontend-dev
-# or: npm start
-```
-
-**Full stack** (both backend and frontend):
 ```bash
 make dev-full
-# or: docker-compose --profile dev up
 ```
+
+This provides the complete development experience in one terminal:
+- **Port 8000** - Backend API with frontend (Uvicorn auto-reload on source changes)
+- **Port 3000** - Vite dev server with hot module replacement (HMR)
+
+How it works:
+1. Compiles fresh frontend locally (`npm run compile`)
+2. Rebuilds Docker image with fresh backend and frontend
+3. Mounts both `./backend/src` and `./public` into container for live changes
+4. Both backend (Python) and frontend (TypeScript) auto-reload on file changes
+
+**Note**: The Docker image rebuild happens once on startup. After containers are running:
+- Frontend changes in `src/` trigger Vite HMR on port 3000 (instant)
+- Backend changes in `backend/src/` trigger Uvicorn reload on port 8000 (instant)
+
+To force a full rebuild without restarting:
+```bash
+make dev-full  # Stops containers, rebuilds image, restarts
+```
+
+#### Alternative: Native Dev Servers (if Docker not available)
+
+**Backend only**:
+```bash
+make backend-dev
+# Runs on http://localhost:8000
+```
+
+**Frontend only**:
+```bash
+make frontend-dev
+# Runs on http://localhost:3000 with HMR
+```
+
+**Full stack** (2 terminals):
+```bash
+# Terminal 1
+make backend-dev
+
+# Terminal 2
+make frontend-dev
+```
+
+This is faster for active development if you have Python and Node installed locally, but requires managing multiple terminals.
 
 ### Testing
 
@@ -135,11 +167,11 @@ The backend follows **Domain-Driven Design** with four distinct layers:
 
 ### API Endpoints
 
-All endpoints are under `/api/v1/`:
+All endpoints are under `/api/`:
 
 - `GET /api/health` - Health check
-- `GET /api/v1/github/user/{username}` - Fetch GitHub user profile
-- `GET /api/v1/github/stats/{username}` - Fetch GitHub statistics
+- `GET /api/v1/profiles/github` - Fetch GitHub user profile
+- `GET /api/v1/stats` - Fetch aggregated statistics
 - `GET /api/docs` - Swagger UI documentation
 - `GET /api/redoc` - ReDoc documentation
 - `/*` - SPA catch-all (serves `index.html` for client-side routing)
@@ -148,12 +180,14 @@ All endpoints are under `/api/v1/`:
 
 **File**: `src/services/github-api.ts` (frontend) + `backend/src/infrastructure/repositories/github_http_repository.py` (backend)
 
+- GitHub username is configured via `GITHUB_USERNAME` environment variable (defaults to `stevendejongnl`)
 - Backend proxies GitHub API calls via `GitHubHttpRepository`
 - Two-layer caching:
   - Backend: In-memory cache with TTL (1hr for user, 30min for stats)
   - Frontend: `localStorage` cache with TTL (same durations)
 - Graceful error handling with fallback values
 - Avatar URL uses GitHub redirect: `https://github.com/{username}.png`
+- Architecture supports multiple profile providers (GitHub, GitLab, Gitea, etc.) via extensible `/api/v1/profiles/{service}` pattern
 
 ## Important Files
 
@@ -272,7 +306,9 @@ git push --no-verify
 
 5. **API Proxy Development**: Frontend dev server proxies `/api` to backend (see `vite.config.ts`); ensure backend is running on port 8000
 
-6. **Multi-stage Docker Build**: `backend/Dockerfile` builds web app first (stage 1), then Python runtime (stage 2+). Ensure both Node.js and Python dependencies are installed
+6. **Fresh Docker Builds**: `make dev-full` rebuilds frontend locally before starting Docker. This ensures port 8000 serves fresh code. If you change source and the browser shows old code, restart `make dev-full` to rebuild.
+
+7. **Multi-stage Docker Build**: `backend/Dockerfile` builds web app first (stage 1), then Python runtime (stage 2+). Ensure both Node.js and Python dependencies are installed
 
 ## Common Tasks
 

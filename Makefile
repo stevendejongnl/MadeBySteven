@@ -19,10 +19,10 @@ install:
 	cd backend && uv sync
 
 dev:
-	docker-compose up app
+	docker-compose up --build app
 
 dev-full:
-	docker-compose --profile dev up
+	npm run precompile && npm run compile && docker-compose --profile dev up --build
 
 backend-dev:
 	cd backend && uv run uvicorn src.main:app --reload
