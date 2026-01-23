@@ -23,6 +23,8 @@ spec:
         app: madebysteven
         color: blue
     spec:
+      securityContext:
+        runAsNonRoot: true
       containers:
       - name: app
         image: ghcr.io/stevendejongnl/madebysteven:blue
@@ -71,6 +73,8 @@ spec:
         app: madebysteven
         color: green
     spec:
+      securityContext:
+        runAsNonRoot: true
       containers:
       - name: app
         image: ghcr.io/stevendejongnl/madebysteven:green
