@@ -96,6 +96,59 @@ export const homeStyles = css`
     background-color: #282a36;
   }
 
+  .projects-section {
+    margin-top: 48px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out 2.6s forwards;
+  }
+
+  .projects-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #50fa7b;
+    margin: 0 0 16px 0;
+    letter-spacing: 0.05em;
+  }
+
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #8be9fd;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .project-link:hover {
+    color: #50fa7b;
+    transform: translateX(4px);
+  }
+
+  .project-icon {
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+  }
+
+  .project-link:hover .project-icon {
+    transform: translateX(2px);
+  }
+
+  .project-name {
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+
+  .project-link:hover .project-name {
+    border-bottom-color: #50fa7b;
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -148,6 +201,10 @@ export const homeStyles = css`
       flex: 1 1 auto;
       width: 100%;
       max-width: 100%;
+    }
+
+    .projects-section {
+      margin-top: 32px;
     }
   }
 `;
