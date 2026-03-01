@@ -55,8 +55,11 @@ export class MbsContributionGraph extends LitElement {
       this.loading = false;
       await this.updateComplete;
       this.setupCanvas();
-      this.resizeCanvas();
-      this.animateCalendar();
+      // Defer until browser layout is complete so offsetWidth is non-zero
+      requestAnimationFrame(() => {
+        this.resizeCanvas();
+        this.animateCalendar();
+      });
     } catch (error) {
       console.error('Failed to load contributions:', error);
       this.loading = false;
@@ -76,7 +79,9 @@ export class MbsContributionGraph extends LitElement {
       this.resizeCanvas();
       if (this.weeks.length > 0) this.drawFrame(this.alphaByWeek);
     });
-    this.resizeObserver.observe(this.canvas);
+    // Observe the container div, not the canvas — canvas has no intrinsic CSS size
+    const container = this.canvas.parentElement;
+    if (container) this.resizeObserver.observe(container);
   }
 
   private resizeCanvas(): void {
