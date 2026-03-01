@@ -35,6 +35,12 @@ spec:
               name: github-token
               key: token
               optional: true
+        - name: WAKAPI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: wakapi-secret
+              key: api-key
+              optional: true
         livenessProbe:
           httpGet:
             path: /api/health

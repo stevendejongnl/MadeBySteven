@@ -259,6 +259,16 @@ if [ -n "$CONTAINER_IMAGE" ]; then
                   "optional": true
                 }
               }
+            },
+            {
+              "name": "WAKAPI_API_KEY",
+              "valueFrom": {
+                "secretKeyRef": {
+                  "name": "wakapi-secret",
+                  "key": "api-key",
+                  "optional": true
+                }
+              }
             }
           ],
           "livenessProbe": {

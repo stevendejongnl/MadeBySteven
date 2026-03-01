@@ -1,3 +1,3 @@
-from . import github, gitlab
+from . import github, gitlab, wakapi
 
-__all__ = ["github", "gitlab"]
+__all__ = ["github", "gitlab", "wakapi"]

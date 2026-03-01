@@ -6,9 +6,11 @@ from ..application.use_cases.fetch_github_contributions import FetchGitHubContri
 from ..application.use_cases.fetch_github_stats import FetchGitHubStats
 from ..application.use_cases.fetch_github_user import FetchGitHubUser
 from ..application.use_cases.fetch_gitlab_contributions import FetchGitLabContributions
+from ..application.use_cases.fetch_wakapi_stats import FetchWakapiStats
 from ..infrastructure.cache.in_memory_cache import InMemoryCache
 from ..infrastructure.repositories.github_http_repository import GitHubHttpRepository
 from ..infrastructure.repositories.gitlab_http_repository import GitLabHttpRepository
+from ..infrastructure.repositories.wakapi_http_repository import WakapiHttpRepository
 from ..infrastructure.config import settings
 
 
@@ -23,6 +25,10 @@ class Container(containers.DeclarativeContainer):
     )
     gitlab_repository = providers.Factory(
         GitLabHttpRepository,
+        cache=cache
+    )
+    wakapi_repository = providers.Factory(
+        WakapiHttpRepository,
         cache=cache
     )
 
@@ -58,4 +64,8 @@ class Container(containers.DeclarativeContainer):
             "github": settings.GITHUB_USERNAME,
             "gitlab": settings.GITLAB_USERNAME,
         })
+    )
+    fetch_wakapi_stats_use_case = providers.Factory(
+        FetchWakapiStats,
+        repository=wakapi_repository
     )

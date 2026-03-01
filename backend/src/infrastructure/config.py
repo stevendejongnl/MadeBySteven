@@ -33,5 +33,10 @@ class Settings(BaseSettings):
     CACHE_TTL_STATS: int = 1800  # 30 minutes
     CACHE_TTL_CONTRIBUTIONS: int = 14400  # 4 hours
 
+    # Wakapi
+    WAKAPI_BASE_URL: str = "https://wakapi.madebysteven.nl"
+    WAKAPI_USERNAME: str = "StevendeJong"
+    WAKAPI_API_KEY: str | None = None
+
 
 settings = Settings()
