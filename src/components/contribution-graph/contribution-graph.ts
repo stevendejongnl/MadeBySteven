@@ -90,7 +90,14 @@ export class MbsContributionGraph extends LitElement {
     const container = this.canvas.parentElement;
     if (!container) return;
 
-    const cssWidth = container.offsetWidth;
+    // Use getBoundingClientRect for accurate post-layout width
+    const cssWidth = container.getBoundingClientRect().width || container.offsetWidth;
+
+    // Layout not ready yet — retry next frame
+    if (cssWidth <= 0) {
+      requestAnimationFrame(() => this.resizeCanvas());
+      return;
+    }
     const numWeeks = Math.max(this.weeks.length, 52);
     this.cellSize = (cssWidth - numWeeks * CELL_GAP) / numWeeks;
     const cssHeight = MONTH_LABEL_HEIGHT + 7 * (this.cellSize + CELL_GAP);
