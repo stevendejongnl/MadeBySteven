@@ -64,7 +64,7 @@ echo ""
 echo "Cleaning up old resources..."
 # Delete old Ingress resources that might conflict
 # (madebysteven-nginx from old deployment)
-old_ingress_names=("madebysteven-nginx" "madebysteven-app")
+old_ingress_names=("madebysteven-nginx" "madebysteven-app" "madebysteven-ingress")
 for old_name in "${old_ingress_names[@]}"; do
   if [ "$old_name" != "$INGRESS_NAME" ]; then
     old_status=$(curl -s -o /dev/null -w "%{http_code}" \
