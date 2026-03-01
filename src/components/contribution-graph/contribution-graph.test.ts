@@ -23,9 +23,11 @@ test('contribution graph renders a canvas with dimensions', async ({ page }) => 
   // Wait for animations and data loading
   await page.waitForTimeout(5000)
 
-  // Canvas should exist inside the shadow DOM
+  // Canvas should exist inside the shadow DOM (pierce nested shadow roots)
   const hasCanvas = await page.evaluate(() => {
-    const graph = document.querySelector('mbs-contribution-graph')
+    const main = document.querySelector('mbs-main')
+    const homePage = main?.shadowRoot?.querySelector('mbs-home-page')
+    const graph = homePage?.shadowRoot?.querySelector('mbs-contribution-graph')
     if (!graph?.shadowRoot) return false
     const canvas = graph.shadowRoot.getElementById('contribution-canvas') as HTMLCanvasElement | null
     if (!canvas) return false
@@ -53,7 +55,9 @@ test('contribution graph tooltip appears on canvas hover', async ({ page }) => {
   if (count > 0) {
     // Get canvas bounding rect and compute position of first cell
     const cellCoords = await page.evaluate(() => {
-      const graph = document.querySelector('mbs-contribution-graph')
+      const main = document.querySelector('mbs-main')
+      const homePage = main?.shadowRoot?.querySelector('mbs-home-page')
+      const graph = homePage?.shadowRoot?.querySelector('mbs-contribution-graph')
       if (!graph?.shadowRoot) return null
       const canvas = graph.shadowRoot.getElementById('contribution-canvas') as HTMLCanvasElement | null
       if (!canvas) return null
@@ -70,7 +74,9 @@ test('contribution graph tooltip appears on canvas hover', async ({ page }) => {
 
       // Check tooltip rendered via shadow DOM
       const tooltipVisible = await page.evaluate(() => {
-        const graph = document.querySelector('mbs-contribution-graph')
+        const main = document.querySelector('mbs-main')
+        const homePage = main?.shadowRoot?.querySelector('mbs-home-page')
+        const graph = homePage?.shadowRoot?.querySelector('mbs-contribution-graph')
         if (!graph?.shadowRoot) return false
         return graph.shadowRoot.querySelector('.tooltip') !== null
       })
