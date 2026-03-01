@@ -47,22 +47,6 @@ export class MbsContributionGraph extends LitElement {
     if (this.animationId !== null) cancelAnimationFrame(this.animationId);
   }
 
-  override firstUpdated(): void {
-    this.canvas = this.shadowRoot?.getElementById('contribution-canvas') as HTMLCanvasElement | null;
-    if (!this.canvas) return;
-
-    this.ctx = this.canvas.getContext('2d');
-
-    this.canvas.addEventListener('mousemove', (e) => this.handleCanvasMouseMove(e));
-    this.canvas.addEventListener('mouseleave', () => this.handleCanvasMouseLeave());
-
-    this.resizeObserver = new ResizeObserver(() => {
-      this.resizeCanvas();
-      if (this.weeks.length > 0) this.drawFrame(this.alphaByWeek);
-    });
-    this.resizeObserver.observe(this.canvas);
-  }
-
   private async loadContributions(): Promise<void> {
     try {
       const contributions = await fetchAggregatedContributions();
@@ -70,12 +54,29 @@ export class MbsContributionGraph extends LitElement {
       this.totalContributions = contributions.total_contributions;
       this.loading = false;
       await this.updateComplete;
+      this.setupCanvas();
       this.resizeCanvas();
       this.animateCalendar();
     } catch (error) {
       console.error('Failed to load contributions:', error);
       this.loading = false;
     }
+  }
+
+  private setupCanvas(): void {
+    this.canvas = this.shadowRoot?.getElementById('contribution-canvas') as HTMLCanvasElement | null;
+    if (!this.canvas) return;
+
+    this.ctx = this.canvas.getContext('2d');
+    this.canvas.addEventListener('mousemove', (e) => this.handleCanvasMouseMove(e));
+    this.canvas.addEventListener('mouseleave', () => this.handleCanvasMouseLeave());
+
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = new ResizeObserver(() => {
+      this.resizeCanvas();
+      if (this.weeks.length > 0) this.drawFrame(this.alphaByWeek);
+    });
+    this.resizeObserver.observe(this.canvas);
   }
 
   private resizeCanvas(): void {
