@@ -32,6 +32,7 @@ export class MbsContributionGraph extends LitElement {
 
   private resizeListener = () => {
     this.isSmallDevice = window.innerWidth <= 768;
+    this.requestUpdate();
   };
 
   override connectedCallback(): void {
@@ -53,6 +54,7 @@ export class MbsContributionGraph extends LitElement {
       this.weeks = contributions.weeks;
       this.totalContributions = contributions.total_contributions;
       this.loading = false;
+      this.requestUpdate();
       await this.updateComplete;
       this.setupCanvas();
       // Defer until browser layout is complete so offsetWidth is non-zero
@@ -63,6 +65,7 @@ export class MbsContributionGraph extends LitElement {
     } catch (error) {
       console.error('Failed to load contributions:', error);
       this.loading = false;
+      this.requestUpdate();
     }
   }
 
@@ -250,12 +253,14 @@ export class MbsContributionGraph extends LitElement {
       this.tooltipData = null;
     }
 
+    this.requestUpdate();
     if (this.animationId === null) this.drawFrame(this.alphaByWeek);
   }
 
   private handleCanvasMouseLeave(): void {
     this.hoveredCell = null;
     this.tooltipData = null;
+    this.requestUpdate();
     if (this.animationId === null) this.drawFrame(this.alphaByWeek);
   }
 

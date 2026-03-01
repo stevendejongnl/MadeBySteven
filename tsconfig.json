@@ -14,7 +14,7 @@
       "ESNext"
     ],
     "experimentalDecorators": true,
-    "useDefineForClassFields": true,
+    "useDefineForClassFields": false,
     "module": "NodeNext",
     "moduleResolution": "nodenext",
     "baseUrl": "./src",
