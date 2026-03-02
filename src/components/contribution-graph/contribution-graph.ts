@@ -242,10 +242,14 @@ export class MbsContributionGraph extends LitElement {
     if (day && col >= 0 && col < this.weeks.length && row >= 0 && row < 7) {
       this.hoveredCell = { col, row };
       const hostRect = this.shadowRoot?.host.getBoundingClientRect();
+      const containerWidth = (this.shadowRoot?.host as HTMLElement)?.offsetWidth ?? 300;
+      const TOOLTIP_HALF_WIDTH = 70;
+      const rawX = hostRect ? event.clientX - hostRect.left : event.clientX;
+      const clampedX = Math.max(TOOLTIP_HALF_WIDTH, Math.min(rawX, containerWidth - TOOLTIP_HALF_WIDTH));
       this.tooltipData = {
         date: day.date,
         count: day.count,
-        x: hostRect ? event.clientX - hostRect.left : event.clientX,
+        x: clampedX,
         y: hostRect ? event.clientY - hostRect.top : event.clientY,
       };
     } else {
@@ -276,7 +280,7 @@ export class MbsContributionGraph extends LitElement {
                 ? html`
                     <div
                       class="tooltip"
-                      style="left: ${this.tooltipData.x}px; top: ${this.tooltipData.y - 50}px"
+                      style="left: ${this.tooltipData.x}px; top: ${this.tooltipData.y - 50}px; transform: translateX(-50%)"
                     >
                       <div class="tooltip-content">
                         <span class="tooltip-date">${this.tooltipData.date}</span>
