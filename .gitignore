@@ -32,3 +32,6 @@ tsconfig.tsbuildinfo
 
 # Project Specific
 design/
+/*.jpg
+/*.jpeg
+/*.png
