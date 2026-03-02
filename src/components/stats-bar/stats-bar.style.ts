@@ -61,6 +61,27 @@ export const statsBarStyles = css`
     color: #44475a;
   }
 
+  @media (max-width: 768px) {
+    :host {
+      padding: 0 12px;
+    }
+
+    .status-bar {
+      font-size: 11px;
+      gap: 8px;
+      padding: 10px 0;
+    }
+
+    .stats-content {
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      min-width: unset;
+    }
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;

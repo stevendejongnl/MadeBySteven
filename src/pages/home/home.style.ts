@@ -11,6 +11,7 @@ export const homeStyles = css`
     max-width: 900px;
     margin: 0 auto;
     padding: 40px 24px 100px 24px;
+    box-sizing: border-box;
     color: #f8f8f2;
     font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
   }
@@ -171,7 +172,7 @@ export const homeStyles = css`
 
   @media (max-width: 768px) {
     section {
-      padding: 24px 12px;
+      padding: 20px 16px 80px;
     }
 
     .main-title {
@@ -179,16 +180,17 @@ export const homeStyles = css`
       letter-spacing: 0;
       white-space: normal;
       display: block;
-      max-width: 80px;
+      max-width: 100%;
     }
 
     .tagline {
-      font-size: 1rem;
+      font-size: 0.95rem;
+      max-width: 100%;
     }
 
     .skills-and-contributions {
       flex-direction: column;
-      gap: 32px;
+      gap: 24px;
       width: 100%;
     }
 
@@ -204,7 +206,7 @@ export const homeStyles = css`
     }
 
     .projects-section {
-      margin-top: 32px;
+      margin-top: 24px;
     }
   }
 `;

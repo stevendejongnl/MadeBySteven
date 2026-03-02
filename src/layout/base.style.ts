@@ -11,9 +11,16 @@ export const styles = css`
     }
     main {
         display: grid;
+        grid-template-columns: minmax(0, 1fr);
         grid-template-rows: auto 1fr;
         margin: 0 auto;
         padding: 2rem;
         row-gap: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        main {
+            padding: 0;
+        }
     }
 `
