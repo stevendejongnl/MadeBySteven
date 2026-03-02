@@ -134,6 +134,14 @@ export class MbsHomePage extends LitElement {
                   <span class="project-icon">→</span>
                   <span class="project-name">Print Files</span>
                 </a>
+                <a href="https://github.com/stevendejongnl/retrospekt" target="_blank" rel="noopener noreferrer" class="project-link">
+                  <span class="project-icon">→</span>
+                  <span class="project-name">Retrospekt</span>
+                </a>
+                <a href="https://github.com/stevendejongnl/guidr" target="_blank" rel="noopener noreferrer" class="project-link">
+                  <span class="project-icon">→</span>
+                  <span class="project-name">Guidr</span>
+                </a>
               </div>
             </div>`
           : ''}
