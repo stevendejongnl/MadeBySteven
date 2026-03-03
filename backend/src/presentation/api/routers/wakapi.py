@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import Response
 from dependency_injector.wiring import Provide, inject
 
-from src.application.dtos.wakapi_dto import WakapiEditorDTO, WakapiLanguageDTO, WakapiStatsDTO
+from src.application.dtos.wakapi_dto import WakapiEditorDTO, WakapiLanguageDTO, WakapiProjectDTO, WakapiStatsDTO
 from src.application.use_cases.fetch_wakapi_stats import FetchWakapiStats
 from src.presentation.container import Container
 
@@ -10,6 +10,7 @@ router = APIRouter()
 
 _MAX_LANGUAGES = 5
 _MAX_EDITORS = 3
+_MAX_PROJECTS = 4
 
 _BG = "#282A36"
 _BORDER = "#44475A"
@@ -18,6 +19,7 @@ _TEXT = "#F8F8F2"
 _DIM = "#6272A4"
 _GREEN = "#50FA7B"
 _CYAN = "#8BE9FD"
+_PURPLE = "#BD93F9"
 _FONT = "'Fira Mono', Consolas, Menlo, monospace"
 
 _WIDTH = 500
@@ -71,7 +73,7 @@ def _text(x, y, size, fill, content, *, anchor="start", weight="normal") -> str:
     )
 
 
-def _item_row(item: WakapiLanguageDTO | WakapiEditorDTO, bar_color: str, y: int) -> list[str]:
+def _item_row(item: WakapiLanguageDTO | WakapiEditorDTO | WakapiProjectDTO, bar_color: str, y: int) -> list[str]:
     bar_fill = max(4, round(item.percent / 100 * _BAR_W))
     return [
         _text(_PAD, y + 16, 11, _TEXT, item.name),
@@ -85,6 +87,7 @@ def _item_row(item: WakapiLanguageDTO | WakapiEditorDTO, bar_color: str, y: int)
 def _render_svg(stats: WakapiStatsDTO) -> str:
     langs = stats.languages[:_MAX_LANGUAGES]
     editors = stats.editors[:_MAX_EDITORS]
+    projects = stats.projects[:_MAX_PROJECTS]
 
     height = (
         _PAD
@@ -96,6 +99,7 @@ def _render_svg(stats: WakapiStatsDTO) -> str:
         + 16                      # gap between sections
         + 22                      # EDITORS label
         + len(editors) * _ROW_H
+        + (16 + 22 + len(projects) * _ROW_H if projects else 0)  # PROJECTS section
         + _PAD
     )
 
@@ -125,6 +129,14 @@ def _render_svg(stats: WakapiStatsDTO) -> str:
     for editor in editors:
         out.extend(_item_row(editor, _CYAN, y))
         y += _ROW_H
+
+    if projects:
+        y += 16
+        out.append(_text(_PAD, y + 13, 11, _DIM, "PROJECTS", weight="bold"))
+        y += 22
+        for project in projects:
+            out.extend(_item_row(project, _PURPLE, y))
+            y += _ROW_H
 
     out.append("</svg>")
     return "\n".join(out)

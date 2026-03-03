@@ -1,4 +1,4 @@
-from ..dtos.github_user_dto import GitHubUserDTO
+from ..dtos.github_user_dto import GitHubUserDTO, RecentRepositoryDTO
 from ...domain.repositories.github_repository import GitHubRepository
 from ...domain.value_objects.username import Username
 from ...infrastructure.config import settings
@@ -30,5 +30,19 @@ class FetchGitHubUser:
             public_repos=user.public_repos,
             followers=user.followers,
             name=user.name,
-            bio=user.bio
+            bio=user.bio,
+            total_stars=user.total_stars,
+            top_language=user.top_language,
+            years_active=user.years_active,
+            recent_repos=[
+                RecentRepositoryDTO(
+                    name=r.name,
+                    url=r.url,
+                    description=r.description,
+                    pushed_at=r.pushed_at,
+                    primary_language=r.primary_language,
+                    stars=r.stars,
+                )
+                for r in user.recent_repos
+            ],
         )

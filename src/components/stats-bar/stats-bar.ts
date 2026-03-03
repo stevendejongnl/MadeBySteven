@@ -8,13 +8,16 @@ interface Stats {
   repos: number
   followers: number
   contributionTooltip: string
+  total_stars: number
+  top_language: string | null
+  years_active: number
 }
 
 @customElement('mbs-stats-bar')
 export class MbsStatsBar extends LitElement {
   static override styles = statsBarStyles;
 
-  @state() private stats: Stats = { contributions: 0, repos: 0, followers: 0, contributionTooltip: '' };
+  @state() private stats: Stats = { contributions: 0, repos: 0, followers: 0, contributionTooltip: '', total_stars: 0, top_language: null, years_active: 0 };
 
   @state() private loading: boolean = true;
 
@@ -65,6 +68,9 @@ export class MbsStatsBar extends LitElement {
         repos: user.public_repos,
         followers: user.followers,
         contributionTooltip: tooltip,
+        total_stars: user.total_stars,
+        top_language: user.top_language,
+        years_active: user.years_active,
       };
 
       this.dataLoaded = true;
@@ -95,8 +101,15 @@ export class MbsStatsBar extends LitElement {
                 <div class="stat-separator">|</div>
 
                 <div class="stat-item">
-                  <span class="stat-label">Public Repos:</span>
+                  <span class="stat-label">Repos:</span>
                   <span class="stat-value">${this.stats.repos}</span>
+                </div>
+
+                <div class="stat-separator">|</div>
+
+                <div class="stat-item">
+                  <span class="stat-label">Stars:</span>
+                  <span class="stat-value">${this.stats.total_stars}</span>
                 </div>
 
                 <div class="stat-separator">|</div>
@@ -105,6 +118,21 @@ export class MbsStatsBar extends LitElement {
                   <span class="stat-label">Followers:</span>
                   <span class="stat-value">${this.stats.followers}</span>
                 </div>
+
+                ${this.stats.top_language ? html`
+                  <div class="stat-separator">|</div>
+                  <div class="stat-item">
+                    <span class="stat-value stat-lang">${this.stats.top_language}</span>
+                  </div>
+                ` : ''}
+
+                ${this.stats.years_active > 0 ? html`
+                  <div class="stat-separator">|</div>
+                  <div class="stat-item">
+                    <span class="stat-label">Since</span>
+                    <span class="stat-value">${new Date().getFullYear() - this.stats.years_active}</span>
+                  </div>
+                ` : ''}
               </div>
             `
           : ''}

@@ -1,4 +1,6 @@
-from datetime import datetime, timedelta
+import asyncio
+from collections import Counter
+from datetime import datetime, timedelta, timezone
 
 import httpx
 
@@ -7,6 +9,7 @@ from ...domain.entities.github_user import GitHubUser
 from ...domain.repositories.github_repository import GitHubRepository
 from ...domain.value_objects.contribution_day import ContributionDay
 from ...domain.value_objects.contribution_week import ContributionWeek
+from ...domain.value_objects.recent_repository import RecentRepository
 from ...domain.value_objects.username import Username
 from ..cache.in_memory_cache import InMemoryCache
 from ..config import settings
@@ -23,36 +26,47 @@ class GitHubHttpRepository(GitHubRepository):
             self._headers["Authorization"] = f"token {settings.GITHUB_TOKEN}"
 
     async def fetch_user(self, username: Username) -> GitHubUser:
-        """Fetch user from GitHub API with caching"""
+        """Fetch user from GitHub API with caching, merging REST + GraphQL extended data"""
         cache_key = f"user:{username.value}"
         cached = self._cache.get(cache_key)
 
         if cached:
+            recent_repos = [
+                RecentRepository(**r) for r in cached.get("recent_repos", [])
+            ]
             return GitHubUser(
                 username=username,
                 avatar_url=cached["avatar_url"],
                 public_repos=cached["public_repos"],
                 followers=cached["followers"],
                 name=cached.get("name"),
-                bio=cached.get("bio")
+                bio=cached.get("bio"),
+                total_stars=cached.get("total_stars", 0),
+                top_language=cached.get("top_language"),
+                years_active=cached.get("years_active", 0),
+                recent_repos=recent_repos,
             )
 
-        async with httpx.AsyncClient() as client:
-            response = await client.get(
-                f"{self._base_url}/users/{username.value}",
-                headers=self._headers,
-                timeout=10.0
-            )
-            response.raise_for_status()
-            data = response.json()
+        # Fetch REST data and extended GraphQL data in parallel.
+        # _fetch_extended_data never raises (catches all exceptions internally).
+        rest_data: dict
+        extended: dict
+        rest_data, extended = await asyncio.gather(
+            self._fetch_rest_user(username),
+            self._fetch_extended_data(username),
+        )
 
         user = GitHubUser(
             username=username,
-            avatar_url=data["avatar_url"],
-            public_repos=data["public_repos"],
-            followers=data["followers"],
-            name=data.get("name"),
-            bio=data.get("bio")
+            avatar_url=rest_data["avatar_url"],
+            public_repos=rest_data["public_repos"],
+            followers=rest_data["followers"],
+            name=rest_data.get("name"),
+            bio=rest_data.get("bio"),
+            total_stars=extended.get("total_stars", 0),
+            top_language=extended.get("top_language"),
+            years_active=extended.get("years_active", 0),
+            recent_repos=extended.get("recent_repos", []),
         )
 
         self._cache.set(cache_key, {
@@ -60,10 +74,128 @@ class GitHubHttpRepository(GitHubRepository):
             "public_repos": user.public_repos,
             "followers": user.followers,
             "name": user.name,
-            "bio": user.bio
+            "bio": user.bio,
+            "total_stars": user.total_stars,
+            "top_language": user.top_language,
+            "years_active": user.years_active,
+            "recent_repos": [
+                {
+                    "name": r.name,
+                    "url": r.url,
+                    "description": r.description,
+                    "pushed_at": r.pushed_at,
+                    "primary_language": r.primary_language,
+                    "stars": r.stars,
+                }
+                for r in user.recent_repos
+            ],
         }, ttl=settings.CACHE_TTL_USER)
 
         return user
+
+    async def _fetch_rest_user(self, username: Username) -> dict:
+        """Fetch basic user data from GitHub REST API"""
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                f"{self._base_url}/users/{username.value}",
+                headers=self._headers,
+                timeout=10.0,
+            )
+            response.raise_for_status()
+            return response.json()
+
+    async def _fetch_extended_data(self, username: Username) -> dict:
+        """Fetch extended stats via GitHub GraphQL API (stars, top language, recent repos)"""
+        cache_key = f"extended:{username.value}"
+        cached = self._cache.get(cache_key)
+        if cached is not None:
+            return cached
+
+        graphql_query = """
+        query($username: String!) {
+          user(login: $username) {
+            createdAt
+            repositories(
+              first: 100,
+              orderBy: {field: PUSHED_AT, direction: DESC},
+              ownerAffiliations: OWNER,
+              isFork: false,
+              isArchived: false
+            ) {
+              nodes {
+                name
+                url
+                description
+                pushedAt
+                primaryLanguage { name }
+                stargazerCount
+              }
+            }
+          }
+        }
+        """
+
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    "https://api.github.com/graphql",
+                    json={"query": graphql_query, "variables": {"username": username.value}},
+                    headers=self._headers,
+                    timeout=10.0,
+                )
+                response.raise_for_status()
+                data = response.json()
+        except Exception:
+            return {}
+
+        if "errors" in data or not data.get("data", {}).get("user"):
+            return {}
+
+        user_data = data["data"]["user"]
+        nodes = user_data.get("repositories", {}).get("nodes", [])
+
+        # Compute total stars and top language across all repos
+        total_stars = sum(n.get("stargazerCount", 0) for n in nodes)
+        language_counts: Counter = Counter(
+            n["primaryLanguage"]["name"]
+            for n in nodes
+            if n.get("primaryLanguage")
+        )
+        top_language = language_counts.most_common(1)[0][0] if language_counts else None
+
+        # Years active since account creation
+        created_at = user_data.get("createdAt", "")
+        years_active = 0
+        if created_at:
+            try:
+                created_year = datetime.fromisoformat(
+                    created_at.replace("Z", "+00:00")
+                ).year
+                years_active = datetime.now(timezone.utc).year - created_year
+            except ValueError:
+                pass
+
+        # Most recently pushed 4 repos
+        recent_repos = [
+            RecentRepository(
+                name=n["name"],
+                url=n["url"],
+                description=n.get("description"),
+                pushed_at=n.get("pushedAt", ""),
+                primary_language=n["primaryLanguage"]["name"] if n.get("primaryLanguage") else None,
+                stars=n.get("stargazerCount", 0),
+            )
+            for n in nodes[:4]
+        ]
+
+        result = {
+            "total_stars": total_stars,
+            "top_language": top_language,
+            "years_active": years_active,
+            "recent_repos": recent_repos,
+        }
+        self._cache.set(cache_key, result, ttl=settings.CACHE_TTL_USER)
+        return result
 
     async def fetch_contributions(self, username: Username) -> int:
         """Fetch contributions for user from contribution calendar"""

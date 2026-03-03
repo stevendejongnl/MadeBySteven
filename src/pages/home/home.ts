@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
 import { homeStyles } from './home.style.js'
+import { fetchGitHubUser, GitHubUser } from '../../services/github-api.js'
 import '../../components/profile-card/profile-card.js'
 import '../../components/skills-list/skills-list.js'
 import '../../components/stats-bar/stats-bar.js'
@@ -19,6 +20,8 @@ export class MbsHomePage extends LitElement {
   @state() private showSkills: boolean = false
 
   @state() private skillsFinished: boolean = false
+
+  @state() private user: GitHubUser | null = null
 
   private titleTimeout: number | undefined
 
@@ -39,6 +42,10 @@ export class MbsHomePage extends LitElement {
     this.tagline = this.taglines[Math.floor(Math.random() * this.taglines.length)]!
     this.showTagline = true
     this.startTitleAnimation()
+    fetchGitHubUser().then(user => {
+      this.user = user
+      this.requestUpdate()
+    })
   }
 
   override disconnectedCallback(): void {
@@ -86,6 +93,26 @@ export class MbsHomePage extends LitElement {
       this.skillsFinished = true
       this.requestUpdate()
     }, 200)
+  }
+
+  // TODO: Implement this function to convert ISO dates to human-readable labels.
+  // Examples: "today", "yesterday", "3 days ago", "last week", "2 months ago", "last year"
+  // pushed_at is an ISO 8601 string like "2024-11-15T12:34:56Z"
+  private formatPushedAt(pushed_at: string): string {
+    const now = new Date()
+    const pushed = new Date(pushed_at)
+    const diffMs = now.getTime() - pushed.getTime()
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+    if (diffDays === 0) return 'today'
+    if (diffDays === 1) return 'yesterday'
+    if (diffDays < 7) return `${diffDays} days ago`
+    if (diffDays < 14) return 'last week'
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`
+    if (diffDays < 60) return 'last month'
+    if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`
+    if (diffDays < 730) return 'last year'
+    return `${Math.floor(diffDays / 365)} years ago`
   }
 
   override render() {
@@ -142,6 +169,28 @@ export class MbsHomePage extends LitElement {
                   <span class="project-icon">→</span>
                   <span class="project-name">Guidr</span>
                 </a>
+              </div>
+            </div>`
+          : ''}
+
+        ${this.showProfile && this.user && this.user.recent_repos.length > 0
+          ? html`<div class="recent-section">
+              <h2 class="recent-title">Recently Active</h2>
+              <div class="recent-list">
+                ${this.user.recent_repos.map(repo => html`
+                  <a href="${repo.url}" target="_blank" rel="noopener noreferrer" class="recent-item">
+                    <span class="recent-name">→ ${repo.name}</span>
+                    <span class="recent-meta">
+                      ${repo.primary_language
+                        ? html`<span class="recent-lang">${repo.primary_language}</span>`
+                        : ''}
+                      ${repo.stars > 0
+                        ? html`<span class="recent-stars">★ ${repo.stars}</span>`
+                        : ''}
+                      <span class="recent-date">${this.formatPushedAt(repo.pushed_at)}</span>
+                    </span>
+                  </a>
+                `)}
               </div>
             </div>`
           : ''}

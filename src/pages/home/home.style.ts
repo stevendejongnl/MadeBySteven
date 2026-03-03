@@ -150,6 +150,68 @@ export const homeStyles = css`
     border-bottom-color: #50fa7b;
   }
 
+  .recent-section {
+    margin-top: 32px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out 2.9s forwards;
+  }
+
+  .recent-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #bd93f9;
+    margin: 0 0 16px 0;
+    letter-spacing: 0.05em;
+  }
+
+  .recent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .recent-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    color: #8be9fd;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+    flex-wrap: wrap;
+  }
+
+  .recent-item:hover {
+    color: #bd93f9;
+    transform: translateX(4px);
+  }
+
+  .recent-name {
+    flex: 0 0 auto;
+  }
+
+  .recent-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #6272a4;
+    flex-wrap: wrap;
+  }
+
+  .recent-lang {
+    color: #ffb86c;
+  }
+
+  .recent-stars {
+    color: #f1fa8c;
+  }
+
+  .recent-date {
+    color: #6272a4;
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;

@@ -1,8 +1,10 @@
 import httpx
 
-from ...application.dtos.wakapi_dto import WakapiEditorDTO, WakapiLanguageDTO, WakapiStatsDTO
+from ...application.dtos.wakapi_dto import WakapiEditorDTO, WakapiLanguageDTO, WakapiProjectDTO, WakapiStatsDTO
 from ..cache.in_memory_cache import InMemoryCache
 from ..config import settings
+
+_MAX_PROJECTS = 4
 
 _CACHE_KEY = "wakapi:stats:last_7_days"
 
@@ -40,6 +42,12 @@ class WakapiHttpRepository:
         except Exception:
             return self._empty_stats()
 
+        raw_projects = sorted(
+            data.get("projects", []),
+            key=lambda p: p.get("total_seconds", 0),
+            reverse=True,
+        )[:_MAX_PROJECTS]
+
         return WakapiStatsDTO(
             total_seconds=data.get("total_seconds", 0),
             human_readable_total=data.get("human_readable_total", "0 secs"),
@@ -62,6 +70,15 @@ class WakapiHttpRepository:
                 )
                 for ed in data.get("editors", [])
             ],
+            projects=[
+                WakapiProjectDTO(
+                    name=proj.get("name", ""),
+                    total_seconds=proj.get("total_seconds", 0),
+                    percent=proj.get("percent", 0.0),
+                    text=proj.get("text", ""),
+                )
+                for proj in raw_projects
+            ],
         )
 
     @staticmethod
@@ -72,4 +89,5 @@ class WakapiHttpRepository:
             range="last_7_days",
             languages=[],
             editors=[],
+            projects=[],
         )

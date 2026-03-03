@@ -1,3 +1,12 @@
+export interface RecentRepository {
+  name: string
+  url: string
+  description: string | null
+  pushed_at: string
+  primary_language: string | null
+  stars: number
+}
+
 export interface GitHubUser {
   login: string
   avatar_url: string
@@ -5,6 +14,10 @@ export interface GitHubUser {
   followers: number
   name: string | null
   bio: string | null
+  total_stars: number
+  top_language: string | null
+  years_active: number
+  recent_repos: RecentRepository[]
 }
 
 export interface ContributionDay {
@@ -96,6 +109,10 @@ export async function fetchGitHubUser(): Promise<GitHubUser> {
       followers: 0,
       name: null,
       bio: null,
+      total_stars: 0,
+      top_language: null,
+      years_active: 0,
+      recent_repos: [],
     };
     return fallback;
   }

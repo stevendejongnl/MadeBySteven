@@ -41,7 +41,8 @@ export const statsBarStyles = css`
     display: flex;
     align-items: center;
     gap: 8px;
-    min-width: 120px;
+    min-width: 0;
+    white-space: nowrap;
   }
 
   .stat-item.loading {
@@ -55,6 +56,10 @@ export const statsBarStyles = css`
   .stat-value {
     color: #50fa7b;
     font-weight: bold;
+  }
+
+  .stat-lang {
+    color: #ffb86c;
   }
 
   .stat-separator {

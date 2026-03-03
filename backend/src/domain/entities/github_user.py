@@ -1,5 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
+from ..value_objects.recent_repository import RecentRepository
 from ..value_objects.username import Username
 
 
@@ -12,6 +13,10 @@ class GitHubUser:
     followers: int
     name: str | None = None
     bio: str | None = None
+    total_stars: int = 0
+    top_language: str | None = None
+    years_active: int = 0
+    recent_repos: list[RecentRepository] = field(default_factory=list)
 
     def __post_init__(self):
         if self.public_repos < 0:
