@@ -22,11 +22,11 @@ _CYAN = "#8BE9FD"
 _PURPLE = "#BD93F9"
 _FONT = "'Fira Mono', Consolas, Menlo, monospace"
 
-_WIDTH = 500
+_WIDTH = 650
 _PAD = 16
 _ROW_H = 32
-_BAR_X = 140
-_BAR_W = 200
+_BAR_X = 280
+_BAR_W = 180
 
 
 @router.get("/wakapi/stats", response_model=WakapiStatsDTO, tags=["wakapi"])
