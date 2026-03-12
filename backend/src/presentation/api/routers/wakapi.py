@@ -79,8 +79,8 @@ def _item_row(item: WakapiLanguageDTO | WakapiEditorDTO | WakapiProjectDTO, bar_
         _text(_PAD, y + 16, 11, _TEXT, item.name),
         f'<rect x="{_BAR_X}" y="{y + 9}" width="{_BAR_W}" height="7" rx="3" fill="{_BAR_BG}"/>',
         f'<rect x="{_BAR_X}" y="{y + 9}" width="{bar_fill}" height="7" rx="3" fill="{bar_color}"/>',
-        _text(348, y + 16, 10, _DIM, f"{item.percent:.1f}%"),
-        _text(484, y + 16, 10, _TEXT, item.text, anchor="end"),
+        _text(_BAR_X + _BAR_W + 6, y + 16, 10, _DIM, f"{item.percent:.1f}%"),
+        _text(_WIDTH - _PAD, y + 16, 10, _TEXT, item.text, anchor="end"),
     ]
 
 
