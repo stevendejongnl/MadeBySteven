@@ -5,39 +5,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  determine-color:
-    runs-on: ubuntu-latest
-    outputs:
-      NEW_COLOR: ${{ steps.color.outputs.NEW_COLOR }}
-      OLD_COLOR: ${{ steps.color.outputs.OLD_COLOR }}
-    steps:
-      - name: Determine next deployment color
-        id: color
-        shell: bash
-        run: |
-          echo "Checking for existing deployments in Kubernetes..."
-
-          # Check if blue deployment exists
-          blue_status=$(curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
-            -k \
-            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/apis/apps/v1/namespaces/madebysteven/deployments/madebysteven-blue" 2>&1)
-
-          if [ "$blue_status" = "200" ]; then
-            echo "Blue deployment found, switching to green"
-            NEW_COLOR="green"
-            OLD_COLOR="blue"
-          else
-            echo "Blue deployment not found, deploying blue"
-            NEW_COLOR="blue"
-            OLD_COLOR="green"
-          fi
-
-          echo "NEW_COLOR=${NEW_COLOR}" >> "$GITHUB_OUTPUT"
-          echo "OLD_COLOR=${OLD_COLOR}" >> "$GITHUB_OUTPUT"
-          echo "Color values being set:"
-          cat $GITHUB_OUTPUT
-
   typecheck:
     runs-on: ubuntu-latest
     steps:
@@ -106,7 +73,7 @@ jobs:
           retention-days: 7
 
   build:
-    needs: [determine-color, typecheck, backend-lint, backend-tests, frontend-tests]
+    needs: [typecheck, backend-lint, backend-tests, frontend-tests]
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -145,122 +112,3 @@ jobs:
             ghcr.io/stevendejongnl/madebysteven:latest
             ghcr.io/stevendejongnl/madebysteven:${{ github.sha }}
 
-  deploy:
-    needs: [determine-color, build]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Bypass Cloudflare for Kubernetes deployment
-        uses: xiaotianxt/bypass-cloudflare-for-github-action@v2.1.0
-        with:
-          cf_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          cf_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-          cf_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          disable_bot_fight_mode: 'true'
-          bfm_propagation_delay: 45
-
-      - name: Deploy Kubernetes resources (Service, Ingress, Deployment)
-        env:
-          KUBERNETES_TOKEN: ${{ secrets.KUBERNETES_TOKEN }}
-          KUBERNETES_API_URL: ${{ secrets.KUBERNETES_API_URL }}
-          NAMESPACE: madebysteven
-          APP_NAME: madebysteven
-          SERVICE_NAME: madebysteven
-          SERVICE_PORT: 8000
-          CONTAINER_PORT: 8000
-          DEPLOYMENT_NAME: madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}
-          DEPLOYMENT_COLOR: ${{ needs.determine-color.outputs.NEW_COLOR }}
-          CONTAINER_IMAGE: ghcr.io/stevendejongnl/madebysteven:${{ github.sha }}
-          INGRESS_NAME: madebysteven
-          DOMAIN: madebysteven.nl
-          GITHUB_USERNAME: stevendejongnl
-          COMMIT_SHA: ${{ github.sha }}
-          REPLICAS: 1
-        run: bash scripts/deploy-k8s-resources.sh
-
-      - name: Switch traffic to new version
-        run: |
-          curl -X PATCH \
-            -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
-            -H "Content-Type: application/merge-patch+json" \
-            -k \
-            -d '{"spec":{"selector":{"color":"${{ needs.determine-color.outputs.NEW_COLOR }}"}}}' \
-            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/api/v1/namespaces/madebysteven/services/madebysteven"
-
-      - name: Verify deployment
-        run: |
-          echo "Active color: ${{ needs.determine-color.outputs.NEW_COLOR }}"
-          echo "Deployment name: madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}"
-          curl -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" -k \
-            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/api/v1/namespaces/madebysteven/pods?labelSelector=app=madebysteven,color=${{ needs.determine-color.outputs.NEW_COLOR }}"
-
-      - name: Wait for deployment to be ready
-        run: |
-          max_attempts=30
-          attempt=0
-          while [ $attempt -lt $max_attempts ]; do
-            ready=$(curl -s -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" -k \
-              "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/apis/apps/v1/namespaces/madebysteven/deployments/madebysteven-${{ needs.determine-color.outputs.NEW_COLOR }}" | \
-              jq '.status.conditions[] | select(.type=="Available") | .status' -r)
-            if [ "$ready" = "True" ]; then
-              echo "✓ Deployment is ready"
-              exit 0
-            fi
-            attempt=$((attempt + 1))
-            echo "Waiting for deployment... (attempt $attempt/$max_attempts)"
-            sleep 2
-          done
-          echo "✗ Deployment failed to become ready"
-          exit 1
-
-      - name: Health check
-        run: |
-          echo "Waiting for ingress routing to propagate (10s)..."
-          sleep 10
-
-          echo "Checking health endpoint with retries..."
-          max_attempts=10
-          attempt=0
-          while [ $attempt -lt $max_attempts ]; do
-            attempt=$((attempt + 1))
-            echo "Attempt $attempt/$max_attempts..."
-
-            # Use HTTPS (Cloudflare enforces HTTPS redirect)
-            # Use -f to fail on HTTP errors
-            # Use -L to follow redirects
-            # Use --max-time 10 to timeout
-            if health=$(curl -fsSL --max-time 10 https://www.madebysteven.nl/api/health 2>&1); then
-              status=$(echo "$health" | jq -r '.status' 2>/dev/null)
-              if [ "$status" = "ok" ]; then
-                echo "✓ Health check passed"
-                exit 0
-              fi
-              echo "Health check returned unexpected status: $status"
-            else
-              echo "Health check failed with curl error"
-            fi
-
-            if [ $attempt -lt $max_attempts ]; then
-              echo "Retrying in 5 seconds..."
-              sleep 5
-            fi
-          done
-
-          echo "✗ Health check failed after $max_attempts attempts"
-          exit 1
-
-      - name: Cleanup old deployments
-        run: |
-          curl -X GET \
-            -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -k \
-            "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/apis/apps/v1/namespaces/madebysteven/deployments?labelSelector=app=madebysteven,color=${{ needs.determine-color.outputs.OLD_COLOR }}" | \
-            jq -r '.items[:-1] | .[].metadata.name' | \
-            while read deployment; do
-              curl -X DELETE \
-                -H "Authorization: Bearer ${{ secrets.KUBERNETES_TOKEN }}" \
-                -k \
-                "${{ secrets.KUBERNETES_API_URL }}/k8s/clusters/local/apis/apps/v1/namespaces/madebysteven/deployments/$deployment"
-            done
