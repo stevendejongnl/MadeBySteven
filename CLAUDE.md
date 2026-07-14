@@ -5,7 +5,7 @@
 This is a modern, professional personal portfolio website built with:
 - **Frontend**: Lit web components with TypeScript and Vite
 - **Backend**: FastAPI with Python 3.12, following layered DDD architecture
-- **Deployment**: Docker multi-stage build, Kubernetes blue-green deployment
+- **Deployment**: Docker multi-stage build, single Kubernetes Deployment, self-hosted GH Actions runner triggers rolling restart
 
 ## Tech Stack
 
@@ -16,7 +16,7 @@ This is a modern, professional personal portfolio website built with:
 | **Architecture** | Layered DDD (Domain, Application, Infrastructure, Presentation) |
 | **Package Manager** | npm (frontend), uv (backend) |
 | **Container** | Docker (multi-stage build) |
-| **Orchestration** | Kubernetes with blue-green deployment |
+| **Orchestration** | Kubernetes, single Deployment (no blue-green, no Keel) |
 
 ## Quick Start
 
@@ -272,8 +272,8 @@ To add more sources (Gitea, Bitbucket, etc.):
 |------|---------|
 | `backend/Dockerfile` | Multi-stage build: web app + backend |
 | `compose.yml` | Docker Compose for local development |
-| `deployment.yaml` | Kubernetes blue-green deployment |
-| `.github/workflows/deploy.yml` | CI/CD pipeline for blue-green deployment |
+| `deployment.yaml` | Kubernetes Deployment/Service/Ingress (single deployment, no color labels) |
+| `.github/workflows/deploy.yml` | CI/CD: build+push image, then self-hosted runner triggers rolling restart via in-cluster ServiceAccount |
 | `Makefile` | Development convenience commands |
 
 ## Development Workflow
@@ -442,13 +442,11 @@ Edit `src/styles.ts` and update Dracula theme variables across all components.
 
 1. Push changes to main branch
 2. GitHub Actions runs:
-   - Determines blue/green color
    - Builds multi-stage Docker image
-   - Pushes to GHCR
-   - Deploys to Kubernetes
-   - Switches traffic to new deployment
-   - Cleans up old deployment
-3. Blue-green allows instant rollback by updating service selector
+   - Pushes to GHCR (`:latest` and `:<sha>` tags)
+   - `deploy` job runs on the self-hosted in-cluster runner (`runs-on: [self-hosted, k8s]`)
+   - Patches the `madebysteven` Deployment's pod template annotation via the runner's in-cluster ServiceAccount token (no `KUBECONFIG` secret needed), triggering a standard Kubernetes rolling restart that pulls the freshly-pushed `:latest` image
+3. Rollback: `kubectl rollout undo deployment/madebysteven -n madebysteven`, or redeploy a previous commit
 
 ### Debug in browser
 
@@ -461,7 +459,7 @@ Edit `src/styles.ts` and update Dracula theme variables across all components.
 
 - **Frontend**: Lit only re-renders when state changes; animations are CSS-based
 - **Backend**: Two-layer caching (backend in-memory + frontend localStorage) reduces GitHub API calls
-- **Infrastructure**: Blue-green deployment ensures zero-downtime updates
+- **Infrastructure**: Single-replica rolling restart on deploy (brief downtime during pod swap; bump `replicas` for zero-downtime if needed)
 - **Container**: Multi-stage Docker build produces small production images
 
 ## Future Enhancements
@@ -476,3 +474,7 @@ Edit `src/styles.ts` and update Dracula theme variables across all components.
 4. **Monitoring**: Add Prometheus metrics and Sentry error tracking
 5. **Authentication**: Protect sensitive endpoints with API keys or OAuth
 6. **Database**: Persistent storage for caching instead of in-memory (could use SQLite or PostgreSQL)
+
+## MR / PR Descriptions
+
+Never include a "Test plan" section. Summary of changes only.

@@ -3,11 +3,10 @@ kind: Namespace
 metadata:
   name: madebysteven
 ---
-# Blue Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: madebysteven-blue
+  name: madebysteven
   namespace: madebysteven
   labels:
     app: madebysteven
@@ -16,18 +15,16 @@ spec:
   selector:
     matchLabels:
       app: madebysteven
-      color: blue
   template:
     metadata:
       labels:
         app: madebysteven
-        color: blue
     spec:
       securityContext:
         runAsNonRoot: true
       containers:
       - name: app
-        image: ghcr.io/stevendejongnl/madebysteven:blue
+        image: ghcr.io/stevendejongnl/madebysteven:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
@@ -53,57 +50,6 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 5
 ---
-# Green Deployment
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: madebysteven-green
-  namespace: madebysteven
-  labels:
-    app: madebysteven
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: madebysteven
-      color: green
-  template:
-    metadata:
-      labels:
-        app: madebysteven
-        color: green
-    spec:
-      securityContext:
-        runAsNonRoot: true
-      containers:
-      - name: app
-        image: ghcr.io/stevendejongnl/madebysteven:green
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8000
-        env:
-        - name: GITHUB_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: github-token
-              key: token
-              optional: true
-        livenessProbe:
-          httpGet:
-            path: /api/health
-            port: 8000
-          initialDelaySeconds: 10
-          periodSeconds: 30
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /api/health
-            port: 8000
-          initialDelaySeconds: 5
-          periodSeconds: 10
-          timeoutSeconds: 5
----
-# Service (switch color label for blue-green deployment)
 apiVersion: v1
 kind: Service
 metadata:
@@ -115,13 +61,11 @@ spec:
   type: ClusterIP
   selector:
     app: madebysteven
-    color: blue  # Switch to 'green' for blue-green deployment
   ports:
     - protocol: TCP
       port: 8000
       targetPort: 8000
 ---
-# Ingress
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

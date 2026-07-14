@@ -27,6 +27,11 @@ COPY backend/src ./src
 # Copy compiled web app from builder
 COPY --from=web-builder /web-app/public ../web-app/public
 
+RUN groupadd --gid 1000 app && \
+    useradd --uid 1000 --gid app --no-create-home app && \
+    chown -R app:app /app /web-app
+USER 1000
+
 ENV PYTHONUNBUFFERED=1
 EXPOSE 8000
 
