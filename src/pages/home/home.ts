@@ -153,10 +153,6 @@ export class MbsHomePage extends LitElement {
           ? html`<div class="projects-section">
               <h2 class="projects-title">Projects</h2>
               <div class="projects-list">
-                <a href="https://ask.steven-dejong.nl" target="_blank" rel="noopener noreferrer" class="project-link">
-                  <span class="project-icon">→</span>
-                  <span class="project-name">Ask Steven</span>
-                </a>
                 <a href="https://stevendejongnl.github.io/print-files/" target="_blank" rel="noopener noreferrer" class="project-link">
                   <span class="project-icon">→</span>
                   <span class="project-name">Print Files</span>
