@@ -2,18 +2,9 @@ import { test, expect } from '@playwright/test'
 
 const HOST = 'http://localhost:3000'
 
-interface MtmEntry {
-  event: string
-  eventCategory?: string
-  eventAction?: string
-  eventName?: string
-}
-
-declare global {
-  interface Window {
-    _mtm?: MtmEntry[]
-  }
-}
+// window._mtm's type comes from the ambient `declare global` in analytics.ts
+// (Record<string, unknown>[]) — redeclaring it here with a stricter shape
+// conflicts with that declaration merge and fails typecheck.
 
 test('tracks a pageview on initial load', async ({ page }) => {
   await page.goto(HOST)
