@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { fetchGitHubUser, getAvatarUrl } from '../../services/github-api.js';
 import { profileCardStyles } from './profile-card.style.js';
+import { tagManager } from '../../analytics.js';
 
 interface GitHubUserCard {
   login: string
@@ -79,10 +80,10 @@ export class MbsProfileCard extends LitElement {
             }
           }}"
         />
-        <a href="https://github.com/${this.user.login}" class="username">
+        <a href="https://github.com/${this.user.login}" class="username" @click="${() => tagManager.trackEvent('Profile', 'github_link_click', 'username')}">
           @${this.user.login}
         </a>
-        <a href="https://github.com/${this.user.login}" class="profile-link">
+        <a href="https://github.com/${this.user.login}" class="profile-link" @click="${() => tagManager.trackEvent('Profile', 'github_link_click', 'view_profile')}">
           View Profile →
         </a>
       </div>

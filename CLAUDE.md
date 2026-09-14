@@ -190,6 +190,15 @@ All endpoints are under `/api/`:
 - Avatar URL uses GitHub redirect: `https://github.com/{username}.png`
 - Token-based authentication via `GITHUB_TOKEN` environment variable (optional, recommended to avoid rate limits)
 
+### Analytics
+
+**File**: `src/analytics.ts`
+
+- Tracks via a self-hosted Matomo Tag Manager container (`https://analytics.madebysteven.nl/js/container_3kTIOOCJ.js`, site ID 1) instead of a hardcoded Matomo Analytics snippet — the container's tags/triggers are configured in the Matomo UI (Data-Layer variables reading `eventCategory`/`eventAction`/`eventName`/`eventValue`), so tracking can evolve without a redeploy
+- `tagManager.init()` runs once in `src/main.ts`; `trackPageView(path, title)` fires on initial load and on every `popstate` (main.ts also listens directly, since `mbs-main` doesn't currently re-render on navigation — see Known Gotchas)
+- `trackEvent(category, action, name?, value?)` fires on: nav tab clicks (`terminal-header.ts` — currently unused/unmounted, see below), outbound project links and recently-active-repo links (`home.ts`), and GitHub profile links (`profile-card.ts`)
+- The `TagManager` interface is the swap point for a different analytics vendor later
+
 ### GitLab API Integration
 
 **File**: `src/services/github-api.ts` (frontend) + `backend/src/infrastructure/repositories/gitlab_http_repository.py` (backend)
@@ -240,6 +249,7 @@ To add more sources (Gitea, Bitbucket, etc.):
 | `src/components/stats-bar/` | GitHub stats with event-based loading |
 | `src/components/contribution-graph/` | GitHub contribution calendar grid |
 | `src/services/github-api.ts` | Backend API client with localStorage caching |
+| `src/analytics.ts` | `TagManager` interface (`init`, `trackPageView`, `trackEvent`) + `MatomoTagManager` implementation, swappable for another analytics vendor |
 | `src/styles.ts` | Global Dracula theme colors |
 | `vite.config.ts` | Vite dev server config with API proxy |
 
@@ -415,6 +425,8 @@ git push --no-verify
     - Parallel fetching via `asyncio.gather()` minimizes total request time
 
 11. **CSS Changes Require Docker Rebuild**: Unlike TypeScript changes which auto-reload, CSS modifications (`.style.ts` files) are bundled during Docker build. Always run `make dev-full` again after editing CSS to pick up changes. Changes to TypeScript component files will auto-reload, but CSS needs a rebuild.
+
+12. **SPA navigation is incomplete**: `mbs-terminal-header` (nav tabs for About/Projects/Contact) is defined but not mounted anywhere in the render tree yet, and `mbs-main`'s `connectedCallback` only picks a page once on initial load — it never listens for `popstate`, so even the placeholder about/projects/contact pages can't currently be reached via client-side navigation. Pre-existing, unrelated to analytics; noted while wiring pageview/event tracking into `terminal-header.ts` and `main.ts` so it's not mistaken for new breakage.
 
 ## Common Tasks
 

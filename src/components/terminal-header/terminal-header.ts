@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { terminalHeaderStyles } from './terminal-header.style.js';
+import { tagManager } from '../../analytics.js';
 
 interface Tab {
   label: string
@@ -73,6 +74,7 @@ export class MbsTerminalHeader extends LitElement {
     window.history.pushState(null, '', path);
     this.updatePath();
     window.dispatchEvent(new PopStateEvent('popstate'));
+    tagManager.trackEvent('Navigation', 'tab_click', path);
   }
 }
 

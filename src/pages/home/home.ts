@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
 import { homeStyles } from './home.style.js'
 import { fetchGitHubUser, GitHubUser } from '../../services/github-api.js'
+import { tagManager } from '../../analytics.js'
 import '../../components/profile-card/profile-card.js'
 import '../../components/skills-list/skills-list.js'
 import '../../components/stats-bar/stats-bar.js'
@@ -153,15 +154,15 @@ export class MbsHomePage extends LitElement {
           ? html`<div class="projects-section">
               <h2 class="projects-title">Projects</h2>
               <div class="projects-list">
-                <a href="https://stevendejongnl.github.io/print-files/" target="_blank" rel="noopener noreferrer" class="project-link">
+                <a href="https://stevendejongnl.github.io/print-files/" target="_blank" rel="noopener noreferrer" class="project-link" @click="${() => tagManager.trackEvent('Project', 'link_click', 'Print Files')}">
                   <span class="project-icon">→</span>
                   <span class="project-name">Print Files</span>
                 </a>
-                <a href="https://github.com/stevendejongnl/retrospekt" target="_blank" rel="noopener noreferrer" class="project-link">
+                <a href="https://github.com/stevendejongnl/retrospekt" target="_blank" rel="noopener noreferrer" class="project-link" @click="${() => tagManager.trackEvent('Project', 'link_click', 'Retrospekt')}">
                   <span class="project-icon">→</span>
                   <span class="project-name">Retrospekt</span>
                 </a>
-                <a href="https://github.com/stevendejongnl/guidr" target="_blank" rel="noopener noreferrer" class="project-link">
+                <a href="https://github.com/stevendejongnl/guidr" target="_blank" rel="noopener noreferrer" class="project-link" @click="${() => tagManager.trackEvent('Project', 'link_click', 'Guidr')}">
                   <span class="project-icon">→</span>
                   <span class="project-name">Guidr</span>
                 </a>
@@ -174,7 +175,7 @@ export class MbsHomePage extends LitElement {
               <h2 class="recent-title">Recently Active</h2>
               <div class="recent-list">
                 ${this.user.recent_repos.map(repo => html`
-                  <a href="${repo.url}" target="_blank" rel="noopener noreferrer" class="recent-item">
+                  <a href="${repo.url}" target="_blank" rel="noopener noreferrer" class="recent-item" @click="${() => tagManager.trackEvent('Project', 'recent_repo_click', repo.name)}">
                     <span class="recent-name">→ ${repo.name}</span>
                     <span class="recent-meta">
                       ${repo.primary_language
