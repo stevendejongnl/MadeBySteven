@@ -9,6 +9,7 @@ services:
     environment:
       - DEBUG=true
       - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+      - WAKAPI_API_KEY=${WAKAPI_API_KEY:-}
     volumes:
       - ./backend/src:/app/src
       - ./public:/web-app/public
