@@ -8,6 +8,18 @@ _MAX_PROJECTS = 4
 
 _CACHE_KEY = "wakapi:stats:last_7_days"
 
+# Agent-driven editing still happens in Neovim, so report it as such.
+# Keys are lowercase; lookup is case-insensitive.
+_EDITOR_ALIASES = {
+    "opus": "Neovim",
+    "sonnet": "Neovim",
+    "haiku": "Neovim",
+    "claude": "Neovim",
+    "claude code": "Neovim",
+    "neovim": "Neovim",
+    "nvim": "Neovim",
+}
+
 
 class WakapiHttpRepository:
     """HTTP repository for Wakapi coding stats (WakaTime-compatible API)"""
@@ -61,15 +73,7 @@ class WakapiHttpRepository:
                 )
                 for lang in data.get("languages", [])
             ],
-            editors=[
-                WakapiEditorDTO(
-                    name=ed.get("name", ""),
-                    total_seconds=ed.get("total_seconds", 0),
-                    percent=ed.get("percent", 0.0),
-                    text=ed.get("text", ""),
-                )
-                for ed in data.get("editors", [])
-            ],
+            editors=self._merge_editors(data.get("editors", [])),
             projects=[
                 WakapiProjectDTO(
                     name=proj.get("name", ""),
@@ -80,6 +84,39 @@ class WakapiHttpRepository:
                 for proj in raw_projects
             ],
         )
+
+    @classmethod
+    def _merge_editors(cls, raw_editors: list[dict]) -> list[WakapiEditorDTO]:
+        """Map editor aliases onto their canonical name and merge the duplicates"""
+        merged: dict[str, WakapiEditorDTO] = {}
+
+        for ed in raw_editors:
+            raw_name = ed.get("name", "")
+            name = _EDITOR_ALIASES.get(raw_name.lower(), raw_name)
+            existing = merged.get(name)
+
+            total_seconds = int(ed.get("total_seconds", 0))
+            percent = float(ed.get("percent", 0.0))
+
+            if existing is None:
+                merged[name] = WakapiEditorDTO(
+                    name=name,
+                    total_seconds=total_seconds,
+                    percent=percent,
+                    text=cls._humanize(total_seconds),
+                )
+                continue
+
+            existing.total_seconds += total_seconds
+            existing.percent = min(100.0, existing.percent + percent)
+            existing.text = cls._humanize(existing.total_seconds)
+
+        return sorted(merged.values(), key=lambda e: e.total_seconds, reverse=True)
+
+    @staticmethod
+    def _humanize(total_seconds: int) -> str:
+        hours, remainder = divmod(total_seconds, 3600)
+        return f"{hours} hrs {remainder // 60} mins"
 
     @staticmethod
     def _empty_stats() -> WakapiStatsDTO:
